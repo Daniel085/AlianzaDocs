@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="PHP code examples for Alianza API integration">
+  <title>PHP Code Examples - Alianza API</title>
+  <link rel="stylesheet" href="../css/main.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="docs-header">
+    <a href="../../../index.html" class="docs-logo">
+      <span>📞</span> Alianza API
+    </a>
+    <nav class="docs-nav">
+      <a href="../../../index.html">Home</a>
+      <a href="../architecture/diagrams.html">Architecture</a>
+      <a href="../guides/account-management.html">Guides</a>
+      <a href="../../../openapi.yaml">API Reference</a>
+      <button id="theme-toggle" class="theme-toggle">🌙 Dark</button>
+    </nav>
+  </header>
+
+  <div class="docs-container">
+    <!-- Sidebar -->
+    <aside class="docs-sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-title">Getting Started</div>
+        <ul class="sidebar-links">
+          <li><a href="../getting-started/quick-start.html">Quick Start</a></li>
+          <li><a href="../getting-started/authentication.html">Authentication</a></li>
+        </ul>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-title">Guides</div>
+        <ul class="sidebar-links">
+          <li><a href="../guides/account-management.html">Account Management</a></li>
+          <li><a href="../guides/phone-numbers.html">Phone Numbers</a></li>
+          <li><a href="../guides/device-management.html">Device Management</a></li>
+          <li><a href="../guides/call-routing.html">Call Routing</a></li>
+        </ul>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-title">Code Examples</div>
+        <ul class="sidebar-links">
+          <li><a href="python-examples.html">Python</a></li>
+          <li><a href="nodejs-examples.html">Node.js</a></li>
+          <li><a href="php-examples.html" class="active">PHP</a></li>
+          <li><a href="java-examples.html">Java</a></li>
+        </ul>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-title">Advanced</div>
+        <ul class="sidebar-links">
+          <li><a href="../advanced/error-handling.html">Error Handling</a></li>
+          <li><a href="../advanced/best-practices.html">Best Practices</a></li>
+        </ul>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="docs-main">
+      <h1>PHP Code Examples</h1>
+      <p style="font-size: 1.2rem;">Complete PHP code examples for integrating with the Alianza API. These examples use PHP's native cURL functions and are compatible with PHP 7.4+.</p>
+
+      <div class="alert alert-info">
+        <strong>💡 Prerequisites</strong>: These examples require PHP 7.4+ with cURL extension enabled. For production use, consider using Guzzle HTTP client for better error handling and features.
+      </div>
+
+      <h2 id="setup">Setup and Installation</h2>
+      <p>First, ensure you have PHP and cURL extension installed:</p>
+
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">Bash</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code># Check PHP version
+php --version
+
+# Check if cURL is enabled
+php -m | grep curl
+
+# Install cURL extension if needed (Ubuntu/Debian)
+sudo apt-get install php-curl</code></pre>
+      </div>
+
+      <h3>Alianza API Client Class</h3>
+      <p>Create a reusable client class for all API interactions:</p>
+
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">PHP</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>&lt;?php
+
+class AlianzaAPIClient {
+    private $baseUrl;
+    private $authToken;
+    private $partitionId;
+
+    public function __construct($baseUrl = 'https://api.alianza.com') {
+        $this->baseUrl = rtrim($baseUrl, '/');
+    }
+
+    /**
+     * Authenticate and obtain auth token
+     */
+    public function authenticate($username, $password) {
+        $response = $this->request('POST', '/v2/authorize', [
+            'userName' => $username,
+            'password' => $password
+        ]);
+
+        if (isset($response['authToken'])) {
+            $this->authToken = $response['authToken'];
+            $this->partitionId = $response['partitionId'];
+            return $response;
+        }
+
+        throw new Exception('Authentication failed');
+    }
+
+    /**
+     * Make HTTP request to API
+     */
+    private function request($method, $endpoint, $data = null) {
+        $url = $this->baseUrl . $endpoint;
+
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
+
+        $headers = ['Content-Type: application/json'];
+
+        if ($this->authToken) {
+            $headers[] = 'X-AUTH-TOKEN: ' . $this->authToken;
+        }
+
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+        if ($data !== null) {
+            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+        }
+
+        $response = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+        if (curl_errno($ch)) {
+            throw new Exception('cURL error: ' . curl_error($ch));
+        }
+
+        curl_close($ch);
+
+        $decoded = json_decode($response, true);
+
+        if ($httpCode >= 400) {
+            $message = $decoded['message'] ?? 'API request failed';
+            throw new Exception("API Error ($httpCode): $message");
+        }
+
+        return $decoded;
+    }
+
+    /**
+     * GET request
+     */
+    public function get($endpoint) {
+        return $this->request('GET', $endpoint);
+    }
+
+    /**
+     * POST request
+     */
+    public function post($endpoint, $data) {
+        return $this->request('POST', $endpoint, $data);
+    }
+
+    /**
+     * PUT request
+     */
+    public function put($endpoint, $data) {
+        return $this->request('PUT', $endpoint, $data);
+    }
+
+    /**
+     * DELETE request
+     */
+    public function delete($endpoint) {
+        return $this->request('DELETE', $endpoint);
+    }
+
+    public function getPartitionId() {
+        return $this->partitionId;
+    }
+}
+?&gt;</code></pre>
+      </div>
+
+      <h2 id="authentication">Authentication Example</h2>
+      <p>Authenticate and obtain an auth token:</p>
+
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">PHP</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>&lt;?php
+
+require_once 'AlianzaAPIClient.php';
+
+try {
+    // Initialize client (use development URL for testing)
+    $client = new AlianzaAPIClient('https://api.d2.alianza.com');
+
+    // Authenticate
+    $authResponse = $client->authenticate(
+        'your-username',
+        'your-password'
+    );
+
+    echo "Authenticated successfully!\n";
+    echo "User ID: " . $authResponse['userId'] . "\n";
+    echo "Partition ID: " . $authResponse['partitionId'] . "\n";
+    echo "Token expires in: " . $authResponse['expiresIn'] . " seconds\n";
+
+} catch (Exception $e) {
+    echo "Error: " . $e->getMessage() . "\n";
+}
+?&gt;</code></pre>
+      </div>
+
+      <h2 id="account-management">Account Management</h2>
+
+      <h3>Create Account</h3>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">PHP</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>&lt;?php
+
+require_once 'AlianzaAPIClient.php';
+
+try {
+    $client = new AlianzaAPIClient();
+    $client->authenticate('username', 'password');
+
+    $partitionId = $client->getPartitionId();
+
+    // Create new account
+    $accountData = [
+        'accountNumber' => '1001',
+        'name' => 'Acme Corporation',
+        'timeZone' => 'America/New_York',
+        'status' => 'ACTIVE',
+        'accountType' => 'BUSINESS'
+    ];
+
+    $account = $client->post(
+        "/v2/partition/{$partitionId}/account",
+        $accountData
+    );
+
+    echo "Account created successfully!\n";
+    echo "Account ID: " . $account['accountId'] . "\n";
+    echo "Account Name: " . $account['name'] . "\n";
+
+} catch (Exception $e) {
+    echo "Error: " . $e->getMessage() . "\n";
+}
+?&gt;</code></pre>
+      </div>
+
+      <h3>List All Accounts</h3>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">PHP</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>&lt;?php
+
+try {
+    $client = new AlianzaAPIClient();
+    $client->authenticate('username', 'password');
+
+    $partitionId = $client->getPartitionId();
+
+    // Get all accounts
+    $accounts = $client->get("/v2/partition/{$partitionId}/account");
+
+    echo "Found " . count($accounts) . " accounts:\n\n";
+
+    foreach ($accounts as $account) {
+        echo "- {$account['name']} (ID: {$account['accountId']})\n";
+        echo "  Status: {$account['status']}\n";
+        echo "  Account Number: {$account['accountNumber']}\n\n";
+    }
+
+} catch (Exception $e) {
+    echo "Error: " . $e->getMessage() . "\n";
+}
+?&gt;</code></pre>
+      </div>
+
+      <h3>Update Account</h3>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">PHP</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>&lt;?php
+
+try {
+    $client = new AlianzaAPIClient();
+    $client->authenticate('username', 'password');
+
+    $partitionId = $client->getPartitionId();
+    $accountId = 'account123';
+
+    // Update account
+    $updates = [
+        'name' => 'Acme Corporation - Updated',
+        'timeZone' => 'America/Los_Angeles'
+    ];
+
+    $updated = $client->put(
+        "/v2/partition/{$partitionId}/account/{$accountId}",
+        $updates
+    );
+
+    echo "Account updated successfully!\n";
+    echo "New name: " . $updated['name'] . "\n";
+
+} catch (Exception $e) {
+    echo "Error: " . $e->getMessage() . "\n";
+}
+?&gt;</code></pre>
+      </div>
+
+      <h2 id="user-management">End User Management</h2>
+
+      <h3>Create End User</h3>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">PHP</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>&lt;?php
+
+try {
+    $client = new AlianzaAPIClient();
+    $client->authenticate('username', 'password');
+
+    $partitionId = $client->getPartitionId();
+    $accountId = 'account123';
+
+    // Create end user
+    $userData = [
+        'firstName' => 'John',
+        'lastName' => 'Doe',
+        'email' => 'john.doe@example.com',
+        'extension' => '1001',
+        'status' => 'ACTIVE',
+        'timeZone' => 'America/New_York'
+    ];
+
+    $user = $client->post(
+        "/v2/partition/{$partitionId}/account/{$accountId}/enduser",
+        $userData
+    );
+
+    echo "End user created successfully!\n";
+    echo "User ID: " . $user['endUserId'] . "\n";
+    echo "Name: {$user['firstName']} {$user['lastName']}\n";
+    echo "Extension: " . $user['extension'] . "\n";
+
+} catch (Exception $e) {
+    echo "Error: " . $e->getMessage() . "\n";
+}
+?&gt;</code></pre>
+      </div>
+
+      <h2 id="phone-numbers">Phone Number Management</h2>
+
+      <h3>Search Available Phone Numbers</h3>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">PHP</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>&lt;?php
+
+try {
+    $client = new AlianzaAPIClient();
+    $client->authenticate('username', 'password');
+
+    $partitionId = $client->getPartitionId();
+
+    // Search for available numbers
+    $areaCode = '212';
+    $numbers = $client->get(
+        "/v2/partition/{$partitionId}/phonenumber/search" .
+        "?areaCode={$areaCode}&amp;limit=10"
+    );
+
+    echo "Available phone numbers in area code {$areaCode}:\n\n";
+
+    foreach ($numbers as $number) {
+        echo "- {$number['phoneNumber']}\n";
+        echo "  Location: {$number['city']}, {$number['state']}\n";
+        echo "  Type: {$number['numberType']}\n\n";
+    }
+
+} catch (Exception $e) {
+    echo "Error: " . $e->getMessage() . "\n";
+}
+?&gt;</code></pre>
+      </div>
+
+      <h3>Provision Phone Number</h3>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">PHP</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>&lt;?php
+
+try {
+    $client = new AlianzaAPIClient();
+    $client->authenticate('username', 'password');
+
+    $partitionId = $client->getPartitionId();
+    $accountId = 'account123';
+
+    // Provision phone number
+    $phoneData = [
+        'phoneNumber' => '+12125551234',
+        'phoneNumberType' => 'DID',
+        'routingType' => 'END_USER',
+        'routingDestination' => 'enduser123'
+    ];
+
+    $phone = $client->post(
+        "/v2/partition/{$partitionId}/account/{$accountId}/phonenumber",
+        $phoneData
+    );
+
+    echo "Phone number provisioned successfully!\n";
+    echo "Number: " . $phone['phoneNumber'] . "\n";
+    echo "Status: " . $phone['status'] . "\n";
+
+} catch (Exception $e) {
+    echo "Error: " . $e->getMessage() . "\n";
+}
+?&gt;</code></pre>
+      </div>
+
+      <h2 id="device-management">Device Management</h2>
+
+      <h3>Create Device</h3>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">PHP</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>&lt;?php
+
+try {
+    $client = new AlianzaAPIClient();
+    $client->authenticate('username', 'password');
+
+    $partitionId = $client->getPartitionId();
+    $accountId = 'account123';
+    $endUserId = 'enduser123';
+
+    // Create device
+    $deviceData = [
+        'deviceType' => 'HARD_PHONE',
+        'manufacturer' => 'Polycom',
+        'model' => 'VVX450',
+        'macAddress' => '00:04:f2:12:34:56',
+        'description' => 'Conference Room Phone'
+    ];
+
+    $device = $client->post(
+        "/v2/partition/{$partitionId}/account/{$accountId}/enduser/{$endUserId}/device",
+        $deviceData
+    );
+
+    echo "Device created successfully!\n";
+    echo "Device ID: " . $device['deviceId'] . "\n";
+    echo "SIP Username: " . $device['sipUsername'] . "\n";
+    echo "SIP Password: " . $device['sipPassword'] . "\n";
+
+} catch (Exception $e) {
+    echo "Error: " . $e->getMessage() . "\n";
+}
+?&gt;</code></pre>
+      </div>
+
+      <h2 id="error-handling">Error Handling</h2>
+      <p>Comprehensive error handling example:</p>
+
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">PHP</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>&lt;?php
+
+class AlianzaAPIException extends Exception {
+    private $httpCode;
+    private $errorDetails;
+
+    public function __construct($message, $httpCode, $errorDetails = null) {
+        parent::__construct($message);
+        $this->httpCode = $httpCode;
+        $this->errorDetails = $errorDetails;
+    }
+
+    public function getHttpCode() {
+        return $this->httpCode;
+    }
+
+    public function getErrorDetails() {
+        return $this->errorDetails;
+    }
+}
+
+try {
+    $client = new AlianzaAPIClient();
+    $client->authenticate('username', 'password');
+
+    // Attempt operation
+    $result = $client->post('/v2/partition/123/account', [
+        'accountNumber' => '1001',
+        'name' => 'Test Account'
+    ]);
+
+} catch (AlianzaAPIException $e) {
+    // Handle API-specific errors
+    switch ($e->getHttpCode()) {
+        case 400:
+            echo "Bad Request: Invalid data provided\n";
+            break;
+        case 401:
+            echo "Unauthorized: Check your credentials\n";
+            break;
+        case 404:
+            echo "Not Found: Resource doesn't exist\n";
+            break;
+        case 409:
+            echo "Conflict: Resource already exists\n";
+            break;
+        case 429:
+            echo "Rate Limited: Too many requests\n";
+            break;
+        default:
+            echo "API Error: " . $e->getMessage() . "\n";
+    }
+
+    if ($details = $e->getErrorDetails()) {
+        echo "Details: " . json_encode($details, JSON_PRETTY_PRINT) . "\n";
+    }
+
+} catch (Exception $e) {
+    // Handle general errors
+    echo "Error: " . $e->getMessage() . "\n";
+}
+?&gt;</code></pre>
+      </div>
+
+      <h2 id="complete-example">Complete Integration Example</h2>
+      <p>A complete example showing account provisioning workflow:</p>
+
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">PHP</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>&lt;?php
+
+require_once 'AlianzaAPIClient.php';
+
+function provisionNewCustomer($username, $password, $customerData) {
+    try {
+        $client = new AlianzaAPIClient('https://api.alianza.com');
+
+        // Step 1: Authenticate
+        echo "1. Authenticating...\n";
+        $client->authenticate($username, $password);
+        $partitionId = $client->getPartitionId();
+        echo "   ✓ Authenticated\n\n";
+
+        // Step 2: Create Account
+        echo "2. Creating account...\n";
+        $account = $client->post("/v2/partition/{$partitionId}/account", [
+            'accountNumber' => $customerData['accountNumber'],
+            'name' => $customerData['companyName'],
+            'timeZone' => $customerData['timeZone'],
+            'status' => 'ACTIVE',
+            'accountType' => 'BUSINESS'
+        ]);
+        $accountId = $account['accountId'];
+        echo "   ✓ Account created: {$accountId}\n\n";
+
+        // Step 3: Create End User
+        echo "3. Creating end user...\n";
+        $user = $client->post(
+            "/v2/partition/{$partitionId}/account/{$accountId}/enduser",
+            [
+                'firstName' => $customerData['firstName'],
+                'lastName' => $customerData['lastName'],
+                'email' => $customerData['email'],
+                'extension' => $customerData['extension'],
+                'status' => 'ACTIVE'
+            ]
+        );
+        $endUserId = $user['endUserId'];
+        echo "   ✓ End user created: {$endUserId}\n\n";
+
+        // Step 4: Create Device
+        echo "4. Creating device...\n";
+        $device = $client->post(
+            "/v2/partition/{$partitionId}/account/{$accountId}/enduser/{$endUserId}/device",
+            [
+                'deviceType' => 'HARD_PHONE',
+                'manufacturer' => $customerData['deviceManufacturer'],
+                'model' => $customerData['deviceModel'],
+                'macAddress' => $customerData['macAddress']
+            ]
+        );
+        $deviceId = $device['deviceId'];
+        echo "   ✓ Device created: {$deviceId}\n";
+        echo "   ✓ SIP Credentials:\n";
+        echo "     Username: {$device['sipUsername']}\n";
+        echo "     Password: {$device['sipPassword']}\n\n";
+
+        // Step 5: Provision Phone Number
+        echo "5. Provisioning phone number...\n";
+        $phone = $client->post(
+            "/v2/partition/{$partitionId}/account/{$accountId}/phonenumber",
+            [
+                'phoneNumber' => $customerData['phoneNumber'],
+                'phoneNumberType' => 'DID',
+                'routingType' => 'END_USER',
+                'routingDestination' => $endUserId
+            ]
+        );
+        echo "   ✓ Phone number provisioned: {$phone['phoneNumber']}\n\n";
+
+        echo "✅ Customer provisioned successfully!\n";
+
+        return [
+            'accountId' => $accountId,
+            'endUserId' => $endUserId,
+            'deviceId' => $deviceId,
+            'phoneNumber' => $phone['phoneNumber'],
+            'sipCredentials' => [
+                'username' => $device['sipUsername'],
+                'password' => $device['sipPassword']
+            ]
+        ];
+
+    } catch (Exception $e) {
+        echo "❌ Error: " . $e->getMessage() . "\n";
+        throw $e;
+    }
+}
+
+// Usage
+$customerData = [
+    'accountNumber' => '2001',
+    'companyName' => 'Acme Corporation',
+    'timeZone' => 'America/New_York',
+    'firstName' => 'John',
+    'lastName' => 'Doe',
+    'email' => 'john.doe@acme.com',
+    'extension' => '1001',
+    'phoneNumber' => '+12125551234',
+    'deviceManufacturer' => 'Polycom',
+    'deviceModel' => 'VVX450',
+    'macAddress' => '00:04:f2:12:34:56'
+];
+
+$result = provisionNewCustomer(
+    'your-api-username',
+    'your-api-password',
+    $customerData
+);
+
+print_r($result);
+?&gt;</code></pre>
+      </div>
+
+      <h2 id="best-practices">Best Practices</h2>
+
+      <div class="card">
+        <div class="card-title">1. Use Environment Variables</div>
+        <p>Never hardcode credentials in your code:</p>
+        <div class="code-block">
+          <pre><code>&lt;?php
+$username = getenv('ALIANZA_USERNAME');
+$password = getenv('ALIANZA_PASSWORD');
+$baseUrl = getenv('ALIANZA_API_URL') ?: 'https://api.alianza.com';
+?&gt;</code></pre>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">2. Implement Token Caching</div>
+        <p>Cache auth tokens to reduce authentication calls:</p>
+        <div class="code-block">
+          <pre><code>&lt;?php
+class TokenCache {
+    private $cacheFile = '/tmp/alianza_token.json';
+
+    public function get() {
+        if (!file_exists($this->cacheFile)) return null;
+
+        $data = json_decode(file_get_contents($this->cacheFile), true);
+        if ($data['expires'] &lt; time()) return null;
+
+        return $data['token'];
+    }
+
+    public function set($token, $expiresIn) {
+        file_put_contents($this->cacheFile, json_encode([
+            'token' => $token,
+            'expires' => time() + $expiresIn - 60 // 1 min buffer
+        ]));
+    }
+}
+?&gt;</code></pre>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">3. Use Logging</div>
+        <p>Implement proper logging for debugging:</p>
+        <div class="code-block">
+          <pre><code>&lt;?php
+function logAPICall($method, $endpoint, $response) {
+    $logEntry = sprintf(
+        "[%s] %s %s - Status: %d\n",
+        date('Y-m-d H:i:s'),
+        $method,
+        $endpoint,
+        $response['httpCode']
+    );
+
+    file_put_contents(
+        '/var/log/alianza_api.log',
+        $logEntry,
+        FILE_APPEND
+    );
+}
+?&gt;</code></pre>
+        </div>
+      </div>
+
+      <div class="alert alert-success">
+        <strong>🎉 You're Ready!</strong> You now have complete PHP examples for integrating with the Alianza API. Check out the <a href="../advanced/best-practices.html">Best Practices Guide</a> for more tips.
+      </div>
+
+      <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border-color);">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <a href="nodejs-examples.html" class="btn btn-secondary">← Node.js Examples</a>
+          </div>
+          <div>
+            <a href="java-examples.html" class="btn btn-primary">Java Examples →</a>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="../js/main.js"></script>
+</body>
+</html>

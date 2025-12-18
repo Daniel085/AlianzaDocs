@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Device Management Guide - Alianza API">
+  <title>Device Management Guide - Alianza API</title>
+  <link rel="stylesheet" href="../css/main.css">
+</head>
+<body>
+  <header class="docs-header">
+    <a href="../../../index.html" class="docs-logo">
+      <span>📞</span> Alianza API
+    </a>
+    <nav class="docs-nav">
+      <a href="../../../index.html">Home</a>
+      <a href="../architecture/diagrams.html">Architecture</a>
+      <a href="account-management.html">Guides</a>
+      <a href="../../../openapi.yaml">API Reference</a>
+      <button id="theme-toggle" class="theme-toggle">🌙 Dark</button>
+    </nav>
+  </header>
+
+  <div class="docs-container">
+    <aside class="docs-sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-title">Getting Started</div>
+        <ul class="sidebar-links">
+          <li><a href="../getting-started/quick-start.html">Quick Start</a></li>
+          <li><a href="../getting-started/authentication.html">Authentication</a></li>
+        </ul>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-title">Guides</div>
+        <ul class="sidebar-links">
+          <li><a href="account-management.html">Account Management</a></li>
+          <li><a href="phone-numbers.html">Phone Numbers</a></li>
+          <li><a href="device-management.html" class="active">Device Management</a></li>
+          <li><a href="call-routing.html">Call Routing</a></li>
+        </ul>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-title">Code Examples</div>
+        <ul class="sidebar-links">
+          <li><a href="../code-examples/python-examples.html">Python</a></li>
+          <li><a href="../code-examples/nodejs-examples.html">Node.js</a></li>
+          <li><a href="../code-examples/php-examples.html">PHP</a></li>
+          <li><a href="../code-examples/java-examples.html">Java</a></li>
+        </ul>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-title">Advanced</div>
+        <ul class="sidebar-links">
+          <li><a href="../advanced/error-handling.html">Error Handling</a></li>
+          <li><a href="../advanced/best-practices.html">Best Practices</a></li>
+        </ul>
+      </div>
+    </aside>
+
+    <main class="docs-main">
+      <h1>Device Management Guide</h1>
+      <p style="font-size: 1.2rem;">Complete guide to provisioning, configuring, and managing VoIP devices with the Alianza API.</p>
+
+      <div class="alert alert-info">
+        <strong>📱 What is a Device?</strong> A device is VoIP equipment (IP phone, soft phone, ATA) that connects to the Alianza platform for making and receiving calls.
+      </div>
+
+      <h2 id="overview">Overview</h2>
+      <p>Device management in Alianza includes:</p>
+      <ul>
+        <li>Creating and configuring VoIP devices</li>
+        <li>Managing device lines and features</li>
+        <li>Setting up SIP credentials</li>
+        <li>Device inventory management</li>
+        <li>Device provisioning and auto-configuration</li>
+      </ul>
+
+      <h2 id="device-types">Device Types</h2>
+      <div class="card-grid">
+        <div class="card">
+          <div class="card-title">🖥️ Hard Phones</div>
+          <p>Physical IP phones with displays, buttons, and advanced features. Examples: Yealink, Polycom, Cisco phones.</p>
+        </div>
+        <div class="card">
+          <div class="card-title">💻 Soft Phones</div>
+          <p>Software applications that turn computers or mobile devices into phones. Examples: Desktop apps, mobile apps.</p>
+        </div>
+        <div class="card">
+          <div class="card-title">📞 ATAs</div>
+          <p>Analog Telephone Adapters that connect traditional phones to VoIP networks.</p>
+        </div>
+      </div>
+
+      <h2 id="creating-device">Creating a Device</h2>
+      <p>Devices must be associated with an account before they can be used.</p>
+
+      <h3>Request</h3>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">Bash</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>curl -X POST https://api.alianza.com/v2/partition/{partitionId}/account/{accountId}/device \
+  -H "X-AUTH-TOKEN: your-token" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "macAddress": "00:15:65:4D:12:34",
+    "deviceType": "IP_PHONE",
+    "model": "Yealink T46G",
+    "description": "Conference Room Phone"
+  }'</code></pre>
+      </div>
+
+      <h3>Response</h3>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">JSON</span>
+        </div>
+        <pre><code>{
+  "deviceId": "device_abc123",
+  "macAddress": "00:15:65:4D:12:34",
+  "deviceType": "IP_PHONE",
+  "model": "Yealink T46G",
+  "status": "PENDING_CONFIGURATION",
+  "createdDate": "2025-12-18T10:30:00Z"
+}</code></pre>
+      </div>
+
+      <h2 id="device-lines">Configuring Device Lines</h2>
+      <p>Each device can have multiple lines. Lines define the features available on each button/line appearance.</p>
+
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">Bash</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>curl -X POST https://api.alianza.com/v2/partition/{partitionId}/account/{accountId}/device/{deviceId}/line \
+  -H "X-AUTH-TOKEN: your-token" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "lineNumber": 1,
+    "userId": "user_xyz789",
+    "features": {
+      "voicemail": true,
+      "callWaiting": true,
+      "callForwarding": true,
+      "doNotDisturb": true
+    }
+  }'</code></pre>
+      </div>
+
+      <h2 id="sip-credentials">SIP Credentials</h2>
+      <p>Devices use SIP credentials to register with the Alianza platform.</p>
+
+      <div class="alert alert-warning">
+        <strong>🔒 Security:</strong> SIP credentials are automatically generated. Store them securely and never expose them in logs or client-side code.
+      </div>
+
+      <h2 id="device-inventory">Device Inventory Management</h2>
+      <p>Track and manage devices across your organization:</p>
+      <ul>
+        <li>View all devices in an account</li>
+        <li>Check device status (online/offline)</li>
+        <li>Track firmware versions</li>
+        <li>Manage device replacements</li>
+      </ul>
+
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">Bash</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code># List all devices
+curl -X GET https://api.alianza.com/v2/partition/{partitionId}/account/{accountId}/device \
+  -H "X-AUTH-TOKEN: your-token"</code></pre>
+      </div>
+
+      <h2 id="auto-provisioning">Auto-Provisioning</h2>
+      <p>Alianza supports automatic device configuration for supported phone models:</p>
+      <ol>
+        <li>Device connects to network (DHCP)</li>
+        <li>Device receives provisioning server URL</li>
+        <li>Device downloads configuration from Alianza</li>
+        <li>Device automatically registers</li>
+      </ol>
+
+      <h2 id="best-practices">Best Practices</h2>
+      <div class="card-grid">
+        <div class="card">
+          <h3>MAC Address Format</h3>
+          <p>Use standard format: <code>00:15:65:4D:12:34</code> or <code>00-15-65-4D-12-34</code></p>
+        </div>
+        <div class="card">
+          <h3>Device Naming</h3>
+          <p>Use descriptive names: "Conference Room A", "Reception Desk", "John's Phone"</p>
+        </div>
+        <div class="card">
+          <h3>Line Configuration</h3>
+          <p>Configure essential features first: voicemail, call waiting, transfer</p>
+        </div>
+      </div>
+
+      <h2 id="next-steps">Next Steps</h2>
+      <ul>
+        <li><a href="account-management.html">Account Management</a> - Set up accounts first</li>
+        <li><a href="phone-numbers.html">Phone Numbers</a> - Assign numbers to device lines</li>
+        <li><a href="call-routing.html">Call Routing</a> - Configure call flow</li>
+      </ul>
+
+      <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border-color);">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <a href="phone-numbers.html" class="btn btn-secondary">← Phone Numbers</a>
+          </div>
+          <div>
+            <a href="call-routing.html" class="btn btn-primary">Next: Call Routing →</a>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="../js/main.js"></script>
+</body>
+</html>

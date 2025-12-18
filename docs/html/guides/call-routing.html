@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Call Routing Guide - Alianza API">
+  <title>Call Routing Guide - Alianza API</title>
+  <link rel="stylesheet" href="../css/main.css">
+</head>
+<body>
+  <header class="docs-header">
+    <a href="../../../index.html" class="docs-logo">
+      <span>📞</span> Alianza API
+    </a>
+    <nav class="docs-nav">
+      <a href="../../../index.html">Home</a>
+      <a href="../architecture/diagrams.html">Architecture</a>
+      <a href="account-management.html">Guides</a>
+      <a href="../../../openapi.yaml">API Reference</a>
+      <button id="theme-toggle" class="theme-toggle">🌙 Dark</button>
+    </nav>
+  </header>
+
+  <div class="docs-container">
+    <aside class="docs-sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-title">Getting Started</div>
+        <ul class="sidebar-links">
+          <li><a href="../getting-started/quick-start.html">Quick Start</a></li>
+          <li><a href="../getting-started/authentication.html">Authentication</a></li>
+        </ul>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-title">Guides</div>
+        <ul class="sidebar-links">
+          <li><a href="account-management.html">Account Management</a></li>
+          <li><a href="phone-numbers.html">Phone Numbers</a></li>
+          <li><a href="device-management.html">Device Management</a></li>
+          <li><a href="call-routing.html" class="active">Call Routing</a></li>
+        </ul>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-title">Code Examples</div>
+        <ul class="sidebar-links">
+          <li><a href="../code-examples/python-examples.html">Python</a></li>
+          <li><a href="../code-examples/nodejs-examples.html">Node.js</a></li>
+          <li><a href="../code-examples/php-examples.html">PHP</a></li>
+          <li><a href="../code-examples/java-examples.html">Java</a></li>
+        </ul>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-title">Advanced</div>
+        <ul class="sidebar-links">
+          <li><a href="../advanced/error-handling.html">Error Handling</a></li>
+          <li><a href="../advanced/best-practices.html">Best Practices</a></li>
+        </ul>
+      </div>
+    </aside>
+
+    <main class="docs-main">
+      <h1>Call Routing Guide</h1>
+      <p style="font-size: 1.2rem;">Master IVR menus, hunt groups, call queues, and advanced call routing with the Alianza API.</p>
+
+      <div class="alert alert-info">
+        <strong>📞 Call Routing:</strong> Control how incoming calls flow through your system with IVRs, hunt groups, queues, and more.
+      </div>
+
+      <h2 id="routing-options">Call Routing Options</h2>
+      <div class="card-grid">
+        <div class="card">
+          <div class="card-title">🎹 IVR Menus</div>
+          <p>Interactive Voice Response - automated menus where callers press numbers to navigate</p>
+        </div>
+        <div class="card">
+          <div class="card-title">👥 Hunt Groups</div>
+          <p>Ring multiple devices simultaneously or sequentially</p>
+        </div>
+        <div class="card">
+          <div class="card-title">📢 Paging Groups</div>
+          <p>One-way broadcast to multiple devices</p>
+        </div>
+        <div class="card">
+          <div class="card-title">📞 Call Queues</div>
+          <p>Hold callers in queue with music and position announcements</p>
+        </div>
+      </div>
+
+      <h2 id="ivr">IVR (Interactive Voice Response)</h2>
+      <p>IVR menus let callers self-navigate to the right destination.</p>
+
+      <h3>Creating an IVR</h3>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">Bash</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>curl -X POST https://api.alianza.com/v2/partition/{partitionId}/account/{accountId}/ivr \
+  -H "X-AUTH-TOKEN: your-token" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Main Menu",
+    "greeting": "Thank you for calling. Press 1 for Sales, 2 for Support, 0 for Operator",
+    "options": [
+      {
+        "digit": "1",
+        "action": "TRANSFER",
+        "destination": "hunt_group_sales"
+      },
+      {
+        "digit": "2",
+        "action": "TRANSFER",
+        "destination": "hunt_group_support"
+      },
+      {
+        "digit": "0",
+        "action": "TRANSFER",
+        "destination": "user_operator"
+      }
+    ],
+    "timeout": 5,
+    "maxRetries": 3
+  }'</code></pre>
+      </div>
+
+      <h2 id="hunt-groups">Hunt Groups</h2>
+      <p>Hunt groups ring multiple devices to ensure calls are answered.</p>
+
+      <h3>Hunt Group Strategies</h3>
+      <ul>
+        <li><strong>Simultaneous</strong> - Ring all devices at once (best for urgent calls)</li>
+        <li><strong>Sequential</strong> - Try devices in order (best for escalation)</li>
+        <li><strong>Round Robin</strong> - Distribute calls evenly (best for load balancing)</li>
+        <li><strong>Longest Idle</strong> - Route to agent idle longest</li>
+      </ul>
+
+      <h3>Creating a Hunt Group</h3>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">Bash</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>curl -X POST https://api.alianza.com/v2/partition/{partitionId}/account/{accountId}/hunt-group \
+  -H "X-AUTH-TOKEN: your-token" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Sales Team",
+    "strategy": "SIMULTANEOUS",
+    "members": [
+      {"userId": "user_1", "priority": 1},
+      {"userId": "user_2", "priority": 1},
+      {"userId": "user_3", "priority": 1}
+    ],
+    "ringTimeout": 30,
+    "voicemailEnabled": true
+  }'</code></pre>
+      </div>
+
+      <h2 id="call-queues">Call Queues</h2>
+      <p>Call queues hold callers with music and announcements until an agent is available.</p>
+
+      <h3>Queue Features</h3>
+      <ul>
+        <li>Hold music</li>
+        <li>Position announcements ("You are caller number 3")</li>
+        <li>Estimated wait time</li>
+        <li>Callback options</li>
+        <li>Queue priority levels</li>
+      </ul>
+
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">Bash</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>curl -X POST https://api.alianza.com/v2/partition/{partitionId}/account/{accountId}/call-queue \
+  -H "X-AUTH-TOKEN: your-token" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Support Queue",
+    "maxWaitTime": 300,
+    "holdMusic": "media_id_123",
+    "positionAnnouncements": true,
+    "agents": [
+      {"userId": "agent_1"},
+      {"userId": "agent_2"}
+    ]
+  }'</code></pre>
+      </div>
+
+      <h2 id="paging-groups">Paging Groups</h2>
+      <p>Paging groups broadcast one-way audio to multiple devices (like an intercom).</p>
+
+      <div class="alert alert-warning">
+        <strong>📢 One-Way Audio:</strong> Paging is for announcements only. Devices auto-answer and play audio, but cannot respond.
+      </div>
+
+      <h2 id="call-parking">Call Parking</h2>
+      <p>Park calls in a "spot" and retrieve them from any device.</p>
+
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">Bash</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code># Create parking spots
+curl -X POST https://api.alianza.com/v2/partition/{partitionId}/account/{accountId}/call-parking-spot \
+  -H "X-AUTH-TOKEN: your-token" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "spotNumber": "701",
+    "timeout": 60
+  }'</code></pre>
+      </div>
+
+      <h2 id="time-based-routing">Time-Based Routing</h2>
+      <p>Route calls differently based on time of day and day of week.</p>
+
+      <h3>Example: Business Hours Routing</h3>
+      <ul>
+        <li><strong>Business Hours (M-F 9-5)</strong> → Hunt Group</li>
+        <li><strong>After Hours</strong> → Voicemail</li>
+        <li><strong>Weekends</strong> → On-Call Phone</li>
+        <li><strong>Holidays</strong> → Special Greeting + Voicemail</li>
+      </ul>
+
+      <h2 id="best-practices">Best Practices</h2>
+
+      <h3>IVR Design</h3>
+      <ul>
+        <li>Keep menus simple (max 5 options)</li>
+        <li>Always provide a "0 for operator" option</li>
+        <li>Use clear, professional recordings</li>
+        <li>Test with real callers before launch</li>
+      </ul>
+
+      <h3>Hunt Group Configuration</h3>
+      <ul>
+        <li>Use simultaneous ring for urgent calls</li>
+        <li>Set appropriate timeouts (20-30 seconds)</li>
+        <li>Always configure voicemail as fallback</li>
+        <li>Monitor answer rates and adjust</li>
+      </ul>
+
+      <h3>Queue Management</h3>
+      <ul>
+        <li>Monitor average wait times</li>
+        <li>Add agents during peak hours</li>
+        <li>Provide callback options for long waits</li>
+        <li>Use queue priority for VIP customers</li>
+      </ul>
+
+      <h2 id="next-steps">Next Steps</h2>
+      <ul>
+        <li><a href="../advanced/best-practices.html">Best Practices</a> - Production tips</li>
+        <li><a href="../code-examples/python-examples.html">Code Examples</a> - See it in code</li>
+        <li><a href="../../../openapi.yaml">API Reference</a> - Full spec</li>
+      </ul>
+
+      <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border-color);">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <a href="device-management.html" class="btn btn-secondary">← Device Management</a>
+          </div>
+          <div>
+            <a href="../advanced/best-practices.html" class="btn btn-primary">Next: Best Practices →</a>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="../js/main.js"></script>
+</body>
+</html>

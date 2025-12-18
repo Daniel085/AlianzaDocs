@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Java code examples for Alianza API integration">
+  <title>Java Code Examples - Alianza API</title>
+  <link rel="stylesheet" href="../css/main.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="docs-header">
+    <a href="../../../index.html" class="docs-logo">
+      <span>📞</span> Alianza API
+    </a>
+    <nav class="docs-nav">
+      <a href="../../../index.html">Home</a>
+      <a href="../architecture/diagrams.html">Architecture</a>
+      <a href="../guides/account-management.html">Guides</a>
+      <a href="../../../openapi.yaml">API Reference</a>
+      <button id="theme-toggle" class="theme-toggle">🌙 Dark</button>
+    </nav>
+  </header>
+
+  <div class="docs-container">
+    <!-- Sidebar -->
+    <aside class="docs-sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-title">Getting Started</div>
+        <ul class="sidebar-links">
+          <li><a href="../getting-started/quick-start.html">Quick Start</a></li>
+          <li><a href="../getting-started/authentication.html">Authentication</a></li>
+        </ul>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-title">Guides</div>
+        <ul class="sidebar-links">
+          <li><a href="../guides/account-management.html">Account Management</a></li>
+          <li><a href="../guides/phone-numbers.html">Phone Numbers</a></li>
+          <li><a href="../guides/device-management.html">Device Management</a></li>
+          <li><a href="../guides/call-routing.html">Call Routing</a></li>
+        </ul>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-title">Code Examples</div>
+        <ul class="sidebar-links">
+          <li><a href="python-examples.html">Python</a></li>
+          <li><a href="nodejs-examples.html">Node.js</a></li>
+          <li><a href="php-examples.html">PHP</a></li>
+          <li><a href="java-examples.html" class="active">Java</a></li>
+        </ul>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-title">Advanced</div>
+        <ul class="sidebar-links">
+          <li><a href="../advanced/error-handling.html">Error Handling</a></li>
+          <li><a href="../advanced/best-practices.html">Best Practices</a></li>
+        </ul>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="docs-main">
+      <h1>Java Code Examples</h1>
+      <p style="font-size: 1.2rem;">Enterprise-grade Java code examples for integrating with the Alianza API. These examples use modern Java features and popular libraries like OkHttp and Gson.</p>
+
+      <div class="alert alert-info">
+        <strong>💡 Prerequisites</strong>: Java 11+ and Maven or Gradle. Examples use OkHttp for HTTP requests and Gson for JSON processing.
+      </div>
+
+      <h2 id="setup">Setup and Dependencies</h2>
+
+      <h3>Maven Dependencies</h3>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">XML</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>&lt;dependencies&gt;
+    &lt;!-- OkHttp for HTTP requests --&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;com.squareup.okhttp3&lt;/groupId&gt;
+        &lt;artifactId&gt;okhttp&lt;/artifactId&gt;
+        &lt;version&gt;4.12.0&lt;/version&gt;
+    &lt;/dependency&gt;
+
+    &lt;!-- Gson for JSON processing --&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;com.google.code.gson&lt;/groupId&gt;
+        &lt;artifactId&gt;gson&lt;/artifactId&gt;
+        &lt;version&gt;2.10.1&lt;/version&gt;
+    &lt;/dependency&gt;
+
+    &lt;!-- SLF4J for logging --&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.slf4j&lt;/groupId&gt;
+        &lt;artifactId&gt;slf4j-api&lt;/artifactId&gt;
+        &lt;version&gt;2.0.9&lt;/version&gt;
+    &lt;/dependency&gt;
+&lt;/dependencies&gt;</code></pre>
+      </div>
+
+      <h3>Gradle Dependencies</h3>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">Groovy</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>dependencies {
+    implementation 'com.squareup.okhttp3:okhttp:4.12.0'
+    implementation 'com.google.code.gson:gson:2.10.1'
+    implementation 'org.slf4j:slf4j-api:2.0.9'
+}</code></pre>
+      </div>
+
+      <h2 id="client-class">Alianza API Client</h2>
+      <p>Create a reusable client class with proper error handling:</p>
+
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">Java</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import okhttp3.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.util.concurrent.TimeUnit;
+
+public class AlianzaAPIClient {
+    private static final Logger logger = LoggerFactory.getLogger(AlianzaAPIClient.class);
+    private static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
+
+    private final OkHttpClient httpClient;
+    private final Gson gson;
+    private final String baseUrl;
+    private String authToken;
+    private String partitionId;
+
+    public AlianzaAPIClient(String baseUrl) {
+        this.baseUrl = baseUrl.endsWith("/") ? baseUrl.substring(0, baseUrl.length() - 1) : baseUrl;
+        this.gson = new Gson();
+
+        this.httpClient = new OkHttpClient.Builder()
+                .connectTimeout(30, TimeUnit.SECONDS)
+                .readTimeout(30, TimeUnit.SECONDS)
+                .writeTimeout(30, TimeUnit.SECONDS)
+                .build();
+    }
+
+    public AlianzaAPIClient() {
+        this("https://api.alianza.com");
+    }
+
+    /**
+     * Authenticate and obtain auth token
+     */
+    public AuthResponse authenticate(String username, String password) throws AlianzaAPIException {
+        JsonObject credentials = new JsonObject();
+        credentials.addProperty("userName", username);
+        credentials.addProperty("password", password);
+
+        String responseJson = post("/v2/authorize", credentials.toString());
+        AuthResponse authResponse = gson.fromJson(responseJson, AuthResponse.class);
+
+        this.authToken = authResponse.getAuthToken();
+        this.partitionId = authResponse.getPartitionId();
+
+        logger.info("Authenticated successfully for partition: {}", partitionId);
+        return authResponse;
+    }
+
+    /**
+     * Make GET request
+     */
+    public String get(String endpoint) throws AlianzaAPIException {
+        Request request = new Request.Builder()
+                .url(baseUrl + endpoint)
+                .addHeader("Content-Type", "application/json")
+                .addHeader("X-AUTH-TOKEN", authToken)
+                .get()
+                .build();
+
+        return executeRequest(request);
+    }
+
+    /**
+     * Make POST request
+     */
+    public String post(String endpoint, String jsonBody) throws AlianzaAPIException {
+        RequestBody body = RequestBody.create(jsonBody, JSON);
+
+        Request.Builder requestBuilder = new Request.Builder()
+                .url(baseUrl + endpoint)
+                .addHeader("Content-Type", "application/json")
+                .post(body);
+
+        if (authToken != null) {
+            requestBuilder.addHeader("X-AUTH-TOKEN", authToken);
+        }
+
+        return executeRequest(requestBuilder.build());
+    }
+
+    /**
+     * Make PUT request
+     */
+    public String put(String endpoint, String jsonBody) throws AlianzaAPIException {
+        RequestBody body = RequestBody.create(jsonBody, JSON);
+
+        Request request = new Request.Builder()
+                .url(baseUrl + endpoint)
+                .addHeader("Content-Type", "application/json")
+                .addHeader("X-AUTH-TOKEN", authToken)
+                .put(body)
+                .build();
+
+        return executeRequest(request);
+    }
+
+    /**
+     * Make DELETE request
+     */
+    public String delete(String endpoint) throws AlianzaAPIException {
+        Request request = new Request.Builder()
+                .url(baseUrl + endpoint)
+                .addHeader("Content-Type", "application/json")
+                .addHeader("X-AUTH-TOKEN", authToken)
+                .delete()
+                .build();
+
+        return executeRequest(request);
+    }
+
+    /**
+     * Execute HTTP request
+     */
+    private String executeRequest(Request request) throws AlianzaAPIException {
+        try (Response response = httpClient.newCall(request).execute()) {
+            String responseBody = response.body() != null ? response.body().string() : "";
+
+            if (!response.isSuccessful()) {
+                logger.error("API request failed: {} {} - Status: {}",
+                        request.method(), request.url(), response.code());
+                throw new AlianzaAPIException(
+                        "API request failed with status: " + response.code(),
+                        response.code(),
+                        responseBody
+                );
+            }
+
+            logger.debug("API request succeeded: {} {} - Status: {}",
+                    request.method(), request.url(), response.code());
+            return responseBody;
+
+        } catch (IOException e) {
+            logger.error("Network error during API request: {}", e.getMessage());
+            throw new AlianzaAPIException("Network error: " + e.getMessage(), 0, null);
+        }
+    }
+
+    public String getPartitionId() {
+        return partitionId;
+    }
+
+    public Gson getGson() {
+        return gson;
+    }
+}</code></pre>
+      </div>
+
+      <h2 id="models">Model Classes</h2>
+      <p>Define Java model classes for API requests and responses:</p>
+
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">Java</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>// Authentication Response
+public class AuthResponse {
+    private String authToken;
+    private String tokenType;
+    private int expiresIn;
+    private String userId;
+    private String partitionId;
+    private String userType;
+
+    // Getters and setters
+    public String getAuthToken() { return authToken; }
+    public void setAuthToken(String authToken) { this.authToken = authToken; }
+
+    public String getPartitionId() { return partitionId; }
+    public void setPartitionId(String partitionId) { this.partitionId = partitionId; }
+
+    public String getUserId() { return userId; }
+    public void setUserId(String userId) { this.userId = userId; }
+
+    public int getExpiresIn() { return expiresIn; }
+    public void setExpiresIn(int expiresIn) { this.expiresIn = expiresIn; }
+}
+
+// Account Model
+public class Account {
+    private String accountId;
+    private String accountNumber;
+    private String name;
+    private String status;
+    private String timeZone;
+    private String accountType;
+    private String createdDate;
+
+    // Getters and setters
+    public String getAccountId() { return accountId; }
+    public void setAccountId(String accountId) { this.accountId = accountId; }
+
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
+
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
+
+    public String getTimeZone() { return timeZone; }
+    public void setTimeZone(String timeZone) { this.timeZone = timeZone; }
+}
+
+// End User Model
+public class EndUser {
+    private String endUserId;
+    private String firstName;
+    private String lastName;
+    private String email;
+    private String extension;
+    private String status;
+    private String timeZone;
+
+    // Getters and setters
+    public String getEndUserId() { return endUserId; }
+    public void setEndUserId(String endUserId) { this.endUserId = endUserId; }
+
+    public String getFirstName() { return firstName; }
+    public void setFirstName(String firstName) { this.firstName = firstName; }
+
+    public String getLastName() { return lastName; }
+    public void setLastName(String lastName) { this.lastName = lastName; }
+
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
+
+    public String getExtension() { return extension; }
+    public void setExtension(String extension) { this.extension = extension; }
+}
+
+// Custom Exception
+public class AlianzaAPIException extends Exception {
+    private final int httpCode;
+    private final String responseBody;
+
+    public AlianzaAPIException(String message, int httpCode, String responseBody) {
+        super(message);
+        this.httpCode = httpCode;
+        this.responseBody = responseBody;
+    }
+
+    public int getHttpCode() { return httpCode; }
+    public String getResponseBody() { return responseBody; }
+}</code></pre>
+      </div>
+
+      <h2 id="authentication">Authentication Example</h2>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">Java</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>public class AuthenticationExample {
+    public static void main(String[] args) {
+        try {
+            // Initialize client (use development URL for testing)
+            AlianzaAPIClient client = new AlianzaAPIClient("https://api.d2.alianza.com");
+
+            // Authenticate
+            AuthResponse authResponse = client.authenticate(
+                    "your-username",
+                    "your-password"
+            );
+
+            System.out.println("Authenticated successfully!");
+            System.out.println("User ID: " + authResponse.getUserId());
+            System.out.println("Partition ID: " + authResponse.getPartitionId());
+            System.out.println("Token expires in: " + authResponse.getExpiresIn() + " seconds");
+
+        } catch (AlianzaAPIException e) {
+            System.err.println("Error: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+      </div>
+
+      <h2 id="account-management">Account Management</h2>
+
+      <h3>Create Account</h3>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">Java</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>public class CreateAccountExample {
+    public static void main(String[] args) {
+        try {
+            AlianzaAPIClient client = new AlianzaAPIClient();
+            client.authenticate("username", "password");
+
+            String partitionId = client.getPartitionId();
+
+            // Build account request
+            Account account = new Account();
+            account.setAccountNumber("1001");
+            account.setName("Acme Corporation");
+            account.setTimeZone("America/New_York");
+            account.setStatus("ACTIVE");
+            account.setAccountType("BUSINESS");
+
+            String accountJson = client.getGson().toJson(account);
+
+            // Create account
+            String responseJson = client.post(
+                    String.format("/v2/partition/%s/account", partitionId),
+                    accountJson
+            );
+
+            Account createdAccount = client.getGson().fromJson(responseJson, Account.class);
+
+            System.out.println("Account created successfully!");
+            System.out.println("Account ID: " + createdAccount.getAccountId());
+            System.out.println("Account Name: " + createdAccount.getName());
+
+        } catch (AlianzaAPIException e) {
+            System.err.println("Error: " + e.getMessage());
+        }
+    }
+}</code></pre>
+      </div>
+
+      <h3>List All Accounts</h3>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">Java</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>import com.google.gson.reflect.TypeToken;
+import java.lang.reflect.Type;
+import java.util.List;
+
+public class ListAccountsExample {
+    public static void main(String[] args) {
+        try {
+            AlianzaAPIClient client = new AlianzaAPIClient();
+            client.authenticate("username", "password");
+
+            String partitionId = client.getPartitionId();
+
+            // Get all accounts
+            String responseJson = client.get(
+                    String.format("/v2/partition/%s/account", partitionId)
+            );
+
+            Type listType = new TypeToken&lt;List&lt;Account&gt;&gt;(){}.getType();
+            List&lt;Account&gt; accounts = client.getGson().fromJson(responseJson, listType);
+
+            System.out.println("Found " + accounts.size() + " accounts:\n");
+
+            for (Account account : accounts) {
+                System.out.println("- " + account.getName() +
+                        " (ID: " + account.getAccountId() + ")");
+                System.out.println("  Status: " + account.getStatus());
+                System.out.println("  Account Number: " + account.getAccountNumber() + "\n");
+            }
+
+        } catch (AlianzaAPIException e) {
+            System.err.println("Error: " + e.getMessage());
+        }
+    }
+}</code></pre>
+      </div>
+
+      <h2 id="user-management">End User Management</h2>
+
+      <h3>Create End User</h3>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">Java</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>public class CreateEndUserExample {
+    public static void main(String[] args) {
+        try {
+            AlianzaAPIClient client = new AlianzaAPIClient();
+            client.authenticate("username", "password");
+
+            String partitionId = client.getPartitionId();
+            String accountId = "account123";
+
+            // Build end user request
+            EndUser user = new EndUser();
+            user.setFirstName("John");
+            user.setLastName("Doe");
+            user.setEmail("john.doe@example.com");
+            user.setExtension("1001");
+            user.setStatus("ACTIVE");
+            user.setTimeZone("America/New_York");
+
+            String userJson = client.getGson().toJson(user);
+
+            // Create end user
+            String responseJson = client.post(
+                    String.format("/v2/partition/%s/account/%s/enduser",
+                            partitionId, accountId),
+                    userJson
+            );
+
+            EndUser createdUser = client.getGson().fromJson(responseJson, EndUser.class);
+
+            System.out.println("End user created successfully!");
+            System.out.println("User ID: " + createdUser.getEndUserId());
+            System.out.println("Name: " + createdUser.getFirstName() +
+                    " " + createdUser.getLastName());
+            System.out.println("Extension: " + createdUser.getExtension());
+
+        } catch (AlianzaAPIException e) {
+            System.err.println("Error: " + e.getMessage());
+        }
+    }
+}</code></pre>
+      </div>
+
+      <h2 id="error-handling">Error Handling</h2>
+      <p>Comprehensive error handling with retry logic:</p>
+
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">Java</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>import java.util.concurrent.TimeUnit;
+
+public class ErrorHandlingExample {
+    private static final int MAX_RETRIES = 3;
+    private static final int RETRY_DELAY_MS = 1000;
+
+    public static void main(String[] args) {
+        AlianzaAPIClient client = new AlianzaAPIClient();
+
+        try {
+            // Authenticate
+            client.authenticate("username", "password");
+
+            // Execute operation with retry logic
+            String result = executeWithRetry(() -&gt; {
+                return client.post("/v2/partition/123/account", "{}");
+            });
+
+            System.out.println("Success: " + result);
+
+        } catch (AlianzaAPIException e) {
+            handleAPIError(e);
+        } catch (Exception e) {
+            System.err.println("Unexpected error: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Execute operation with exponential backoff retry
+     */
+    private static String executeWithRetry(APIOperation operation)
+            throws AlianzaAPIException {
+        int retries = 0;
+        long delay = RETRY_DELAY_MS;
+
+        while (retries &lt; MAX_RETRIES) {
+            try {
+                return operation.execute();
+
+            } catch (AlianzaAPIException e) {
+                // Don't retry on client errors (4xx)
+                if (e.getHttpCode() &gt;= 400 &amp;&amp; e.getHttpCode() &lt; 500) {
+                    throw e;
+                }
+
+                retries++;
+                if (retries &gt;= MAX_RETRIES) {
+                    throw e;
+                }
+
+                System.err.println("Request failed, retrying in " + delay + "ms... " +
+                        "(Attempt " + retries + "/" + MAX_RETRIES + ")");
+
+                try {
+                    TimeUnit.MILLISECONDS.sleep(delay);
+                } catch (InterruptedException ie) {
+                    Thread.currentThread().interrupt();
+                    throw e;
+                }
+
+                delay *= 2; // Exponential backoff
+            }
+        }
+
+        throw new AlianzaAPIException("Max retries exceeded", 0, null);
+    }
+
+    /**
+     * Handle API errors with specific status codes
+     */
+    private static void handleAPIError(AlianzaAPIException e) {
+        switch (e.getHttpCode()) {
+            case 400:
+                System.err.println("Bad Request: Invalid data provided");
+                System.err.println("Details: " + e.getResponseBody());
+                break;
+
+            case 401:
+                System.err.println("Unauthorized: Check your credentials");
+                break;
+
+            case 404:
+                System.err.println("Not Found: Resource doesn't exist");
+                break;
+
+            case 409:
+                System.err.println("Conflict: Resource already exists");
+                break;
+
+            case 429:
+                System.err.println("Rate Limited: Too many requests");
+                System.err.println("Please wait before retrying");
+                break;
+
+            case 500:
+            case 502:
+            case 503:
+                System.err.println("Server Error: Service temporarily unavailable");
+                break;
+
+            default:
+                System.err.println("API Error: " + e.getMessage());
+        }
+
+        e.printStackTrace();
+    }
+
+    @FunctionalInterface
+    interface APIOperation {
+        String execute() throws AlianzaAPIException;
+    }
+}</code></pre>
+      </div>
+
+      <h2 id="complete-example">Complete Integration Example</h2>
+      <p>A complete example showing the entire provisioning workflow:</p>
+
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">Java</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>public class CustomerProvisioningService {
+    private final AlianzaAPIClient client;
+
+    public CustomerProvisioningService(String baseUrl) {
+        this.client = new AlianzaAPIClient(baseUrl);
+    }
+
+    public ProvisioningResult provisionNewCustomer(
+            String username,
+            String password,
+            CustomerData customerData) throws AlianzaAPIException {
+
+        try {
+            // Step 1: Authenticate
+            System.out.println("1. Authenticating...");
+            client.authenticate(username, password);
+            String partitionId = client.getPartitionId();
+            System.out.println("   ✓ Authenticated\n");
+
+            // Step 2: Create Account
+            System.out.println("2. Creating account...");
+            Account account = createAccount(partitionId, customerData);
+            System.out.println("   ✓ Account created: " + account.getAccountId() + "\n");
+
+            // Step 3: Create End User
+            System.out.println("3. Creating end user...");
+            EndUser user = createEndUser(partitionId, account.getAccountId(), customerData);
+            System.out.println("   ✓ End user created: " + user.getEndUserId() + "\n");
+
+            // Step 4: Create Device
+            System.out.println("4. Creating device...");
+            Device device = createDevice(partitionId, account.getAccountId(),
+                    user.getEndUserId(), customerData);
+            System.out.println("   ✓ Device created: " + device.getDeviceId());
+            System.out.println("   ✓ SIP Credentials:");
+            System.out.println("     Username: " + device.getSipUsername());
+            System.out.println("     Password: " + device.getSipPassword() + "\n");
+
+            // Step 5: Provision Phone Number
+            System.out.println("5. Provisioning phone number...");
+            PhoneNumber phone = provisionPhoneNumber(partitionId, account.getAccountId(),
+                    user.getEndUserId(), customerData);
+            System.out.println("   ✓ Phone number provisioned: " +
+                    phone.getPhoneNumber() + "\n");
+
+            System.out.println("✅ Customer provisioned successfully!\n");
+
+            return new ProvisioningResult(account, user, device, phone);
+
+        } catch (AlianzaAPIException e) {
+            System.err.println("❌ Provisioning failed: " + e.getMessage());
+            throw e;
+        }
+    }
+
+    private Account createAccount(String partitionId, CustomerData data)
+            throws AlianzaAPIException {
+        Account account = new Account();
+        account.setAccountNumber(data.getAccountNumber());
+        account.setName(data.getCompanyName());
+        account.setTimeZone(data.getTimeZone());
+        account.setStatus("ACTIVE");
+        account.setAccountType("BUSINESS");
+
+        String json = client.getGson().toJson(account);
+        String response = client.post(
+                String.format("/v2/partition/%s/account", partitionId), json);
+
+        return client.getGson().fromJson(response, Account.class);
+    }
+
+    private EndUser createEndUser(String partitionId, String accountId,
+            CustomerData data) throws AlianzaAPIException {
+        EndUser user = new EndUser();
+        user.setFirstName(data.getFirstName());
+        user.setLastName(data.getLastName());
+        user.setEmail(data.getEmail());
+        user.setExtension(data.getExtension());
+        user.setStatus("ACTIVE");
+
+        String json = client.getGson().toJson(user);
+        String response = client.post(
+                String.format("/v2/partition/%s/account/%s/enduser",
+                        partitionId, accountId), json);
+
+        return client.getGson().fromJson(response, EndUser.class);
+    }
+
+    // Additional methods for device and phone number creation...
+
+    public static void main(String[] args) {
+        CustomerProvisioningService service =
+                new CustomerProvisioningService("https://api.alianza.com");
+
+        CustomerData customerData = new CustomerData(
+                "2001",                    // accountNumber
+                "Acme Corporation",        // companyName
+                "America/New_York",        // timeZone
+                "John",                    // firstName
+                "Doe",                     // lastName
+                "john.doe@acme.com",       // email
+                "1001",                    // extension
+                "+12125551234",            // phoneNumber
+                "Polycom",                 // manufacturer
+                "VVX450",                  // model
+                "00:04:f2:12:34:56"        // macAddress
+        );
+
+        try {
+            ProvisioningResult result = service.provisionNewCustomer(
+                    "api-username",
+                    "api-password",
+                    customerData
+            );
+
+            System.out.println("Provisioning completed:");
+            System.out.println("Account ID: " + result.getAccount().getAccountId());
+            System.out.println("User ID: " + result.getUser().getEndUserId());
+            System.out.println("Phone: " + result.getPhone().getPhoneNumber());
+
+        } catch (AlianzaAPIException e) {
+            System.err.println("Error: " + e.getMessage());
+            System.exit(1);
+        }
+    }
+}</code></pre>
+      </div>
+
+      <h2 id="best-practices">Best Practices</h2>
+
+      <div class="card">
+        <div class="card-title">1. Use Configuration Management</div>
+        <p>Load credentials from configuration files or environment variables:</p>
+        <div class="code-block">
+          <pre><code>// application.properties
+alianza.api.url=https://api.alianza.com
+alianza.api.username=${ALIANZA_USERNAME}
+alianza.api.password=${ALIANZA_PASSWORD}
+
+// Load in Java
+Properties props = new Properties();
+props.load(new FileInputStream("application.properties"));
+String apiUrl = props.getProperty("alianza.api.url");</code></pre>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">2. Implement Connection Pooling</div>
+        <p>OkHttp automatically manages connection pooling for optimal performance.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-title">3. Use Dependency Injection</div>
+        <p>For Spring applications, use dependency injection:</p>
+        <div class="code-block">
+          <pre><code>@Configuration
+public class AlianzaConfig {
+    @Bean
+    public AlianzaAPIClient alianzaClient(
+            @Value("${alianza.api.url}") String apiUrl) {
+        return new AlianzaAPIClient(apiUrl);
+    }
+}
+
+@Service
+public class AccountService {
+    private final AlianzaAPIClient client;
+
+    @Autowired
+    public AccountService(AlianzaAPIClient client) {
+        this.client = client;
+    }
+}</code></pre>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">4. Implement Proper Logging</div>
+        <p>Use SLF4J with Logback for comprehensive logging:</p>
+        <div class="code-block">
+          <pre><code>import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+private static final Logger logger =
+        LoggerFactory.getLogger(YourClass.class);
+
+logger.info("Creating account: {}", accountName);
+logger.error("Failed to create account", exception);</code></pre>
+        </div>
+      </div>
+
+      <div class="alert alert-success">
+        <strong>🎉 You're Ready!</strong> You now have enterprise-grade Java examples for the Alianza API. Check out the <a href="../advanced/best-practices.html">Best Practices Guide</a> for production deployment tips.
+      </div>
+
+      <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border-color);">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <a href="php-examples.html" class="btn btn-secondary">← PHP Examples</a>
+          </div>
+          <div>
+            <a href="../advanced/error-handling.html" class="btn btn-primary">Error Handling →</a>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="../js/main.js"></script>
+</body>
+</html>
