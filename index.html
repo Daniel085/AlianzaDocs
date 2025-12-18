@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Comprehensive developer documentation for the Alianza Public API - VoIP and Telecommunications Platform">
+  <title>Alianza API Documentation</title>
+  <link rel="stylesheet" href="docs/html/css/main.css">
+  <style>
+    /* Landing Page Specific Styles */
+    .landing-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .landing-hero {
+      text-align: center;
+      padding: 4rem 2rem;
+      background: linear-gradient(135deg, #e3f2fd 0%, #f8f9fa 100%);
+      border-radius: 16px;
+      margin-bottom: 3rem;
+    }
+
+    [data-theme="dark"] .landing-hero {
+      background: linear-gradient(135deg, #1e3a5f 0%, #2d2d2d 100%);
+    }
+
+    .landing-hero h1 {
+      font-size: 3.5rem;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .landing-hero p {
+      font-size: 1.5rem;
+      max-width: 700px;
+      margin: 0 auto 2rem;
+      color: var(--text-secondary);
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin: 3rem 0;
+    }
+
+    .feature-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 2rem;
+      transition: all 0.3s;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+      border-color: var(--accent-primary);
+    }
+
+    .feature-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+
+    .feature-card h3 {
+      margin-top: 0;
+      color: var(--accent-primary);
+    }
+
+    .quick-start-section {
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      padding: 3rem;
+      margin: 3rem 0;
+    }
+
+    .code-example {
+      background: var(--code-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      position: relative;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin: 3rem 0;
+      text-align: center;
+    }
+
+    .stat-card {
+      background: var(--bg-secondary);
+      padding: 2rem;
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+    }
+
+    .stat-number {
+      font-size: 3rem;
+      font-weight: 700;
+      color: var(--accent-primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-label {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .environments-table {
+      width: 100%;
+      margin: 2rem 0;
+    }
+
+    .nav-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin: 3rem 0;
+    }
+
+    .nav-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1.5rem;
+      text-decoration: none;
+      transition: all 0.3s;
+      display: block;
+    }
+
+    .nav-card:hover {
+      border-color: var(--accent-primary);
+      box-shadow: var(--shadow-md);
+      transform: translateY(-2px);
+      text-decoration: none;
+    }
+
+    .nav-card h4 {
+      margin: 0 0 0.5rem 0;
+      color: var(--accent-primary);
+    }
+
+    .nav-card p {
+      margin: 0;
+      font-size: 0.9rem;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-left: 0.5rem;
+    }
+
+    .badge-new {
+      background: var(--success);
+      color: white;
+    }
+
+    .badge-popular {
+      background: var(--accent-primary);
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="docs-header">
+    <a href="/" class="docs-logo">
+      <span>📞</span> Alianza API
+    </a>
+    <nav class="docs-nav">
+      <a href="#documentation">Documentation</a>
+      <a href="#guides">Guides</a>
+      <a href="#api-reference">API Reference</a>
+      <a href="https://github.com" target="_blank">GitHub</a>
+      <button id="theme-toggle" class="theme-toggle">🌙 Dark</button>
+    </nav>
+  </header>
+
+  <!-- Main Content -->
+  <div class="landing-container" style="margin-top: 64px;">
+    <!-- Hero Section -->
+    <section class="landing-hero">
+      <h1>Alianza API Documentation</h1>
+      <p>Comprehensive developer guide for building powerful VoIP and telecommunications integrations</p>
+      <div class="hero-buttons">
+        <a href="docs/html/getting-started/quick-start.html" class="btn btn-primary" style="font-size: 1.1rem; padding: 0.75rem 2rem;">
+          🚀 Quick Start
+        </a>
+        <a href="openapi.yaml" class="btn btn-secondary" style="font-size: 1.1rem; padding: 0.75rem 2rem;">
+          📄 API Reference
+        </a>
+        <a href="docs/architecture/diagrams.md" class="btn btn-secondary" style="font-size: 1.1rem; padding: 0.75rem 2rem;">
+          🏗️ Architecture
+        </a>
+      </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-number">28K+</div>
+        <div class="stat-label">Lines of OpenAPI Spec</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">100+</div>
+        <div class="stat-label">API Endpoints</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">11</div>
+        <div class="stat-label">Architecture Diagrams</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">6</div>
+        <div class="stat-label">Code Examples</div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section>
+      <h2 style="text-align: center; font-size: 2.5rem; margin-bottom: 2rem;">Everything You Need to Build</h2>
+      <div class="feature-grid">
+        <div class="feature-card">
+          <div class="feature-icon">⚡</div>
+          <h3>Quick Start in 5 Minutes</h3>
+          <p>Get up and running with your first API call in under 5 minutes. Our step-by-step guide walks you through authentication to your first request.</p>
+          <a href="docs/html/getting-started/quick-start.html" class="btn btn-primary" style="margin-top: 1rem;">Start Building →</a>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">🏗️</div>
+          <h3>Visual Architecture Guides</h3>
+          <p>Understand the platform with 11 comprehensive diagrams covering authentication flows, account creation, call routing, and more.</p>
+          <a href="docs/architecture/diagrams.md" class="btn btn-secondary" style="margin-top: 1rem;">View Diagrams →</a>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">💻</div>
+          <h3>Multi-Language Examples</h3>
+          <p>Production-ready code examples in Python, Node.js, PHP, Java, C#, and Ruby with complete error handling.</p>
+          <a href="docs/html/code-examples/" class="btn btn-secondary" style="margin-top: 1rem;">See Examples →</a>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">📱</div>
+          <h3>Complete VoIP Features</h3>
+          <p>Account management, phone numbers, devices, call routing, IVR, hunt groups, emergency services, and more.</p>
+          <a href="docs/guides/account-management.md" class="btn btn-secondary" style="margin-top: 1rem;">Explore Features →</a>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">🔒</div>
+          <h3>Security Best Practices</h3>
+          <p>Learn token management, error handling, rate limiting, and security patterns for production deployments.</p>
+          <a href="docs/advanced/best-practices.md" class="btn btn-secondary" style="margin-top: 1rem;">Best Practices →</a>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">📚</div>
+          <h3>Comprehensive Guides</h3>
+          <p>In-depth tutorials for accounts, phone numbers, porting, devices, and advanced telephony features.</p>
+          <a href="#guides" class="btn btn-secondary" style="margin-top: 1rem;">Read Guides →</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quick Start Preview -->
+    <section class="quick-start-section">
+      <h2>Get Started in 3 Steps</h2>
+      <p style="font-size: 1.1rem; color: var(--text-secondary);">Make your first API call in minutes</p>
+
+      <div style="margin: 2rem 0;">
+        <h3>1️⃣ Authenticate</h3>
+        <div class="code-example">
+          <div class="code-header">
+            <span class="code-language">Bash</span>
+            <button class="copy-button">Copy</button>
+          </div>
+          <pre><code>curl -X POST https://api.alianza.com/v2/authorize \
+  -H "Content-Type: application/json" \
+  -d '{
+    "userName": "your-username",
+    "password": "your-password"
+  }'</code></pre>
+        </div>
+
+        <h3>2️⃣ Get Your Token</h3>
+        <div class="code-example">
+          <div class="code-header">
+            <span class="code-language">JSON Response</span>
+          </div>
+          <pre><code>{
+  "authToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "partitionId": "partition123",
+  "expiresIn": 3600
+}</code></pre>
+        </div>
+
+        <h3>3️⃣ Make Your First Request</h3>
+        <div class="code-example">
+          <div class="code-header">
+            <span class="code-language">Bash</span>
+            <button class="copy-button">Copy</button>
+          </div>
+          <pre><code>curl -X GET https://api.alianza.com/v2/partition/{partitionId}/account \
+  -H "X-AUTH-TOKEN: your-token-here"</code></pre>
+        </div>
+
+        <p style="text-align: center; margin-top: 2rem;">
+          <a href="docs/html/getting-started/quick-start.html" class="btn btn-primary" style="font-size: 1.1rem;">
+            Continue to Full Tutorial →
+          </a>
+        </p>
+      </div>
+    </section>
+
+    <!-- Documentation Navigation -->
+    <section id="documentation">
+      <h2 style="text-align: center; font-size: 2.5rem; margin: 4rem 0 2rem;">Documentation</h2>
+
+      <h3>🎯 Getting Started <span class="badge badge-popular">Popular</span></h3>
+      <div class="nav-cards">
+        <a href="docs/html/getting-started/quick-start.html" class="nav-card">
+          <h4>Quick Start Guide</h4>
+          <p>Your first API call in under 5 minutes</p>
+        </a>
+        <a href="docs/html/getting-started/authentication.html" class="nav-card">
+          <h4>Authentication</h4>
+          <p>Token management and security</p>
+        </a>
+        <a href="docs/architecture/diagrams.md" class="nav-card">
+          <h4>Architecture Diagrams</h4>
+          <p>Visual guides to the platform</p>
+        </a>
+      </div>
+
+      <h3 id="guides">📖 How-To Guides</h3>
+      <div class="nav-cards">
+        <a href="docs/guides/account-management.md" class="nav-card">
+          <h4>Account Management</h4>
+          <p>Create and manage VoIP accounts</p>
+        </a>
+        <a href="docs/guides/phone-numbers.md" class="nav-card">
+          <h4>Phone Numbers</h4>
+          <p>Search, order, port, and assign numbers</p>
+        </a>
+        <a href="docs/guides/device-management.md" class="nav-card">
+          <h4>Device Management <span class="badge" style="background: var(--text-tertiary); color: white;">Coming Soon</span></h4>
+          <p>Configure VoIP devices and lines</p>
+        </a>
+        <a href="docs/guides/call-routing.md" class="nav-card">
+          <h4>Call Routing <span class="badge" style="background: var(--text-tertiary); color: white;">Coming Soon</span></h4>
+          <p>IVR, hunt groups, and call flow</p>
+        </a>
+      </div>
+
+      <h3>💻 Code Examples</h3>
+      <div class="nav-cards">
+        <a href="docs/html/code-examples/python-examples.html" class="nav-card">
+          <h4>Python Examples <span class="badge badge-new">New</span></h4>
+          <p>Complete SDK with error handling</p>
+        </a>
+        <a href="docs/html/code-examples/nodejs-examples.html" class="nav-card">
+          <h4>Node.js Examples <span class="badge badge-new">New</span></h4>
+          <p>JavaScript/TypeScript examples</p>
+        </a>
+        <a href="docs/code-examples/php-examples.md" class="nav-card">
+          <h4>PHP Examples <span class="badge" style="background: var(--text-tertiary); color: white;">Coming Soon</span></h4>
+          <p>PHP integration patterns</p>
+        </a>
+        <a href="docs/code-examples/java-examples.md" class="nav-card">
+          <h4>Java Examples <span class="badge" style="background: var(--text-tertiary); color: white;">Coming Soon</span></h4>
+          <p>Java SDK and examples</p>
+        </a>
+      </div>
+
+      <h3>🚀 Advanced Topics</h3>
+      <div class="nav-cards">
+        <a href="docs/advanced/error-handling.md" class="nav-card">
+          <h4>Error Handling</h4>
+          <p>Comprehensive error patterns</p>
+        </a>
+        <a href="docs/advanced/best-practices.md" class="nav-card">
+          <h4>Best Practices</h4>
+          <p>Production deployment guide</p>
+        </a>
+      </div>
+    </section>
+
+    <!-- API Environments -->
+    <section>
+      <h2 style="text-align: center; font-size: 2.5rem; margin: 4rem 0 2rem;">API Environments</h2>
+      <table class="environments-table">
+        <thead>
+          <tr>
+            <th>Environment</th>
+            <th>URL</th>
+            <th>Purpose</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Development</strong></td>
+            <td><code>https://api.d2.alianza.com</code></td>
+            <td>Initial development and testing</td>
+          </tr>
+          <tr>
+            <td><strong>QA</strong></td>
+            <td><code>https://api.q2.alianza.com</code></td>
+            <td>Integration and acceptance testing</td>
+          </tr>
+          <tr>
+            <td><strong>Beta</strong></td>
+            <td><code>https://api.b2.alianza.com</code></td>
+            <td>Pre-production validation</td>
+          </tr>
+          <tr>
+            <td><strong>Production</strong></td>
+            <td><code>https://api.alianza.com</code></td>
+            <td>Live production traffic</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- API Reference -->
+    <section id="api-reference">
+      <h2 style="text-align: center; font-size: 2.5rem; margin: 4rem 0 2rem;">API Reference</h2>
+      <div style="text-align: center; background: var(--bg-secondary); padding: 3rem; border-radius: 12px;">
+        <p style="font-size: 1.2rem; margin-bottom: 2rem;">
+          Complete OpenAPI 3.0.3 specification with 28,330 lines covering all endpoints, schemas, and examples.
+        </p>
+        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+          <a href="openapi.yaml" class="btn btn-primary">View OpenAPI Spec</a>
+          <a href="https://editor.swagger.io/" target="_blank" class="btn btn-secondary">Open in Swagger Editor</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- PDF Resources -->
+    <section>
+      <h2 style="text-align: center; font-size: 2.5rem; margin: 4rem 0 2rem;">Additional Resources</h2>
+      <div class="nav-cards">
+        <a href="Alianza%20API%20Reference%20Values.pdf" class="nav-card">
+          <h4>📄 Reference Values</h4>
+          <p>Enumeration values and constants</p>
+        </a>
+        <a href="Alianza%20Account%20Create%20API.pdf" class="nav-card">
+          <h4>📄 Account Creation</h4>
+          <p>Step-by-step account setup</p>
+        </a>
+        <a href="Alianza%20Account%20Create%20for%20BeYOC%20via%20API.pdf" class="nav-card">
+          <h4>📄 BeYOC Integration</h4>
+          <p>Bring Your Own Carrier guide</p>
+        </a>
+        <a href="Alianza%20Phone%20Numbers%20via%20API.pdf" class="nav-card">
+          <h4>📄 Phone Numbers</h4>
+          <p>Complete number management</p>
+        </a>
+        <a href="Alianza%20Specialty%20Lines%20via%20API.pdf" class="nav-card">
+          <h4>📄 Specialty Lines</h4>
+          <p>Advanced line configurations</p>
+        </a>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer style="text-align: center; padding: 3rem 0; margin-top: 4rem; border-top: 1px solid var(--border-color);">
+      <p style="color: var(--text-secondary);">
+        Need help? Contact your Alianza account manager for API credentials and support.
+      </p>
+      <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-top: 1rem;">
+        © 2025 Alianza API Documentation
+      </p>
+    </footer>
+  </div>
+
+  <script src="docs/html/js/main.js"></script>
+  <script>
+    // Initialize copy buttons for landing page
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.copy-button').forEach(button => {
+        button.addEventListener('click', async () => {
+          const codeBlock = button.parentElement.nextElementSibling.querySelector('code');
+          const text = codeBlock.textContent;
+
+          try {
+            await navigator.clipboard.writeText(text);
+            button.textContent = '✓ Copied!';
+            setTimeout(() => {
+              button.textContent = 'Copy';
+            }, 2000);
+          } catch (err) {
+            console.error('Failed to copy:', err);
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>

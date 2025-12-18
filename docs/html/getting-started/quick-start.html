@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Get started with the Alianza API in under 5 minutes">
+  <title>Quick Start Guide - Alianza API</title>
+  <link rel="stylesheet" href="../css/main.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="docs-header">
+    <a href="../../../index.html" class="docs-logo">
+      <span>📞</span> Alianza API
+    </a>
+    <nav class="docs-nav">
+      <a href="../../../index.html">Home</a>
+      <a href="../../architecture/diagrams.md">Architecture</a>
+      <a href="../../guides/account-management.md">Guides</a>
+      <a href="../../../openapi.yaml">API Reference</a>
+      <button id="theme-toggle" class="theme-toggle">🌙 Dark</button>
+    </nav>
+  </header>
+
+  <div class="docs-container">
+    <!-- Sidebar -->
+    <aside class="docs-sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-title">Getting Started</div>
+        <ul class="sidebar-links">
+          <li><a href="quick-start.html" class="active">Quick Start</a></li>
+          <li><a href="authentication.html">Authentication</a></li>
+        </ul>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-title">Guides</div>
+        <ul class="sidebar-links">
+          <li><a href="../../guides/account-management.md">Account Management</a></li>
+          <li><a href="../../guides/phone-numbers.md">Phone Numbers</a></li>
+        </ul>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-title">Code Examples</div>
+        <ul class="sidebar-links">
+          <li><a href="../code-examples/python-examples.html">Python</a></li>
+          <li><a href="../code-examples/nodejs-examples.html">Node.js</a></li>
+        </ul>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-title">Advanced</div>
+        <ul class="sidebar-links">
+          <li><a href="../../advanced/error-handling.md">Error Handling</a></li>
+          <li><a href="../../advanced/best-practices.md">Best Practices</a></li>
+        </ul>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="docs-main">
+      <h1>Quick Start Guide</h1>
+      <p style="font-size: 1.2rem;">Get up and running with the Alianza API in under 5 minutes. This guide will walk you through authentication and your first API call.</p>
+
+      <div class="alert alert-info">
+        <strong>💡 New to APIs?</strong> Don't worry! This guide assumes no prior knowledge and walks you through every step.
+      </div>
+
+      <h2 id="prerequisites">Prerequisites</h2>
+      <p>Before you begin, ensure you have:</p>
+      <ul>
+        <li><strong>API Credentials</strong>: Contact your Alianza account manager to obtain:
+          <ul>
+            <li>Username</li>
+            <li>Password</li>
+            <li>Partition ID</li>
+          </ul>
+        </li>
+        <li><strong>API Environment</strong>: Choose your environment
+          <ul>
+            <li><strong>Development</strong>: <code>https://api.d2.alianza.com</code></li>
+            <li><strong>Production</strong>: <code>https://api.alianza.com</code></li>
+          </ul>
+        </li>
+        <li><strong>Tools</strong>: Any HTTP client (curl, Postman, or your favorite programming language)</li>
+      </ul>
+
+      <h2 id="step-1">Step 1: Authenticate and Get Your Token</h2>
+      <p>All API requests require an <code>X-AUTH-TOKEN</code> header. First, you need to obtain this token by logging in.</p>
+
+      <h3>Request</h3>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">Bash</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>curl -X POST https://api.alianza.com/v2/authorize \
+  -H "Content-Type: application/json" \
+  -d '{
+    "userName": "your-username",
+    "password": "your-password"
+  }'</code></pre>
+      </div>
+
+      <h3>Response</h3>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">JSON</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>{
+  "authToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "tokenType": "Bearer",
+  "expiresIn": 3600,
+  "userId": "user123",
+  "partitionId": "partition123",
+  "userType": "MANAGEMENT_USER"
+}</code></pre>
+      </div>
+
+      <div class="alert alert-warning">
+        <strong>⚠️ Save the authToken value</strong> - you'll need it for all subsequent requests.
+      </div>
+
+      <h2 id="step-2">Step 2: Make Your First API Call</h2>
+      <p>Let's retrieve all accounts in your partition to verify everything is working.</p>
+
+      <h3>Request</h3>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">Bash</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>curl -X GET https://api.alianza.com/v2/partition/{partitionId}/account \
+  -H "X-AUTH-TOKEN: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." \
+  -H "Content-Type: application/json"</code></pre>
+      </div>
+
+      <p>Replace <code>{partitionId}</code> with your actual partition ID from the login response.</p>
+
+      <h3>Response</h3>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">JSON</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>[
+  {
+    "accountId": "account123",
+    "accountNumber": "1001",
+    "name": "Acme Corporation",
+    "status": "ACTIVE",
+    "timeZone": "America/New_York",
+    "createdDate": "2025-01-15T10:30:00Z"
+  }
+]</code></pre>
+      </div>
+
+      <h2 id="step-3">Step 3: Create Your First Account</h2>
+      <p>Now let's create a new account to demonstrate write operations.</p>
+
+      <div class="language-tabs">
+        <button class="language-tab active" data-language="curl">cURL</button>
+        <button class="language-tab" data-language="python">Python</button>
+        <button class="language-tab" data-language="nodejs">Node.js</button>
+      </div>
+
+      <div class="language-content active" data-language="curl">
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-language">Bash</span>
+            <button class="copy-button">Copy</button>
+          </div>
+          <pre><code>curl -X POST https://api.alianza.com/v2/partition/{partitionId}/account \
+  -H "X-AUTH-TOKEN: your-auth-token" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "accountNumber": "2001",
+    "name": "New Business Account",
+    "timeZone": "America/Los_Angeles",
+    "status": "ACTIVE"
+  }'</code></pre>
+        </div>
+      </div>
+
+      <div class="language-content" data-language="python">
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-language">Python</span>
+            <button class="copy-button">Copy</button>
+          </div>
+          <pre><code>import requests
+
+# Authenticate
+auth_response = requests.post(
+    'https://api.alianza.com/v2/authorize',
+    json={'userName': 'your-user', 'password': 'your-pass'}
+)
+token = auth_response.json()['authToken']
+partition_id = auth_response.json()['partitionId']
+
+# Create account
+headers = {
+    'X-AUTH-TOKEN': token,
+    'Content-Type': 'application/json'
+}
+
+account_data = {
+    'accountNumber': '2001',
+    'name': 'New Business Account',
+    'timeZone': 'America/Los_Angeles',
+    'status': 'ACTIVE'
+}
+
+response = requests.post(
+    f'https://api.alianza.com/v2/partition/{partition_id}/account',
+    headers=headers,
+    json=account_data
+)
+
+print(response.json())</code></pre>
+        </div>
+      </div>
+
+      <div class="language-content" data-language="nodejs">
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-language">JavaScript</span>
+            <button class="copy-button">Copy</button>
+          </div>
+          <pre><code>const axios = require('axios');
+
+// Authenticate
+const authResponse = await axios.post(
+  'https://api.alianza.com/v2/authorize',
+  {
+    userName: 'your-user',
+    password: 'your-pass'
+  }
+);
+
+const token = authResponse.data.authToken;
+const partitionId = authResponse.data.partitionId;
+
+// Create account
+const accountResponse = await axios.post(
+  `https://api.alianza.com/v2/partition/${partitionId}/account`,
+  {
+    accountNumber: '2001',
+    name: 'New Business Account',
+    timeZone: 'America/Los_Angeles',
+    status: 'ACTIVE'
+  },
+  {
+    headers: {
+      'X-AUTH-TOKEN': token,
+      'Content-Type': 'application/json'
+    }
+  }
+);
+
+console.log(accountResponse.data);</code></pre>
+        </div>
+      </div>
+
+      <h3>Response</h3>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">JSON</span>
+        </div>
+        <pre><code>{
+  "accountId": "account456",
+  "accountNumber": "2001",
+  "name": "New Business Account",
+  "status": "ACTIVE",
+  "timeZone": "America/Los_Angeles",
+  "createdDate": "2025-12-18T15:45:00Z"
+}</code></pre>
+      </div>
+
+      <h2 id="whats-next">What's Next?</h2>
+      <div class="alert alert-success">
+        <strong>🎉 Congratulations!</strong> You've successfully:
+        <ul style="margin: 0.5rem 0 0;">
+          <li>✅ Authenticated with the Alianza API</li>
+          <li>✅ Retrieved account data</li>
+          <li>✅ Created a new account</li>
+        </ul>
+      </div>
+
+      <h3>Continue Your Journey</h3>
+      <p>Explore these guides to build out your integration:</p>
+
+      <div class="card-grid">
+        <div class="card">
+          <div class="card-title">📚 Authentication Guide</div>
+          <p>Deep dive into auth methods, token management, and security</p>
+          <a href="authentication.html" class="btn btn-primary">Learn More →</a>
+        </div>
+
+        <div class="card">
+          <div class="card-title">🏢 Account Management</div>
+          <p>Complete account lifecycle management</p>
+          <a href="../../guides/account-management.md" class="btn btn-primary">Read Guide →</a>
+        </div>
+
+        <div class="card">
+          <div class="card-title">📞 Phone Numbers</div>
+          <p>Provision and manage phone numbers</p>
+          <a href="../../guides/phone-numbers.md" class="btn btn-primary">Read Guide →</a>
+        </div>
+
+        <div class="card">
+          <div class="card-title">💻 Code Examples</div>
+          <p>See examples in Python, Node.js, and more</p>
+          <a href="../code-examples/python-examples.html" class="btn btn-primary">View Examples →</a>
+        </div>
+      </div>
+
+      <h3>Common Next Steps</h3>
+      <p>Most integrations follow this pattern:</p>
+      <ol>
+        <li><strong>Create Account</strong> → Set up a business or residential account</li>
+        <li><strong>Validate Address</strong> → Ensure E911 compliance</li>
+        <li><strong>Provision Phone Number</strong> → Assign telephone numbers</li>
+        <li><strong>Create End User</strong> → Add individual users</li>
+        <li><strong>Configure Device</strong> → Set up VoIP phones</li>
+        <li><strong>Set Up Call Routing</strong> → Configure IVRs, hunt groups, etc.</li>
+      </ol>
+
+      <p>See the <a href="../../guides/account-management.md">Account Management Guide</a> for the complete workflow.</p>
+
+      <h2 id="need-help">Need Help?</h2>
+      <ul>
+        <li><strong>API Reference</strong>: Full OpenAPI specification in <code>openapi.yaml</code></li>
+        <li><strong>Support</strong>: Contact your Alianza account manager</li>
+        <li><strong>Environments</strong>: Test in development before deploying to production</li>
+      </ul>
+
+      <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border-color);">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <a href="../../../index.html" class="btn btn-secondary">← Back to Home</a>
+          </div>
+          <div>
+            <a href="authentication.html" class="btn btn-primary">Next: Authentication →</a>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="../js/main.js"></script>
+</body>
+</html>
