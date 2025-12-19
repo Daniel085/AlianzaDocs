@@ -1,85 +1,989 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Python Code Examples - Alianza API</title>
-  <link rel="stylesheet" href="../css/main.css">
-  <style>
-    .markdown-note {
-      background: var(--accent-tertiary);
-      border-left: 4px solid var(--accent-primary);
-      padding: 1rem;
-      margin: 2rem 0;
-      border-radius: var(--radius-md);
-    }
-    .view-markdown-btn {
-      display: inline-block;
-      margin-top: 1rem;
-      padding: 0.5rem 1rem;
-      background: var(--accent-primary);
-      color: white;
-      text-decoration: none;
-      border-radius: var(--radius-md);
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Code Examples - Alianza API Documentation</title>
+    <link rel="stylesheet" href="../css/main.css">
 </head>
 <body>
-  <header class="docs-header">
-    <a href="../../../index.html" class="docs-logo">
-      <span>📞</span> Alianza API
-    </a>
-    <nav class="docs-nav">
-      <a href="../../../index.html">Home</a>
-      <button id="theme-toggle" class="theme-toggle">🌙 Dark</button>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <a href="../index.html">Alianza API Docs</a>
+            </div>
+            <button class="mobile-menu-toggle" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-menu">
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="../getting-started/quick-start.html">Quick Start</a></li>
+                <li><a href="../getting-started/authentication.html">Authentication</a></li>
+                <li><a href="../api-reference/endpoints.html">API Reference</a></li>
+                <li><a href="../guides/account-management.html">Guides</a></li>
+            </ul>
+            <button class="theme-toggle" aria-label="Toggle theme">
+                <svg class="sun-icon" width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"/>
+                </svg>
+                <svg class="moon-icon" width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/>
+                </svg>
+            </button>
+        </div>
     </nav>
-  </header>
 
-  <div class="docs-container">
-    <aside class="docs-sidebar">
-      <div class="sidebar-section">
-        <div class="sidebar-title">Getting Started</div>
-        <ul class="sidebar-links">
-          <li><a href="../getting-started/quick-start.html">Quick Start</a></li>
-          <li><a href="../getting-started/authentication.html">Authentication</a></li>
-        </ul>
-      </div>
-      <div class="sidebar-section">
-        <div class="sidebar-title">Guides</div>
-        <ul class="sidebar-links">
-          <li><a href="../guides/account-management.html">Account Management</a></li>
-          <li><a href="../guides/phone-numbers.html">Phone Numbers</a></li>
-        </ul>
-      </div>
-      <div class="sidebar-section">
-        <div class="sidebar-title">Code Examples</div>
-        <ul class="sidebar-links">
-          <li><a href="../code-examples/python-examples.html">Python</a></li>
-          <li><a href="../code-examples/nodejs-examples.html">Node.js</a></li>
-        </ul>
-      </div>
-      <div class="sidebar-section">
-        <div class="sidebar-title">Advanced</div>
-        <ul class="sidebar-links">
-          <li><a href="../advanced/error-handling.html">Error Handling</a></li>
-          <li><a href="../advanced/best-practices.html">Best Practices</a></li>
-        </ul>
-      </div>
+    <aside class="sidebar">
+        <div class="sidebar-section">
+            <h3>Getting Started</h3>
+            <ul>
+                <li><a href="../getting-started/quick-start.html">Quick Start</a></li>
+                <li><a href="../getting-started/authentication.html">Authentication</a></li>
+            </ul>
+        </div>
+        <div class="sidebar-section">
+            <h3>Guides</h3>
+            <ul>
+                <li><a href="../guides/account-management.html">Account Management</a></li>
+                <li><a href="../guides/phone-numbers.html">Phone Number Management</a></li>
+                <li><a href="../guides/device-management.html">Device Management</a></li>
+                <li><a href="../guides/call-routing.html">Call Routing</a></li>
+            </ul>
+        </div>
+        <div class="sidebar-section">
+            <h3>Code Examples</h3>
+            <ul>
+                <li><a href="python-examples.html" class="active">Python</a></li>
+                <li><a href="nodejs-examples.html">Node.js</a></li>
+                <li><a href="php-examples.html">PHP</a></li>
+                <li><a href="java-examples.html">Java</a></li>
+            </ul>
+        </div>
+        <div class="sidebar-section">
+            <h3>Advanced</h3>
+            <ul>
+                <li><a href="../advanced/error-handling.html">Error Handling</a></li>
+                <li><a href="../advanced/best-practices.html">Best Practices</a></li>
+            </ul>
+        </div>
+        <div class="sidebar-section">
+            <h3>Architecture</h3>
+            <ul>
+                <li><a href="../architecture/diagrams.html">Diagrams</a></li>
+            </ul>
+        </div>
     </aside>
 
-    <main class="docs-main">
-      <h1>Python Code Examples</h1>
+    <main class="main-content">
+        <div class="content-wrapper">
+            <h1>Python Code Examples</h1>
+            <p class="lead">Complete Python examples and SDK for working with the Alianza API, including authentication, account management, phone numbers, and more.</p>
 
-      <div class="markdown-note">
-        <strong>📝 Note:</strong> This page is being converted from markdown to interactive HTML.
-        <br>
-        <a href="../../../docs/code-examples/python-examples.md" class="view-markdown-btn">View Markdown Version →</a>
-      </div>
+            <div class="toc-box">
+                <h4>On This Page</h4>
+                <ul>
+                    <li><a href="#setup">Setup & Installation</a></li>
+                    <li><a href="#sdk">Complete SDK Client</a></li>
+                    <li><a href="#authentication">Authentication Examples</a></li>
+                    <li><a href="#accounts">Account Management</a></li>
+                    <li><a href="#users">User Management</a></li>
+                    <li><a href="#phone-numbers">Phone Number Management</a></li>
+                    <li><a href="#devices">Device Management</a></li>
+                    <li><a href="#call-routing">Call Routing</a></li>
+                    <li><a href="#error-handling">Error Handling</a></li>
+                    <li><a href="#complete-example">Complete Integration Example</a></li>
+                </ul>
+            </div>
 
-      <p>Interactive HTML version coming soon. For now, please refer to the markdown version above.</p>
+            <section id="setup">
+                <h2>Setup & Installation</h2>
+
+                <h3>Install Required Packages</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-title">Install Dependencies</span>
+                        <button class="copy-button" aria-label="Copy code">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M13.5 2h-10A1.5 1.5 0 002 3.5v10A1.5 1.5 0 003.5 15h10a1.5 1.5 0 001.5-1.5v-10A1.5 1.5 0 0013.5 2z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5.5 1v2M10.5 1v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code>pip install requests python-dotenv</code></pre>
+                </div>
+
+                <h3>Environment Configuration</h3>
+                <p>Create a <code>.env</code> file in your project root to store credentials securely:</p>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-title">.env</span>
+                        <button class="copy-button" aria-label="Copy code">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M13.5 2h-10A1.5 1.5 0 002 3.5v10A1.5 1.5 0 003.5 15h10a1.5 1.5 0 001.5-1.5v-10A1.5 1.5 0 0013.5 2z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5.5 1v2M10.5 1v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code>ALIANZA_USERNAME=your-username
+ALIANZA_PASSWORD=your-password
+ALIANZA_BASE_URL=https://api.alianza.com
+ALIANZA_PARTITION_ID=your-partition-id</code></pre>
+                </div>
+
+                <div class="warning-box">
+                    <strong>Security Note:</strong> Never commit the <code>.env</code> file to version control. Add it to <code>.gitignore</code>.
+                </div>
+            </section>
+
+            <section id="sdk">
+                <h2>Complete SDK Client</h2>
+                <p>A production-ready Python SDK for the Alianza API with automatic authentication, token refresh, and comprehensive error handling.</p>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-title">alianza_client.py</span>
+                        <button class="copy-button" aria-label="Copy code">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M13.5 2h-10A1.5 1.5 0 002 3.5v10A1.5 1.5 0 003.5 15h10a1.5 1.5 0 001.5-1.5v-10A1.5 1.5 0 0013.5 2z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5.5 1v2M10.5 1v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code>import os
+import requests
+import time
+from datetime import datetime, timedelta
+from typing import Optional, Dict, List
+from dotenv import load_dotenv
+
+load_dotenv()
+
+class AlianzaClient:
+    """Complete Alianza API client with authentication and error handling"""
+
+    def __init__(
+        self,
+        username: str = None,
+        password: str = None,
+        base_url: str = None,
+        partition_id: str = None
+    ):
+        self.username = username or os.getenv('ALIANZA_USERNAME')
+        self.password = password or os.getenv('ALIANZA_PASSWORD')
+        self.base_url = (base_url or os.getenv('ALIANZA_BASE_URL')).rstrip('/')
+        self.partition_id = partition_id or os.getenv('ALIANZA_PARTITION_ID')
+
+        self.token: Optional[str] = None
+        self.token_expiry: Optional[datetime] = None
+        self.user_id: Optional[str] = None
+
+    def authenticate(self) -> Dict:
+        """Obtain authentication token"""
+        response = requests.post(
+            f'{self.base_url}/v2/authorize',
+            json={
+                'userName': self.username,
+                'password': self.password
+            }
+        )
+        response.raise_for_status()
+
+        data = response.json()
+        self.token = data['authToken']
+        self.token_expiry = datetime.now() + timedelta(seconds=data['expiresIn'])
+        self.user_id = data.get('userId')
+
+        return data
+
+    def _ensure_authenticated(self):
+        """Refresh token if expired or missing"""
+        if not self.token or datetime.now() >= self.token_expiry - timedelta(minutes=5):
+            self.authenticate()
+
+    def _make_request(
+        self,
+        method: str,
+        endpoint: str,
+        **kwargs
+    ) -> requests.Response:
+        """Make authenticated API request with retry logic"""
+        self._ensure_authenticated()
+
+        headers = kwargs.pop('headers', {})
+        headers['X-AUTH-TOKEN'] = self.token
+        headers['Content-Type'] = 'application/json'
+
+        url = f'{self.base_url}{endpoint}'
+
+        # First attempt
+        response = requests.request(method, url, headers=headers, **kwargs)
+
+        # Retry on 401
+        if response.status_code == 401:
+            self.authenticate()
+            headers['X-AUTH-TOKEN'] = self.token
+            response = requests.request(method, url, headers=headers, **kwargs)
+
+        response.raise_for_status()
+        return response
+
+    def logout(self):
+        """Logout and invalidate token"""
+        if self.token:
+            requests.put(
+                f'{self.base_url}/v2/authorize/logout',
+                headers={'X-AUTH-TOKEN': self.token}
+            )
+            self.token = None
+            self.token_expiry = None
+
+    # Account Methods
+    def list_accounts(self) -> List[Dict]:
+        """List all accounts in partition"""
+        response = self._make_request(
+            'GET',
+            f'/v2/partition/{self.partition_id}/account'
+        )
+        return response.json()
+
+    def get_account(self, account_id: str) -> Dict:
+        """Get account details"""
+        response = self._make_request(
+            'GET',
+            f'/v2/partition/{self.partition_id}/account/{account_id}'
+        )
+        return response.json()
+
+    def create_account(self, account_data: Dict) -> Dict:
+        """Create new account"""
+        response = self._make_request(
+            'POST',
+            f'/v2/partition/{self.partition_id}/account',
+            json=account_data
+        )
+        return response.json()
+
+    def update_account(self, account_id: str, account_data: Dict) -> Dict:
+        """Update account"""
+        response = self._make_request(
+            'PUT',
+            f'/v2/partition/{self.partition_id}/account/{account_id}',
+            json=account_data
+        )
+        return response.json()
+
+    def delete_account(self, account_id: str):
+        """Delete account"""
+        self._make_request(
+            'DELETE',
+            f'/v2/partition/{self.partition_id}/account/{account_id}'
+        )
+
+    # User Methods
+    def list_users(self, account_id: str) -> List[Dict]:
+        """List users in account"""
+        response = self._make_request(
+            'GET',
+            f'/v2/partition/{self.partition_id}/account/{account_id}/user'
+        )
+        return response.json()
+
+    def create_user(self, account_id: str, user_data: Dict) -> Dict:
+        """Create end user"""
+        response = self._make_request(
+            'POST',
+            f'/v2/partition/{self.partition_id}/account/{account_id}/user',
+            json=user_data
+        )
+        return response.json()
+
+    # Phone Number Methods
+    def search_numbers(
+        self,
+        npa: str = None,
+        nxx: str = None,
+        quantity: int = 10
+    ) -> List[Dict]:
+        """Search for available phone numbers"""
+        params = {'quantity': quantity}
+        if npa:
+            params['npa'] = npa
+        if nxx:
+            params['nxx'] = nxx
+
+        response = self._make_request(
+            'GET',
+            f'/v2/partition/{self.partition_id}/telephone-number/search',
+            params=params
+        )
+        return response.json()['telephoneNumbers']
+
+    def order_number(self, telephone_number: str, account_id: str) -> Dict:
+        """Order telephone number"""
+        response = self._make_request(
+            'POST',
+            f'/v2/partition/{self.partition_id}/telephone-number/order',
+            json={
+                'telephoneNumbers': [telephone_number],
+                'accountId': account_id
+            }
+        )
+        return response.json()
+
+    def assign_number(
+        self,
+        account_id: str,
+        user_id: str,
+        telephone_number: str,
+        e911_address: Dict
+    ) -> Dict:
+        """Assign phone number to user with E911"""
+        response = self._make_request(
+            'PUT',
+            f'/v2/partition/{self.partition_id}/account/{account_id}/user/{user_id}/telephone-number',
+            json={
+                'telephoneNumber': telephone_number,
+                'primary': True,
+                'e911Address': e911_address
+            }
+        )
+        return response.json()
+
+    # Address Methods
+    def validate_address(
+        self,
+        address: str,
+        postal_code: str,
+        country: str = 'USA'
+    ) -> Dict:
+        """Validate address for E911"""
+        response = self._make_request(
+            'GET',
+            '/v2/address/validate',
+            params={
+                'address': address,
+                'postalCode': postal_code,
+                'country': country
+            }
+        )
+        return response.json()</code></pre>
+                </div>
+            </section>
+
+            <section id="authentication">
+                <h2>Authentication Examples</h2>
+
+                <h3>Basic Authentication</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-title">Simple Login</span>
+                        <button class="copy-button" aria-label="Copy code">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M13.5 2h-10A1.5 1.5 0 002 3.5v10A1.5 1.5 0 003.5 15h10a1.5 1.5 0 001.5-1.5v-10A1.5 1.5 0 0013.5 2z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5.5 1v2M10.5 1v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code>import requests
+
+# Login
+response = requests.post(
+    'https://api.alianza.com/v2/authorize',
+    json={'userName': 'user', 'password': 'pass'}
+)
+auth_data = response.json()
+token = auth_data['authToken']
+
+# Use token in subsequent requests
+headers = {'X-AUTH-TOKEN': token}</code></pre>
+                </div>
+
+                <h3>Using the SDK Client</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-title">SDK Authentication</span>
+                        <button class="copy-button" aria-label="Copy code">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M13.5 2h-10A1.5 1.5 0 002 3.5v10A1.5 1.5 0 003.5 15h10a1.5 1.5 0 001.5-1.5v-10A1.5 1.5 0 0013.5 2z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5.5 1v2M10.5 1v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code>from alianza_client import AlianzaClient
+
+# Initialize client (loads from .env)
+client = AlianzaClient()
+
+# Authenticate
+login_info = client.authenticate()
+print(f"Logged in as: {login_info['userName']}")
+print(f"Token expires in: {login_info['expiresIn']} seconds")
+print(f"User type: {login_info['userType']}")
+
+# Token is automatically managed for subsequent requests</code></pre>
+                </div>
+            </section>
+
+            <section id="accounts">
+                <h2>Account Management</h2>
+
+                <h3>List Accounts</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-title">Get All Accounts</span>
+                        <button class="copy-button" aria-label="Copy code">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M13.5 2h-10A1.5 1.5 0 002 3.5v10A1.5 1.5 0 003.5 15h10a1.5 1.5 0 001.5-1.5v-10A1.5 1.5 0 0013.5 2z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5.5 1v2M10.5 1v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code>accounts = client.list_accounts()
+
+for account in accounts:
+    print(f"Account: {account['name']} ({account['accountNumber']})")
+    print(f"  Status: {account['status']}")
+    print(f"  Time Zone: {account['timeZone']}")</code></pre>
+                </div>
+
+                <h3>Create Account</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-title">Create New Account</span>
+                        <button class="copy-button" aria-label="Copy code">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M13.5 2h-10A1.5 1.5 0 002 3.5v10A1.5 1.5 0 003.5 15h10a1.5 1.5 0 001.5-1.5v-10A1.5 1.5 0 0013.5 2z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5.5 1v2M10.5 1v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code>account_data = {
+    'accountNumber': '3001',
+    'name': 'Python Test Account',
+    'timeZone': 'America/New_York',
+    'status': 'ACTIVE',
+    'accountType': 'BUSINESS',
+    'billingAddress': {
+        'street': '135 Front St',
+        'city': 'Binghamton',
+        'state': 'NY',
+        'zipCode': '13905'
+    }
+}
+
+new_account = client.create_account(account_data)
+print(f"Created account: {new_account['accountId']}")
+print(f"Account name: {new_account['name']}")</code></pre>
+                </div>
+
+                <h3>Update Account</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-title">Update Account Details</span>
+                        <button class="copy-button" aria-label="Copy code">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M13.5 2h-10A1.5 1.5 0 002 3.5v10A1.5 1.5 0 003.5 15h10a1.5 1.5 0 001.5-1.5v-10A1.5 1.5 0 0013.5 2z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5.5 1v2M10.5 1v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code>account_id = 'acc_12345'
+
+updates = {
+    'name': 'Updated Account Name',
+    'status': 'ACTIVE',
+    'timeZone': 'America/Los_Angeles'
+}
+
+updated_account = client.update_account(account_id, updates)
+print(f"Updated: {updated_account['name']}")</code></pre>
+                </div>
+
+                <h3>Delete Account</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-title">Delete Account</span>
+                        <button class="copy-button" aria-label="Copy code">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M13.5 2h-10A1.5 1.5 0 002 3.5v10A1.5 1.5 0 003.5 15h10a1.5 1.5 0 001.5-1.5v-10A1.5 1.5 0 0013.5 2z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5.5 1v2M10.5 1v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code>account_id = 'acc_12345'
+client.delete_account(account_id)
+print(f"Deleted account: {account_id}")</code></pre>
+                </div>
+            </section>
+
+            <section id="users">
+                <h2>User Management</h2>
+
+                <h3>Create End User</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-title">Create User with Phone Number</span>
+                        <button class="copy-button" aria-label="Copy code">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M13.5 2h-10A1.5 1.5 0 002 3.5v10A1.5 1.5 0 003.5 15h10a1.5 1.5 0 001.5-1.5v-10A1.5 1.5 0 0013.5 2z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5.5 1v2M10.5 1v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code>account_id = 'acc_12345'
+
+user_data = {
+    'firstName': 'John',
+    'lastName': 'Doe',
+    'extension': '1001',
+    'voicemail': {
+        'enabled': True,
+        'pin': '1234',
+        'emailNotification': 'john.doe@example.com'
+    },
+    'callForwarding': {
+        'enabled': False
+    }
+}
+
+new_user = client.create_user(account_id, user_data)
+print(f"Created user: {new_user['firstName']} {new_user['lastName']}")
+print(f"User ID: {new_user['userId']}")
+print(f"Extension: {new_user['extension']}")</code></pre>
+                </div>
+
+                <h3>List Users</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-title">Get All Users in Account</span>
+                        <button class="copy-button" aria-label="Copy code">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M13.5 2h-10A1.5 1.5 0 002 3.5v10A1.5 1.5 0 003.5 15h10a1.5 1.5 0 001.5-1.5v-10A1.5 1.5 0 0013.5 2z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5.5 1v2M10.5 1v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code>users = client.list_users(account_id)
+
+for user in users:
+    print(f"User: {user['firstName']} {user['lastName']}")
+    print(f"  Extension: {user.get('extension', 'N/A')}")
+    print(f"  Voicemail: {'Enabled' if user.get('voicemail', {}).get('enabled') else 'Disabled'}")</code></pre>
+                </div>
+            </section>
+
+            <section id="phone-numbers">
+                <h2>Phone Number Management</h2>
+
+                <h3>Search for Available Numbers</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-title">Search by Area Code</span>
+                        <button class="copy-button" aria-label="Copy code">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M13.5 2h-10A1.5 1.5 0 002 3.5v10A1.5 1.5 0 003.5 15h10a1.5 1.5 0 001.5-1.5v-10A1.5 1.5 0 0013.5 2z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5.5 1v2M10.5 1v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code>numbers = client.search_numbers(npa='607', quantity=10)
+
+print("Available numbers:")
+for number in numbers:
+    print(f"  {number['formatted']} - {number['rateCenter']}, {number['state']}")</code></pre>
+                </div>
+
+                <h3>Order and Assign Number</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-title">Complete Number Provisioning</span>
+                        <button class="copy-button" aria-label="Copy code">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M13.5 2h-10A1.5 1.5 0 002 3.5v10A1.5 1.5 0 003.5 15h10a1.5 1.5 0 001.5-1.5v-10A1.5 1.5 0 0013.5 2z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5.5 1v2M10.5 1v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code># Search for numbers
+numbers = client.search_numbers(npa='607', quantity=5)
+selected_number = numbers[0]['telephoneNumber']
+
+# Order the number
+order_result = client.order_number(selected_number, account_id)
+print(f"Ordered: {selected_number}")
+
+# Assign to user with E911 address
+e911_address = {
+    'street': '135 Front St',
+    'city': 'Binghamton',
+    'state': 'NY',
+    'zipCode': '13905',
+    'location': 'Suite 200'
+}
+
+assignment = client.assign_number(
+    account_id,
+    user_id,
+    selected_number,
+    e911_address
+)
+print(f"Assigned {selected_number} to user {user_id}")</code></pre>
+                </div>
+            </section>
+
+            <section id="devices">
+                <h2>Device Management</h2>
+
+                <h3>Create Device</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-title">Provision VoIP Device</span>
+                        <button class="copy-button" aria-label="Copy code">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M13.5 2h-10A1.5 1.5 0 002 3.5v10A1.5 1.5 0 003.5 15h10a1.5 1.5 0 001.5-1.5v-10A1.5 1.5 0 0013.5 2z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5.5 1v2M10.5 1v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code>device_data = {
+    'deviceType': 'SIP_PHONE',
+    'macAddress': '00:11:22:33:44:55',
+    'model': 'Polycom-VVX450',
+    'lines': [
+        {
+            'lineNumber': 1,
+            'userId': user_id,
+            'primary': True
+        }
+    ]
+}
+
+device = client._make_request(
+    'POST',
+    f'/v2/partition/{client.partition_id}/account/{account_id}/device',
+    json=device_data
+).json()
+
+print(f"Created device: {device['deviceId']}")
+print(f"MAC Address: {device['macAddress']}")</code></pre>
+                </div>
+            </section>
+
+            <section id="call-routing">
+                <h2>Call Routing</h2>
+
+                <h3>Configure Call Forwarding</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-title">Set Up Call Forwarding</span>
+                        <button class="copy-button" aria-label="Copy code">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M13.5 2h-10A1.5 1.5 0 002 3.5v10A1.5 1.5 0 003.5 15h10a1.5 1.5 0 001.5-1.5v-10A1.5 1.5 0 0013.5 2z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5.5 1v2M10.5 1v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code>forwarding_config = {
+    'callForwarding': {
+        'enabled': True,
+        'forwardTo': '+16075551234',
+        'ringTime': 20  # seconds before forwarding
+    }
+}
+
+client._make_request(
+    'PUT',
+    f'/v2/partition/{client.partition_id}/account/{account_id}/user/{user_id}',
+    json=forwarding_config
+)
+
+print("Call forwarding enabled")</code></pre>
+                </div>
+
+                <h3>Create IVR Menu</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-title">Interactive Voice Response</span>
+                        <button class="copy-button" aria-label="Copy code">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M13.5 2h-10A1.5 1.5 0 002 3.5v10A1.5 1.5 0 003.5 15h10a1.5 1.5 0 001.5-1.5v-10A1.5 1.5 0 0013.5 2z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5.5 1v2M10.5 1v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code>ivr_config = {
+    'name': 'Main Menu',
+    'greeting': 'Welcome to Acme Corporation. Press 1 for Sales, 2 for Support.',
+    'options': [
+        {
+            'digit': '1',
+            'action': 'TRANSFER',
+            'destination': 'ext_1001'
+        },
+        {
+            'digit': '2',
+            'action': 'TRANSFER',
+            'destination': 'ext_1002'
+        }
+    ],
+    'timeout': 10,
+    'maxRetries': 3
+}
+
+ivr = client._make_request(
+    'POST',
+    f'/v2/partition/{client.partition_id}/account/{account_id}/ivr',
+    json=ivr_config
+).json()
+
+print(f"Created IVR: {ivr['ivrId']}")</code></pre>
+                </div>
+            </section>
+
+            <section id="error-handling">
+                <h2>Error Handling</h2>
+
+                <h3>Try-Except Pattern</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-title">Robust Error Handling</span>
+                        <button class="copy-button" aria-label="Copy code">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M13.5 2h-10A1.5 1.5 0 002 3.5v10A1.5 1.5 0 003.5 15h10a1.5 1.5 0 001.5-1.5v-10A1.5 1.5 0 0013.5 2z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5.5 1v2M10.5 1v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code>from requests.exceptions import HTTPError, ConnectionError, Timeout
+
+try:
+    accounts = client.list_accounts()
+    print(f"Found {len(accounts)} accounts")
+
+except HTTPError as e:
+    if e.response.status_code == 401:
+        print("Authentication failed - check credentials")
+    elif e.response.status_code == 404:
+        print("Resource not found")
+    elif e.response.status_code == 429:
+        print("Rate limit exceeded - wait and retry")
+    else:
+        print(f"HTTP error: {e}")
+
+except ConnectionError:
+    print("Network connection failed")
+
+except Timeout:
+    print("Request timed out")
+
+except Exception as e:
+    print(f"Unexpected error: {e}")</code></pre>
+                </div>
+
+                <h3>Retry Logic with Backoff</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-title">Exponential Backoff</span>
+                        <button class="copy-button" aria-label="Copy code">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M13.5 2h-10A1.5 1.5 0 002 3.5v10A1.5 1.5 0 003.5 15h10a1.5 1.5 0 001.5-1.5v-10A1.5 1.5 0 0013.5 2z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5.5 1v2M10.5 1v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code>import time
+
+def retry_with_backoff(func, max_attempts=3, backoff_factor=2):
+    """Retry function with exponential backoff"""
+    for attempt in range(max_attempts):
+        try:
+            return func()
+        except HTTPError as e:
+            if e.response.status_code == 429:  # Rate limit
+                if attempt < max_attempts - 1:
+                    wait_time = backoff_factor ** attempt
+                    print(f"Rate limited. Waiting {wait_time}s...")
+                    time.sleep(wait_time)
+                else:
+                    raise
+            else:
+                raise
+
+# Usage
+result = retry_with_backoff(lambda: client.list_accounts())</code></pre>
+                </div>
+            </section>
+
+            <section id="complete-example">
+                <h2>Complete Integration Example</h2>
+                <p>A full end-to-end example that creates an account, provisions users, assigns phone numbers, and configures voicemail.</p>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-title">complete_provisioning.py</span>
+                        <button class="copy-button" aria-label="Copy code">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M13.5 2h-10A1.5 1.5 0 002 3.5v10A1.5 1.5 0 003.5 15h10a1.5 1.5 0 001.5-1.5v-10A1.5 1.5 0 0013.5 2z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5.5 1v2M10.5 1v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code>#!/usr/bin/env python3
+"""
+Complete Alianza API Integration Example
+Provisions a new business account with users and phone numbers
+"""
+
+from alianza_client import AlianzaClient
+from typing import Dict
+
+def provision_complete_account(
+    account_name: str,
+    users: list,
+    area_code: str
+) -> Dict:
+    """Provision complete account with users and numbers"""
+
+    client = AlianzaClient()
+
+    # Step 1: Authenticate
+    print("1. Authenticating...")
+    client.authenticate()
+    print("   ✓ Authenticated successfully")
+
+    # Step 2: Create account
+    print(f"\n2. Creating account: {account_name}")
+    account = client.create_account({
+        'accountNumber': f'AUTO_{int(time.time())}',
+        'name': account_name,
+        'timeZone': 'America/New_York',
+        'status': 'ACTIVE',
+        'accountType': 'BUSINESS'
+    })
+    account_id = account['accountId']
+    print(f"   ✓ Created account: {account_id}")
+
+    # Step 3: Search for phone numbers
+    print(f"\n3. Searching for {len(users)} phone numbers in area code {area_code}")
+    numbers = client.search_numbers(npa=area_code, quantity=len(users))
+    print(f"   ✓ Found {len(numbers)} available numbers")
+
+    # Step 4: Order numbers
+    print("\n4. Ordering phone numbers...")
+    for number in numbers:
+        client.order_number(number['telephoneNumber'], account_id)
+    print(f"   ✓ Ordered {len(numbers)} numbers")
+
+    # Step 5: Create users and assign numbers
+    print("\n5. Creating users and assigning numbers...")
+    provisioned_users = []
+
+    for i, user_info in enumerate(users):
+        # Create user
+        user = client.create_user(account_id, {
+            'firstName': user_info['firstName'],
+            'lastName': user_info['lastName'],
+            'extension': str(1000 + i),
+            'voicemail': {
+                'enabled': True,
+                'pin': '1234',
+                'emailNotification': user_info.get('email')
+            }
+        })
+        user_id = user['userId']
+
+        # Assign number
+        telephone_number = numbers[i]['telephoneNumber']
+        client.assign_number(
+            account_id,
+            user_id,
+            telephone_number,
+            {
+                'street': '135 Front St',
+                'city': 'Binghamton',
+                'state': 'NY',
+                'zipCode': '13905'
+            }
+        )
+
+        provisioned_users.append({
+            'name': f"{user_info['firstName']} {user_info['lastName']}",
+            'extension': user['extension'],
+            'number': numbers[i]['formatted'],
+            'userId': user_id
+        })
+
+        print(f"   ✓ {user_info['firstName']} {user_info['lastName']}: "
+              f"{numbers[i]['formatted']} (ext {user['extension']})")
+
+    # Step 6: Summary
+    print("\n" + "="*60)
+    print("PROVISIONING COMPLETE")
+    print("="*60)
+    print(f"Account: {account_name} ({account_id})")
+    print(f"Users: {len(provisioned_users)}")
+    print("\nUser Details:")
+    for user in provisioned_users:
+        print(f"  • {user['name']}: {user['number']} (ext {user['extension']})")
+
+    return {
+        'account': account,
+        'users': provisioned_users
+    }
+
+
+if __name__ == '__main__':
+    # Define users to provision
+    users_to_provision = [
+        {'firstName': 'John', 'lastName': 'Doe', 'email': 'john@example.com'},
+        {'firstName': 'Jane', 'lastName': 'Smith', 'email': 'jane@example.com'},
+        {'firstName': 'Bob', 'lastName': 'Johnson', 'email': 'bob@example.com'}
+    ]
+
+    # Run provisioning
+    result = provision_complete_account(
+        account_name='Python Integration Test',
+        users=users_to_provision,
+        area_code='607'
+    )
+
+    print("\nProvisioning data returned successfully!")</code></pre>
+                </div>
+            </section>
+
+            <section class="next-steps">
+                <h2>Next Steps</h2>
+                <div class="card-grid">
+                    <a href="nodejs-examples.html" class="card">
+                        <h3>Node.js Examples</h3>
+                        <p>JavaScript and TypeScript examples for the Alianza API</p>
+                    </a>
+                    <a href="php-examples.html" class="card">
+                        <h3>PHP Examples</h3>
+                        <p>PHP code examples and integration patterns</p>
+                    </a>
+                    <a href="../guides/phone-numbers.html" class="card">
+                        <h3>Phone Number Guide</h3>
+                        <p>Complete guide to phone number management</p>
+                    </a>
+                    <a href="../advanced/error-handling.html" class="card">
+                        <h3>Error Handling</h3>
+                        <p>Best practices for handling API errors</p>
+                    </a>
+                </div>
+            </section>
+        </div>
     </main>
-  </div>
 
-  <script src="../js/main.js"></script>
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2025 Alianza Inc. All rights reserved.</p>
+            <p>API Documentation | <a href="https://api.alianza.com">api.alianza.com</a></p>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
 </body>
 </html>
