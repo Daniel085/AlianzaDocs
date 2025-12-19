@@ -1,85 +1,809 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Best Practices Guide - Alianza API</title>
-  <link rel="stylesheet" href="../css/main.css">
-  <style>
-    .markdown-note {
-      background: var(--accent-tertiary);
-      border-left: 4px solid var(--accent-primary);
-      padding: 1rem;
-      margin: 2rem 0;
-      border-radius: var(--radius-md);
-    }
-    .view-markdown-btn {
-      display: inline-block;
-      margin-top: 1rem;
-      padding: 0.5rem 1rem;
-      background: var(--accent-primary);
-      color: white;
-      text-decoration: none;
-      border-radius: var(--radius-md);
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Best Practices - Alianza API Documentation</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-  <header class="docs-header">
-    <a href="../../../index.html" class="docs-logo">
-      <span>📞</span> Alianza API
-    </a>
-    <nav class="docs-nav">
-      <a href="../../../index.html">Home</a>
-      <button id="theme-toggle" class="theme-toggle">🌙 Dark</button>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-left">
+                <button class="sidebar-toggle" id="sidebarToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <a href="../index.html" class="logo">
+                    <i class="fas fa-book"></i>
+                    Alianza API Docs
+                </a>
+            </div>
+            <div class="nav-right">
+                <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </div>
     </nav>
-  </header>
 
-  <div class="docs-container">
-    <aside class="docs-sidebar">
-      <div class="sidebar-section">
-        <div class="sidebar-title">Getting Started</div>
-        <ul class="sidebar-links">
-          <li><a href="../getting-started/quick-start.html">Quick Start</a></li>
-          <li><a href="../getting-started/authentication.html">Authentication</a></li>
-        </ul>
-      </div>
-      <div class="sidebar-section">
-        <div class="sidebar-title">Guides</div>
-        <ul class="sidebar-links">
-          <li><a href="../guides/account-management.html">Account Management</a></li>
-          <li><a href="../guides/phone-numbers.html">Phone Numbers</a></li>
-        </ul>
-      </div>
-      <div class="sidebar-section">
-        <div class="sidebar-title">Code Examples</div>
-        <ul class="sidebar-links">
-          <li><a href="../code-examples/python-examples.html">Python</a></li>
-          <li><a href="../code-examples/nodejs-examples.html">Node.js</a></li>
-        </ul>
-      </div>
-      <div class="sidebar-section">
-        <div class="sidebar-title">Advanced</div>
-        <ul class="sidebar-links">
-          <li><a href="../advanced/error-handling.html">Error Handling</a></li>
-          <li><a href="../advanced/best-practices.html">Best Practices</a></li>
-        </ul>
-      </div>
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-content">
+            <div class="sidebar-section">
+                <h3>Getting Started</h3>
+                <ul>
+                    <li><a href="../getting-started/authentication.html">Authentication</a></li>
+                    <li><a href="../getting-started/quick-start.html">Quick Start</a></li>
+                    <li><a href="../getting-started/environments.html">Environments</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-section">
+                <h3>Guides</h3>
+                <ul>
+                    <li><a href="../guides/account-management.html">Account Management</a></li>
+                    <li><a href="../guides/user-provisioning.html">User Provisioning</a></li>
+                    <li><a href="../guides/phone-numbers.html">Phone Numbers</a></li>
+                    <li><a href="../guides/device-management.html">Device Management</a></li>
+                    <li><a href="../guides/call-routing.html">Call Routing</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-section">
+                <h3>Advanced</h3>
+                <ul>
+                    <li><a href="error-handling.html">Error Handling</a></li>
+                    <li><a href="best-practices.html" class="active">Best Practices</a></li>
+                    <li><a href="webhooks.html">Webhooks</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-section">
+                <h3>Code Examples</h3>
+                <ul>
+                    <li><a href="../code-examples/python-examples.html">Python</a></li>
+                    <li><a href="../code-examples/nodejs-examples.html">Node.js</a></li>
+                    <li><a href="../code-examples/php-examples.html">PHP</a></li>
+                    <li><a href="../code-examples/java-examples.html">Java</a></li>
+                    <li><a href="../code-examples/csharp-examples.html">C#</a></li>
+                    <li><a href="../code-examples/ruby-examples.html">Ruby</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-section">
+                <h3>Architecture</h3>
+                <ul>
+                    <li><a href="../architecture/diagrams.html">Architecture Diagrams</a></li>
+                </ul>
+            </div>
+        </div>
     </aside>
 
-    <main class="docs-main">
-      <h1>Best Practices Guide</h1>
+    <main class="main-content">
+        <div class="content-wrapper">
+            <div class="page-header">
+                <h1><i class="fas fa-star"></i> Best Practices Guide</h1>
+                <p class="subtitle">Production-ready patterns and best practices for Alianza API integrations</p>
+            </div>
 
-      <div class="markdown-note">
-        <strong>📝 Note:</strong> This page is being converted from markdown to interactive HTML.
-        <br>
-        <a href="../../../docs/advanced/best-practices.md" class="view-markdown-btn">View Markdown Version →</a>
-      </div>
+            <div class="toc-card">
+                <h3><i class="fas fa-list"></i> On This Page</h3>
+                <ul>
+                    <li><a href="#authentication">Authentication & Security</a></li>
+                    <li><a href="#rate-limiting">Rate Limiting</a></li>
+                    <li><a href="#error-handling">Error Handling</a></li>
+                    <li><a href="#performance">Performance Optimization</a></li>
+                    <li><a href="#data-management">Data Management</a></li>
+                    <li><a href="#security">Security</a></li>
+                    <li><a href="#testing">Testing</a></li>
+                    <li><a href="#monitoring">Monitoring</a></li>
+                    <li><a href="#documentation">Documentation</a></li>
+                    <li><a href="#checklist">Summary Checklist</a></li>
+                </ul>
+            </div>
 
-      <p>Interactive HTML version coming soon. For now, please refer to the markdown version above.</p>
+            <!-- Authentication Section -->
+            <section id="authentication" class="content-section">
+                <h2><i class="fas fa-key"></i> Authentication & Security</h2>
+
+                <h3>Token Management</h3>
+
+                <div class="comparison-grid">
+                    <div class="comparison-do">
+                        <h4><i class="fas fa-check-circle"></i> DO: Refresh Proactively</h4>
+                        <pre><code class="language-python"># Refresh proactively before expiration
+def ensure_valid_token(client):
+    if not client.token or time_until_expiry() < 300:  # 5 minutes
+        client.authenticate()</code></pre>
+                        <button class="copy-btn" aria-label="Copy code"><i class="fas fa-copy"></i></button>
+                    </div>
+                    <div class="comparison-dont">
+                        <h4><i class="fas fa-times-circle"></i> DON'T: Wait for 401 Error</h4>
+                        <pre><code class="language-python"># Wait for 401 error
+try:
+    client.make_request()
+except UnauthorizedError:
+    client.authenticate()  # Too late, request failed</code></pre>
+                        <button class="copy-btn" aria-label="Copy code"><i class="fas fa-copy"></i></button>
+                    </div>
+                </div>
+
+                <h3>Credential Storage</h3>
+
+                <div class="comparison-grid">
+                    <div class="comparison-do">
+                        <h4><i class="fas fa-check-circle"></i> DO: Use Environment Variables</h4>
+                        <pre><code class="language-python"># Use environment variables
+import os
+username = os.getenv('ALIANZA_USERNAME')
+password = os.getenv('ALIANZA_PASSWORD')</code></pre>
+                        <button class="copy-btn" aria-label="Copy code"><i class="fas fa-copy"></i></button>
+                    </div>
+                    <div class="comparison-dont">
+                        <h4><i class="fas fa-times-circle"></i> DON'T: Hardcode Credentials</h4>
+                        <pre><code class="language-python"># Hardcode credentials
+username = "admin@company.com"  # Never do this!
+password = "MyPassword123"</code></pre>
+                        <button class="copy-btn" aria-label="Copy code"><i class="fas fa-copy"></i></button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Rate Limiting Section -->
+            <section id="rate-limiting" class="content-section">
+                <h2><i class="fas fa-tachometer-alt"></i> Rate Limiting</h2>
+
+                <h3>Implement Request Throttling</h3>
+
+                <div class="info-box">
+                    <i class="fas fa-info-circle"></i>
+                    <div>
+                        <strong>Rate Limits:</strong> The Alianza API has rate limits to ensure fair usage. Implement client-side throttling to stay within limits and avoid 429 errors.
+                    </div>
+                </div>
+
+                <div class="code-block">
+                    <pre><code class="language-python">import time
+from collections import deque
+
+class RateLimiter:
+    def __init__(self, max_requests=100, time_window=1.0):
+        self.max_requests = max_requests
+        self.time_window = time_window
+        self.requests = deque()
+
+    def wait_if_needed(self):
+        now = time.time()
+
+        # Remove old requests outside time window
+        while self.requests and self.requests[0] < now - self.time_window:
+            self.requests.popleft()
+
+        # Wait if at limit
+        if len(self.requests) >= self.max_requests:
+            sleep_time = self.time_window - (now - self.requests[0])
+            if sleep_time > 0:
+                time.sleep(sleep_time)
+
+        self.requests.append(time.time())
+
+# Usage
+rate_limiter = RateLimiter(max_requests=100, time_window=1.0)
+
+for account in accounts_to_create:
+    rate_limiter.wait_if_needed()
+    client.create_account(account)</code></pre>
+                    <button class="copy-btn" aria-label="Copy code"><i class="fas fa-copy"></i></button>
+                </div>
+
+                <h3>Batch Operations</h3>
+
+                <div class="comparison-grid">
+                    <div class="comparison-do">
+                        <h4><i class="fas fa-check-circle"></i> DO: Use Bulk Operations</h4>
+                        <pre><code class="language-python"># Use bulk operations for multiple users
+collection_id = client.create_bulk_collection()
+for user in users:
+    client.add_to_collection(collection_id, user)
+job_id = client.execute_bulk_operation(collection_id, 'UPDATE_CALLING_PLAN')</code></pre>
+                        <button class="copy-btn" aria-label="Copy code"><i class="fas fa-copy"></i></button>
+                    </div>
+                    <div class="comparison-dont">
+                        <h4><i class="fas fa-times-circle"></i> DON'T: Update One by One</h4>
+                        <pre><code class="language-python"># Update users one by one in a loop
+for user in users:
+    client.update_user(user['id'], {'callingPlanId': new_plan})  # Slow!</code></pre>
+                        <button class="copy-btn" aria-label="Copy code"><i class="fas fa-copy"></i></button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Error Handling Section -->
+            <section id="error-handling" class="content-section">
+                <h2><i class="fas fa-exclamation-triangle"></i> Error Handling</h2>
+
+                <h3>Comprehensive Error Handling</h3>
+
+                <div class="code-block">
+                    <pre><code class="language-python">def safe_api_call(func, *args, max_retries=3, **kwargs):
+    """Wrapper for API calls with retry logic"""
+    last_error = None
+
+    for attempt in range(max_retries):
+        try:
+            return func(*args, **kwargs)
+
+        except RateLimitError as e:
+            time.sleep(int(e.retry_after))
+            continue
+
+        except ServerError as e:
+            if attempt < max_retries - 1:
+                delay = 2 ** attempt  # Exponential backoff
+                time.sleep(delay)
+                continue
+            last_error = e
+
+        except ClientError as e:
+            # Don't retry client errors (400, 404, etc.)
+            raise
+
+        except NetworkError as e:
+            if attempt < max_retries - 1:
+                time.sleep(2 ** attempt)
+                continue
+            last_error = e
+
+    raise last_error</code></pre>
+                    <button class="copy-btn" aria-label="Copy code"><i class="fas fa-copy"></i></button>
+                </div>
+
+                <h3>Validation Before API Calls</h3>
+
+                <div class="warning-box">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <div>
+                        <strong>Validate Early:</strong> Validate input data before making API calls to catch errors early and reduce unnecessary API requests.
+                    </div>
+                </div>
+
+                <div class="code-block">
+                    <pre><code class="language-python">def validate_before_create(account_data):
+    """Validate locally before API call"""
+    errors = []
+
+    # Required fields
+    if not account_data.get('accountNumber'):
+        errors.append("Account number is required")
+
+    # Business rules
+    if len(account_data.get('accountNumber', '')) > 50:
+        errors.append("Account number too long (max 50 chars)")
+
+    # Valid values
+    if account_data.get('timeZone') not in VALID_TIMEZONES:
+        errors.append(f"Invalid timezone: {account_data.get('timeZone')}")
+
+    if errors:
+        raise ValidationError(errors)
+
+    return True</code></pre>
+                    <button class="copy-btn" aria-label="Copy code"><i class="fas fa-copy"></i></button>
+                </div>
+            </section>
+
+            <!-- Performance Section -->
+            <section id="performance" class="content-section">
+                <h2><i class="fas fa-rocket"></i> Performance Optimization</h2>
+
+                <h3>Parallel Requests</h3>
+
+                <div class="info-box">
+                    <i class="fas fa-info-circle"></i>
+                    <div>
+                        <strong>Concurrency:</strong> Use parallel requests for independent operations to improve throughput. Limit concurrent workers to avoid overwhelming the API.
+                    </div>
+                </div>
+
+                <div class="code-block">
+                    <pre><code class="language-python">import concurrent.futures
+
+def create_accounts_parallel(client, accounts, max_workers=5):
+    """Create multiple accounts in parallel"""
+    with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
+        futures = {
+            executor.submit(client.create_account, account): account
+            for account in accounts
+        }
+
+        results = []
+        for future in concurrent.futures.as_completed(futures):
+            try:
+                result = future.result()
+                results.append(result)
+            except Exception as e:
+                account = futures[future]
+                print(f"Failed to create account {account['accountNumber']}: {e}")
+
+        return results</code></pre>
+                    <button class="copy-btn" aria-label="Copy code"><i class="fas fa-copy"></i></button>
+                </div>
+
+                <h3>Caching</h3>
+
+                <p>Cache frequently accessed data to reduce API calls and improve response times.</p>
+
+                <div class="code-block">
+                    <pre><code class="language-python">from functools import lru_cache
+import time
+
+class CachedAlianzaClient:
+    def __init__(self, client):
+        self.client = client
+        self._cache = {}
+        self._cache_ttl = {}
+
+    def get_account_cached(self, account_id, ttl=300):
+        """Get account with 5-minute cache"""
+        now = time.time()
+
+        if account_id in self._cache:
+            if now < self._cache_ttl.get(account_id, 0):
+                return self._cache[account_id]
+
+        # Fetch from API
+        account = self.client.get_account(account_id)
+        self._cache[account_id] = account
+        self._cache_ttl[account_id] = now + ttl
+
+        return account</code></pre>
+                    <button class="copy-btn" aria-label="Copy code"><i class="fas fa-copy"></i></button>
+                </div>
+
+                <h3>Pagination for Large Datasets</h3>
+
+                <div class="code-block">
+                    <pre><code class="language-python">def get_all_accounts(client, partition_id, page_size=100):
+    """Fetch all accounts with pagination"""
+    all_accounts = []
+    offset = 0
+
+    while True:
+        response = client.list_accounts(
+            partition_id,
+            limit=page_size,
+            offset=offset
+        )
+
+        accounts = response.get('accounts', [])
+        all_accounts.extend(accounts)
+
+        if len(accounts) < page_size:
+            break  # Last page
+
+        offset += page_size
+
+    return all_accounts</code></pre>
+                    <button class="copy-btn" aria-label="Copy code"><i class="fas fa-copy"></i></button>
+                </div>
+            </section>
+
+            <!-- Data Management Section -->
+            <section id="data-management" class="content-section">
+                <h2><i class="fas fa-database"></i> Data Management</h2>
+
+                <h3>E911 Compliance</h3>
+
+                <div class="warning-box">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <div>
+                        <strong>E911 Required:</strong> Always validate and register E911 addresses when assigning phone numbers to users. This is a legal requirement for emergency services.
+                    </div>
+                </div>
+
+                <div class="code-block">
+                    <pre><code class="language-python">def create_user_with_e911(client, account_id, user_data, telephone_number):
+    """Ensure E911 compliance"""
+    # 1. Validate address
+    address_validation = client.validate_address(
+        user_data['address'],
+        user_data['postalCode']
+    )
+
+    if not address_validation['valid']:
+        raise ValueError("Invalid E911 address")
+
+    # 2. Create user
+    user = client.create_user(account_id, user_data)
+
+    # 3. Assign number with E911
+    client.assign_number(
+        account_id,
+        user['userId'],
+        telephone_number,
+        e911_address=address_validation['formatted']
+    )
+
+    return user</code></pre>
+                    <button class="copy-btn" aria-label="Copy code"><i class="fas fa-copy"></i></button>
+                </div>
+
+                <h3>Idempotency</h3>
+
+                <p>Implement idempotent operations to safely handle retries and duplicate requests.</p>
+
+                <div class="code-block">
+                    <pre><code class="language-python">def create_account_idempotent(client, account_data):
+    """Create account with idempotency check"""
+    account_number = account_data['accountNumber']
+
+    # Check if exists
+    try:
+        existing = client.get_account_by_number(account_number)
+        return existing  # Already created
+    except NotFoundError:
+        pass  # Doesn't exist, create it
+
+    # Create new account
+    return client.create_account(account_data)</code></pre>
+                    <button class="copy-btn" aria-label="Copy code"><i class="fas fa-copy"></i></button>
+                </div>
+            </section>
+
+            <!-- Security Section -->
+            <section id="security" class="content-section">
+                <h2><i class="fas fa-shield-alt"></i> Security</h2>
+
+                <h3>Input Sanitization</h3>
+
+                <div class="code-block">
+                    <pre><code class="language-python">import re
+
+def sanitize_input(data):
+    """Sanitize user input"""
+    sanitized = {}
+
+    for key, value in data.items():
+        if isinstance(value, str):
+            # Remove potential injection characters
+            value = re.sub(r'[<>"\'%;()&+]', '', value)
+            # Trim whitespace
+            value = value.strip()
+
+        sanitized[key] = value
+
+    return sanitized</code></pre>
+                    <button class="copy-btn" aria-label="Copy code"><i class="fas fa-copy"></i></button>
+                </div>
+
+                <h3>Audit Logging</h3>
+
+                <p>Maintain an audit trail of all API operations for compliance and troubleshooting.</p>
+
+                <div class="code-block">
+                    <pre><code class="language-python">import logging
+import json
+from datetime import datetime
+
+class AuditLogger:
+    """Log all API operations for audit trail"""
+
+    def __init__(self, log_file):
+        self.logger = logging.getLogger('audit')
+        handler = logging.FileHandler(log_file)
+        handler.setFormatter(logging.Formatter('%(message)s'))
+        self.logger.addHandler(handler)
+        self.logger.setLevel(logging.INFO)
+
+    def log_operation(self, user, operation, resource_type, resource_id, result):
+        """Log API operation"""
+        log_entry = {
+            'timestamp': datetime.utcnow().isoformat(),
+            'user': user,
+            'operation': operation,
+            'resource_type': resource_type,
+            'resource_id': resource_id,
+            'result': result,
+            'ip_address': self.get_client_ip()
+        }
+
+        self.logger.info(json.dumps(log_entry))
+
+# Usage
+audit = AuditLogger('/var/log/alianza_audit.log')
+audit.log_operation(
+    user='admin@company.com',
+    operation='CREATE',
+    resource_type='ACCOUNT',
+    resource_id='acc_123',
+    result='SUCCESS'
+)</code></pre>
+                    <button class="copy-btn" aria-label="Copy code"><i class="fas fa-copy"></i></button>
+                </div>
+
+                <h3>Principle of Least Privilege</h3>
+
+                <p>Use different credentials with appropriate permissions for different operations.</p>
+
+                <div class="code-block">
+                    <pre><code class="language-python"># Use different credentials for different operations
+class AlianzaClientFactory:
+    @staticmethod
+    def create_readonly_client():
+        """Client with read-only credentials"""
+        return AlianzaClient(
+            username=os.getenv('ALIANZA_READONLY_USER'),
+            password=os.getenv('ALIANZA_READONLY_PASS')
+        )
+
+    @staticmethod
+    def create_admin_client():
+        """Client with admin credentials"""
+        return AlianzaClient(
+            username=os.getenv('ALIANZA_ADMIN_USER'),
+            password=os.getenv('ALIANZA_ADMIN_PASS')
+        )
+
+# Use appropriate client
+readonly_client = AlianzaClientFactory.create_readonly_client()
+accounts = readonly_client.list_accounts()  # Safe read operation
+
+admin_client = AlianzaClientFactory.create_admin_client()
+admin_client.create_account(data)  # Requires admin privileges</code></pre>
+                    <button class="copy-btn" aria-label="Copy code"><i class="fas fa-copy"></i></button>
+                </div>
+            </section>
+
+            <!-- Testing Section -->
+            <section id="testing" class="content-section">
+                <h2><i class="fas fa-flask"></i> Testing</h2>
+
+                <h3>Test in Development Environment</h3>
+
+                <div class="info-box">
+                    <i class="fas fa-info-circle"></i>
+                    <div>
+                        <strong>Environment Progression:</strong> Always test in Development → QA → Beta before deploying to Production.
+                    </div>
+                </div>
+
+                <div class="code-block">
+                    <pre><code class="language-python">class AlianzaConfig:
+    """Environment-specific configuration"""
+
+    ENVIRONMENTS = {
+        'development': 'https://api.d2.alianza.com',
+        'qa': 'https://api.q2.alianza.com',
+        'beta': 'https://api.b2.alianza.com',
+        'production': 'https://api.alianza.com'
+    }
+
+    @classmethod
+    def get_url(cls, env='development'):
+        return cls.ENVIRONMENTS.get(env)
+
+# Always test in dev first
+dev_client = AlianzaClient(
+    username=os.getenv('DEV_USERNAME'),
+    password=os.getenv('DEV_PASSWORD'),
+    base_url=AlianzaConfig.get_url('development')
+)</code></pre>
+                    <button class="copy-btn" aria-label="Copy code"><i class="fas fa-copy"></i></button>
+                </div>
+
+                <h3>Mock for Unit Tests</h3>
+
+                <div class="code-block">
+                    <pre><code class="language-python">from unittest.mock import Mock, patch
+
+def test_create_account():
+    """Unit test with mocked API"""
+    mock_client = Mock()
+    mock_client.create_account.return_value = {
+        'accountId': 'acc_123',
+        'accountNumber': '1001',
+        'name': 'Test Account'
+    }
+
+    # Test your logic
+    result = create_account_with_validation(mock_client, account_data)
+
+    assert result['accountId'] == 'acc_123'
+    mock_client.create_account.assert_called_once()</code></pre>
+                    <button class="copy-btn" aria-label="Copy code"><i class="fas fa-copy"></i></button>
+                </div>
+            </section>
+
+            <!-- Monitoring Section -->
+            <section id="monitoring" class="content-section">
+                <h2><i class="fas fa-chart-line"></i> Monitoring</h2>
+
+                <h3>Health Checks</h3>
+
+                <div class="code-block">
+                    <pre><code class="language-python">def check_api_health(client):
+    """Verify API connectivity and authentication"""
+    try:
+        # Attempt to authenticate
+        client.authenticate()
+
+        # Make a simple API call
+        client.list_accounts()
+
+        return {
+            'status': 'healthy',
+            'timestamp': datetime.utcnow().isoformat()
+        }
+
+    except Exception as e:
+        return {
+            'status': 'unhealthy',
+            'error': str(e),
+            'timestamp': datetime.utcnow().isoformat()
+        }</code></pre>
+                    <button class="copy-btn" aria-label="Copy code"><i class="fas fa-copy"></i></button>
+                </div>
+
+                <h3>Metrics Collection</h3>
+
+                <p>Collect metrics on API performance to identify issues and optimize usage.</p>
+
+                <div class="code-block">
+                    <pre><code class="language-python">import statsd
+
+class MetricsCollector:
+    """Collect and send metrics"""
+
+    def __init__(self):
+        self.statsd = statsd.StatsClient('localhost', 8125)
+
+    def record_api_call(self, endpoint, duration_ms, status_code):
+        """Record API call metrics"""
+        # Timing
+        self.statsd.timing(f'api.{endpoint}.duration', duration_ms)
+
+        # Counter
+        self.statsd.incr(f'api.{endpoint}.count')
+
+        # Status codes
+        self.statsd.incr(f'api.{endpoint}.status.{status_code}')
+
+        # Error rate
+        if status_code >= 400:
+            self.statsd.incr(f'api.{endpoint}.errors')</code></pre>
+                    <button class="copy-btn" aria-label="Copy code"><i class="fas fa-copy"></i></button>
+                </div>
+            </section>
+
+            <!-- Documentation Section -->
+            <section id="documentation" class="content-section">
+                <h2><i class="fas fa-file-alt"></i> Documentation</h2>
+
+                <h3>Code Documentation</h3>
+
+                <p>Document your API integration code with clear docstrings, type hints, and examples.</p>
+
+                <div class="code-block">
+                    <pre><code class="language-python">def create_account(
+    client: AlianzaClient,
+    account_number: str,
+    name: str,
+    timezone: str,
+    **kwargs
+) -> Dict[str, Any]:
+    """
+    Create a new account in the Alianza platform.
+
+    Args:
+        client: Authenticated Alianza API client
+        account_number: Unique account identifier (max 50 chars)
+        name: Account name/business name
+        timezone: IANA timezone (e.g., 'America/New_York')
+        **kwargs: Additional optional fields (address, callingPlanId, etc.)
+
+    Returns:
+        Dict containing created account with accountId
+
+    Raises:
+        ValueError: If validation fails
+        AlianzaAPIError: If API call fails
+
+    Example:
+        >>> client = AlianzaClient()
+        >>> account = create_account(
+        ...     client,
+        ...     account_number='1001',
+        ...     name='Acme Corp',
+        ...     timezone='America/New_York'
+        ... )
+        >>> print(account['accountId'])
+        'acc_abc123'
+    """
+    # Implementation
+    pass</code></pre>
+                    <button class="copy-btn" aria-label="Copy code"><i class="fas fa-copy"></i></button>
+                </div>
+            </section>
+
+            <!-- Summary Checklist Section -->
+            <section id="checklist" class="content-section">
+                <h2><i class="fas fa-check-square"></i> Summary Checklist</h2>
+
+                <div class="checklist-grid">
+                    <div class="checklist-column">
+                        <h3>Authentication</h3>
+                        <ul class="checklist">
+                            <li><i class="fas fa-check"></i> Store credentials securely (environment variables)</li>
+                            <li><i class="fas fa-check"></i> Refresh tokens proactively</li>
+                            <li><i class="fas fa-check"></i> Handle 401 errors gracefully</li>
+                            <li><i class="fas fa-check"></i> Use separate credentials per environment</li>
+                        </ul>
+
+                        <h3>Performance</h3>
+                        <ul class="checklist">
+                            <li><i class="fas fa-check"></i> Implement rate limiting</li>
+                            <li><i class="fas fa-check"></i> Use bulk operations for multiple items</li>
+                            <li><i class="fas fa-check"></i> Cache frequently accessed data</li>
+                            <li><i class="fas fa-check"></i> Use parallel requests where appropriate</li>
+                        </ul>
+
+                        <h3>Reliability</h3>
+                        <ul class="checklist">
+                            <li><i class="fas fa-check"></i> Implement retry logic with exponential backoff</li>
+                            <li><i class="fas fa-check"></i> Validate input before API calls</li>
+                            <li><i class="fas fa-check"></i> Handle all error scenarios</li>
+                            <li><i class="fas fa-check"></i> Log all errors with request IDs</li>
+                        </ul>
+                    </div>
+
+                    <div class="checklist-column">
+                        <h3>Security</h3>
+                        <ul class="checklist">
+                            <li><i class="fas fa-check"></i> Sanitize user input</li>
+                            <li><i class="fas fa-check"></i> Use least privilege principle</li>
+                            <li><i class="fas fa-check"></i> Implement audit logging</li>
+                            <li><i class="fas fa-check"></i> Never log sensitive data (tokens, passwords)</li>
+                        </ul>
+
+                        <h3>Testing</h3>
+                        <ul class="checklist">
+                            <li><i class="fas fa-check"></i> Test in development environment first</li>
+                            <li><i class="fas fa-check"></i> Write unit tests with mocks</li>
+                            <li><i class="fas fa-check"></i> Test error scenarios</li>
+                            <li><i class="fas fa-check"></i> Validate in QA before production</li>
+                        </ul>
+
+                        <h3>Monitoring</h3>
+                        <ul class="checklist">
+                            <li><i class="fas fa-check"></i> Implement health checks</li>
+                            <li><i class="fas fa-check"></i> Collect metrics (latency, error rates)</li>
+                            <li><i class="fas fa-check"></i> Set up alerts for anomalies</li>
+                            <li><i class="fas fa-check"></i> Monitor token expiration</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Next Steps -->
+            <section class="content-section">
+                <h2><i class="fas fa-forward"></i> Next Steps</h2>
+                <div class="link-grid">
+                    <a href="error-handling.html" class="link-card">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <h3>Error Handling Guide</h3>
+                        <p>Comprehensive error handling patterns</p>
+                    </a>
+                    <a href="../code-examples/python-examples.html" class="link-card">
+                        <i class="fab fa-python"></i>
+                        <h3>Python Examples</h3>
+                        <p>Production-ready Python code examples</p>
+                    </a>
+                    <a href="../architecture/diagrams.html" class="link-card">
+                        <i class="fas fa-project-diagram"></i>
+                        <h3>Architecture Diagrams</h3>
+                        <p>System architecture and data flow</p>
+                    </a>
+                </div>
+            </section>
+        </div>
     </main>
-  </div>
 
-  <script src="../js/main.js"></script>
+    <script src="../js/main.js"></script>
 </body>
 </html>
