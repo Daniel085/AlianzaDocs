@@ -1,0 +1,1216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Complete Ruby SDK and examples for the Alianza API">
+  <title>Ruby Code Examples - Alianza API</title>
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <header class="docs-header">
+    <a href="../../../index.html" class="docs-logo">
+      <span>📞</span> Alianza API
+    </a>
+    <nav class="docs-nav">
+      <a href="../../../index.html">Home</a>
+      <a href="../architecture/diagrams.html">Architecture</a>
+      <a href="../guides/account-management.html">Guides</a>
+      <a href="../../../openapi.yaml">API Reference</a>
+      <button id="theme-toggle" class="theme-toggle">🌙 Dark</button>
+    </nav>
+  </header>
+
+  <div class="docs-container">
+    <aside class="docs-sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-title">Getting Started</div>
+        <ul class="sidebar-links">
+          <li><a href="../getting-started/quick-start.html">Quick Start</a></li>
+          <li><a href="../getting-started/authentication.html">Authentication</a></li>
+        </ul>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-title">Architecture</div>
+        <ul class="sidebar-links">
+          <li><a href="../architecture/diagrams.html">Architecture Diagrams</a></li>
+        </ul>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-title">Guides</div>
+        <ul class="sidebar-links">
+          <li><a href="../guides/account-management.html">Account Management</a></li>
+          <li><a href="../guides/phone-numbers.html">Phone Numbers</a></li>
+          <li><a href="../guides/device-management.html">Device Management</a></li>
+          <li><a href="../guides/call-routing.html">Call Routing</a></li>
+          <li><a href="../guides/user-provisioning.html">User Provisioning</a></li>
+        </ul>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-title">Code Examples</div>
+        <ul class="sidebar-links">
+          <li><a href="python-examples.html">Python</a></li>
+          <li><a href="nodejs-examples.html">Node.js</a></li>
+          <li><a href="php-examples.html">PHP</a></li>
+          <li><a href="java-examples.html">Java</a></li>
+          <li><a href="csharp-examples.html">C#</a></li>
+          <li><a href="ruby-examples.html" class="active">Ruby</a></li>
+        </ul>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-title">Advanced</div>
+        <ul class="sidebar-links">
+          <li><a href="../advanced/error-handling.html">Error Handling</a></li>
+          <li><a href="../advanced/best-practices.html">Best Practices</a></li>
+          <li><a href="../advanced/webhooks.html">Webhooks</a></li>
+        </ul>
+      </div>
+    </aside>
+
+    <main class="docs-main">
+      <h1><i class="fas fa-gem"></i> Ruby Code Examples</h1>
+      <p style="font-size: 1.2rem;">Complete Ruby SDK and examples for integrating with the Alianza API using Faraday HTTP client and Rails.</p>
+
+      <div class="alert alert-info">
+        <strong><i class="fas fa-info-circle"></i> Requirements</strong>: Ruby 2.7+ or Ruby 3.x. Examples use modern Ruby features (keyword arguments, safe navigation operator).
+      </div>
+
+      <h2 id="installation">Installation</h2>
+
+      <h3>Gemfile</h3>
+      <p>Add required gems to your Gemfile:</p>
+
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">Ruby - Gemfile</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code># Gemfile
+source 'https://rubygems.org'
+
+gem 'faraday', '~> 2.0'
+gem 'faraday-retry', '~> 2.0'
+gem 'json', '~> 2.6'
+
+# For Rails integration
+gem 'rails', '~> 7.0'  # or your Rails version
+
+# For environment variable management
+gem 'dotenv-rails', '~> 2.8'</code></pre>
+      </div>
+
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">Bash</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>bundle install</code></pre>
+      </div>
+
+      <h2 id="sdk">Complete Alianza SDK Client</h2>
+
+      <h3>Core Client Implementation</h3>
+      <p>A complete, production-ready Ruby SDK for the Alianza API:</p>
+
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">Ruby - lib/alianza/client.rb</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>require 'faraday'
+require 'faraday/retry'
+require 'json'
+require 'time'
+
+module Alianza
+  class Client
+    attr_reader :base_url, :partition_id
+
+    def initialize(base_url:, username:, password:)
+      @base_url = base_url.chomp('/')
+      @username = username
+      @password = password
+      @auth_token = nil
+      @token_expiry = nil
+      @partition_id = nil
+
+      @connection = Faraday.new(url: @base_url) do |f|
+        f.request :json
+        f.response :json, content_type: /\bjson$/
+        f.request :retry, max: 3, interval: 0.5, backoff_factor: 2
+        f.adapter Faraday.default_adapter
+      end
+    end
+
+    # Authenticate and obtain auth token
+    def authenticate
+      response = @connection.post('/v2/authorize') do |req|
+        req.headers['Content-Type'] = 'application/json'
+        req.body = {
+          userName: @username,
+          password: @password
+        }.to_json
+      end
+
+      raise AuthenticationError, "Authentication failed: #{response.status}" unless response.success?
+
+      auth_data = response.body
+      @auth_token = auth_data['authToken']
+      @partition_id = auth_data['partitionId']
+      @token_expiry = Time.now + auth_data['expiresIn'] - 60  # 1 min buffer
+
+      auth_data
+    end
+
+    # Ensure we have a valid auth token
+    def ensure_authenticated
+      authenticate if @auth_token.nil? || Time.now >= @token_expiry
+    end
+
+    # Make authenticated GET request
+    def get(endpoint)
+      request(:get, endpoint)
+    end
+
+    # Make authenticated POST request
+    def post(endpoint, data)
+      request(:post, endpoint, data)
+    end
+
+    # Make authenticated PUT request
+    def put(endpoint, data)
+      request(:put, endpoint, data)
+    end
+
+    # Make authenticated DELETE request
+    def delete(endpoint)
+      request(:delete, endpoint)
+    end
+
+    private
+
+    def request(method, endpoint, data = nil)
+      ensure_authenticated
+
+      response = @connection.send(method) do |req|
+        req.url endpoint
+        req.headers['X-AUTH-TOKEN'] = @auth_token
+        req.headers['Content-Type'] = 'application/json' if data
+        req.body = data.to_json if data
+      end
+
+      # Handle token expiration with retry
+      if response.status == 401
+        authenticate
+        response = @connection.send(method) do |req|
+          req.url endpoint
+          req.headers['X-AUTH-TOKEN'] = @auth_token
+          req.headers['Content-Type'] = 'application/json' if data
+          req.body = data.to_json if data
+        end
+      end
+
+      handle_response(response)
+    end
+
+    def handle_response(response)
+      case response.status
+      when 200..299
+        response.body
+      when 400
+        raise BadRequestError, "Bad request: #{response.body}"
+      when 401
+        raise AuthenticationError, "Unauthorized: #{response.body}"
+      when 403
+        raise ForbiddenError, "Forbidden: #{response.body}"
+      when 404
+        raise NotFoundError, "Not found: #{response.body}"
+      when 429
+        raise RateLimitError, "Rate limit exceeded: #{response.body}"
+      when 500..599
+        raise ServerError, "Server error: #{response.status} - #{response.body}"
+      else
+        raise ApiError, "Unexpected error: #{response.status} - #{response.body}"
+      end
+    end
+  end
+
+  # Custom exception classes
+  class ApiError < StandardError; end
+  class AuthenticationError < ApiError; end
+  class BadRequestError < ApiError; end
+  class ForbiddenError < ApiError; end
+  class NotFoundError < ApiError; end
+  class RateLimitError < ApiError; end
+  class ServerError < ApiError; end
+end</code></pre>
+      </div>
+
+      <h3>Account Service</h3>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">Ruby - lib/alianza/services/account_service.rb</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>module Alianza
+  module Services
+    class AccountService
+      def initialize(client)
+        @client = client
+      end
+
+      # Get all accounts in a partition
+      def list(partition_id)
+        @client.get("/v2/partition/#{partition_id}/account")
+      end
+
+      # Get specific account details
+      def get(partition_id, account_id)
+        @client.get("/v2/partition/#{partition_id}/account/#{account_id}")
+      end
+
+      # Create a new account
+      def create(partition_id, account_data)
+        @client.post("/v2/partition/#{partition_id}/account", account_data)
+      end
+
+      # Update an existing account
+      def update(partition_id, account_id, updates)
+        @client.put("/v2/partition/#{partition_id}/account/#{account_id}", updates)
+      end
+
+      # Delete an account
+      def delete(partition_id, account_id)
+        @client.delete("/v2/partition/#{partition_id}/account/#{account_id}")
+      end
+    end
+  end
+end</code></pre>
+      </div>
+
+      <h3>User Service</h3>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">Ruby - lib/alianza/services/user_service.rb</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>module Alianza
+  module Services
+    class UserService
+      def initialize(client)
+        @client = client
+      end
+
+      # Get all users for an account
+      def list(partition_id, account_id)
+        @client.get("/v2/partition/#{partition_id}/account/#{account_id}/enduser")
+      end
+
+      # Get specific user details
+      def get(partition_id, account_id, user_id)
+        @client.get("/v2/partition/#{partition_id}/account/#{account_id}/enduser/#{user_id}")
+      end
+
+      # Create a new end user
+      def create(partition_id, account_id, user_data)
+        @client.post("/v2/partition/#{partition_id}/account/#{account_id}/enduser", user_data)
+      end
+
+      # Update user information
+      def update(partition_id, account_id, user_id, updates)
+        @client.put("/v2/partition/#{partition_id}/account/#{account_id}/enduser/#{user_id}", updates)
+      end
+
+      # Delete a user
+      def delete(partition_id, account_id, user_id)
+        @client.delete("/v2/partition/#{partition_id}/account/#{account_id}/enduser/#{user_id}")
+      end
+
+      # Configure voicemail for a user
+      def configure_voicemail(partition_id, account_id, user_id, settings)
+        @client.put(
+          "/v2/partition/#{partition_id}/account/#{account_id}/enduser/#{user_id}/voicemail",
+          settings
+        )
+      end
+
+      # Configure call forwarding
+      def configure_call_forwarding(partition_id, account_id, user_id, rules)
+        @client.put(
+          "/v2/partition/#{partition_id}/account/#{account_id}/enduser/#{user_id}/callforwarding",
+          rules
+        )
+      end
+    end
+  end
+end</code></pre>
+      </div>
+
+      <h3>Phone Number Service</h3>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">Ruby - lib/alianza/services/phone_number_service.rb</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>module Alianza
+  module Services
+    class PhoneNumberService
+      def initialize(client)
+        @client = client
+      end
+
+      # Search for available phone numbers
+      def search_available(partition_id, area_code:, limit: 10)
+        @client.get("/v2/partition/#{partition_id}/phonenumber/available?areaCode=#{area_code}&limit=#{limit}")
+      end
+
+      # Provision a phone number
+      def provision(partition_id, account_id, phone_number:, number_type: 'DID')
+        data = {
+          phoneNumber: phone_number,
+          numberType: number_type
+        }
+        @client.post("/v2/partition/#{partition_id}/account/#{account_id}/phonenumber", data)
+      end
+
+      # Assign phone number to user
+      def assign_to_user(partition_id, account_id, phone_number, user_id)
+        data = { userId: user_id }
+        @client.post(
+          "/v2/partition/#{partition_id}/account/#{account_id}/phonenumber/#{phone_number}/assign",
+          data
+        )
+      end
+
+      # Release a phone number
+      def release(partition_id, account_id, phone_number)
+        @client.delete("/v2/partition/#{partition_id}/account/#{account_id}/phonenumber/#{phone_number}")
+      end
+
+      # Get phone numbers for an account
+      def list(partition_id, account_id)
+        @client.get("/v2/partition/#{partition_id}/account/#{account_id}/phonenumber")
+      end
+    end
+  end
+end</code></pre>
+      </div>
+
+      <h2 id="usage-examples">Usage Examples</h2>
+
+      <h3>Basic Authentication and Account Listing</h3>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">Ruby</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>require_relative 'lib/alianza/client'
+require_relative 'lib/alianza/services/account_service'
+
+# Initialize client
+client = Alianza::Client.new(
+  base_url: 'https://api.alianza.com',
+  username: ENV['ALIANZA_USERNAME'],
+  password: ENV['ALIANZA_PASSWORD']
+)
+
+begin
+  # Authenticate
+  auth_response = client.authenticate
+  puts "Authenticated as: #{auth_response['userName']}"
+  puts "Partition: #{auth_response['partitionName']}"
+  puts "Partition ID: #{client.partition_id}"
+
+  # Get accounts
+  account_service = Alianza::Services::AccountService.new(client)
+  accounts = account_service.list(client.partition_id)
+
+  puts "\nFound #{accounts['total']} accounts:"
+  accounts['items'].each do |account|
+    puts "  - #{account['accountName']} (#{account['accountNumber']})"
+  end
+rescue Alianza::ApiError => e
+  puts "Error: #{e.message}"
+end</code></pre>
+      </div>
+
+      <h3>Create Account with Users</h3>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">Ruby</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>require_relative 'lib/alianza/client'
+require_relative 'lib/alianza/services/account_service'
+require_relative 'lib/alianza/services/user_service'
+
+def create_account_with_users
+  client = Alianza::Client.new(
+    base_url: ENV['ALIANZA_BASE_URL'] || 'https://api.alianza.com',
+    username: ENV['ALIANZA_USERNAME'],
+    password: ENV['ALIANZA_PASSWORD']
+  )
+
+  client.authenticate
+  partition_id = client.partition_id
+
+  # Create account
+  account_service = Alianza::Services::AccountService.new(client)
+  account_data = {
+    accountName: 'Acme Corporation',
+    accountNumber: 'ACME-001',
+    billingAddress: {
+      street1: '123 Main St',
+      city: 'San Francisco',
+      state: 'CA',
+      postalCode: '94105',
+      country: 'US'
+    },
+    serviceAddress: {
+      street1: '123 Main St',
+      city: 'San Francisco',
+      state: 'CA',
+      postalCode: '94105',
+      country: 'US'
+    },
+    callingPlanId: 'standard-unlimited'
+  }
+
+  account = account_service.create(partition_id, account_data)
+  puts "Account created: #{account['id']}"
+
+  # Create user
+  user_service = Alianza::Services::UserService.new(client)
+  user_data = {
+    firstName: 'John',
+    lastName: 'Doe',
+    emailAddress: 'john.doe@acme.com',
+    userName: 'jdoe',
+    password: 'SecureP@ssw0rd123',
+    extension: '1001',
+    timeZone: 'America/Los_Angeles',
+    language: 'en_US'
+  }
+
+  user = user_service.create(partition_id, account['id'], user_data)
+  puts "User created: #{user['id']}"
+
+  # Configure voicemail
+  voicemail_settings = {
+    enabled: true,
+    pin: '6789',
+    emailNotification: true,
+    emailAddress: 'john.doe@acme.com',
+    attachAudioToEmail: true,
+    transcriptionEnabled: true
+  }
+
+  user_service.configure_voicemail(partition_id, account['id'], user['id'], voicemail_settings)
+  puts "Voicemail configured"
+
+  account
+end
+
+# Run the example
+create_account_with_users</code></pre>
+      </div>
+
+      <h3>Provision and Assign Phone Numbers</h3>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">Ruby</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>require_relative 'lib/alianza/client'
+require_relative 'lib/alianza/services/phone_number_service'
+require_relative 'lib/alianza/services/user_service'
+
+def provision_and_assign_numbers(partition_id, account_id)
+  client = Alianza::Client.new(
+    base_url: ENV['ALIANZA_BASE_URL'] || 'https://api.alianza.com',
+    username: ENV['ALIANZA_USERNAME'],
+    password: ENV['ALIANZA_PASSWORD']
+  )
+
+  client.authenticate
+
+  phone_service = Alianza::Services::PhoneNumberService.new(client)
+
+  # Search for available numbers in 415 area code
+  available_numbers = phone_service.search_available(
+    partition_id,
+    area_code: '415',
+    limit: 10
+  )
+
+  puts "Found #{available_numbers['total']} available numbers"
+
+  if available_numbers['items'].any?
+    # Provision first available number
+    number_to_provision = available_numbers['items'].first['phoneNumber']
+
+    provisioned_number = phone_service.provision(
+      partition_id,
+      account_id,
+      phone_number: number_to_provision,
+      number_type: 'DID'
+    )
+
+    puts "Provisioned number: #{provisioned_number['phoneNumber']}"
+
+    # Assign to first user
+    user_service = Alianza::Services::UserService.new(client)
+    users = user_service.list(partition_id, account_id)
+
+    if users['items'].any?
+      user_id = users['items'].first['id']
+
+      phone_service.assign_to_user(
+        partition_id,
+        account_id,
+        provisioned_number['phoneNumber'],
+        user_id
+      )
+
+      puts "Number assigned to user: #{user_id}"
+    end
+  end
+end</code></pre>
+      </div>
+
+      <h2 id="rails-integration">Rails Integration</h2>
+
+      <h3>Initializer Configuration</h3>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">Ruby - config/initializers/alianza.rb</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>require 'alianza/client'
+
+# Configure Alianza client
+Rails.application.config.alianza = Alianza::Client.new(
+  base_url: ENV['ALIANZA_BASE_URL'] || 'https://api.alianza.com',
+  username: ENV['ALIANZA_USERNAME'],
+  password: ENV['ALIANZA_PASSWORD']
+)
+
+# Pre-authenticate on startup
+begin
+  Rails.application.config.alianza.authenticate
+  Rails.logger.info "Alianza client initialized and authenticated"
+rescue Alianza::ApiError => e
+  Rails.logger.error "Failed to authenticate Alianza client: #{e.message}"
+end</code></pre>
+      </div>
+
+      <h3>Service Object Pattern</h3>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">Ruby - app/services/alianza_account_manager.rb</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>class AlianzaAccountManager
+  def initialize(client = nil)
+    @client = client || Rails.application.config.alianza
+    @account_service = Alianza::Services::AccountService.new(@client)
+    @user_service = Alianza::Services::UserService.new(@client)
+  end
+
+  def create_business_account(business_params)
+    partition_id = @client.partition_id
+
+    # Create Alianza account
+    account_data = {
+      accountName: business_params[:name],
+      accountNumber: business_params[:account_number],
+      billingAddress: build_address(business_params[:billing_address]),
+      serviceAddress: build_address(business_params[:service_address]),
+      callingPlanId: business_params[:calling_plan_id]
+    }
+
+    alianza_account = @account_service.create(partition_id, account_data)
+
+    # Create local database record
+    Account.create!(
+      alianza_id: alianza_account['id'],
+      name: alianza_account['accountName'],
+      account_number: alianza_account['accountNumber'],
+      status: alianza_account['status']
+    )
+  end
+
+  def provision_user(account, user_params)
+    partition_id = @client.partition_id
+
+    user_data = {
+      firstName: user_params[:first_name],
+      lastName: user_params[:last_name],
+      emailAddress: user_params[:email],
+      userName: user_params[:username],
+      password: user_params[:password],
+      extension: user_params[:extension],
+      timeZone: user_params[:timezone] || 'America/Los_Angeles',
+      language: user_params[:language] || 'en_US'
+    }
+
+    alianza_user = @user_service.create(
+      partition_id,
+      account.alianza_id,
+      user_data
+    )
+
+    # Create local database record
+    User.create!(
+      account: account,
+      alianza_id: alianza_user['id'],
+      first_name: alianza_user['firstName'],
+      last_name: alianza_user['lastName'],
+      email: alianza_user['emailAddress'],
+      extension: alianza_user['extension']
+    )
+  end
+
+  private
+
+  def build_address(address_params)
+    {
+      street1: address_params[:street1],
+      street2: address_params[:street2],
+      city: address_params[:city],
+      state: address_params[:state],
+      postalCode: address_params[:postal_code],
+      country: address_params[:country] || 'US'
+    }
+  end
+end</code></pre>
+      </div>
+
+      <h3>Controller Example</h3>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">Ruby - app/controllers/accounts_controller.rb</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>class AccountsController < ApplicationController
+  before_action :set_account, only: [:show, :update, :destroy]
+
+  def index
+    @accounts = Account.all
+    render json: @accounts
+  end
+
+  def show
+    # Fetch fresh data from Alianza
+    client = Rails.application.config.alianza
+    account_service = Alianza::Services::AccountService.new(client)
+
+    begin
+      alianza_account = account_service.get(
+        client.partition_id,
+        @account.alianza_id
+      )
+
+      render json: {
+        account: @account,
+        alianza_data: alianza_account
+      }
+    rescue Alianza::NotFoundError
+      render json: { error: 'Account not found in Alianza' }, status: :not_found
+    rescue Alianza::ApiError => e
+      render json: { error: e.message }, status: :service_unavailable
+    end
+  end
+
+  def create
+    manager = AlianzaAccountManager.new
+    @account = manager.create_business_account(account_params)
+
+    render json: @account, status: :created
+  rescue Alianza::ApiError => e
+    render json: { error: e.message }, status: :unprocessable_entity
+  end
+
+  def update
+    client = Rails.application.config.alianza
+    account_service = Alianza::Services::AccountService.new(client)
+
+    updates = {
+      accountName: params[:name]
+    }
+
+    alianza_account = account_service.update(
+      client.partition_id,
+      @account.alianza_id,
+      updates
+    )
+
+    @account.update!(name: alianza_account['accountName'])
+    render json: @account
+  rescue Alianza::ApiError => e
+    render json: { error: e.message }, status: :unprocessable_entity
+  end
+
+  def destroy
+    client = Rails.application.config.alianza
+    account_service = Alianza::Services::AccountService.new(client)
+
+    account_service.delete(client.partition_id, @account.alianza_id)
+    @account.destroy
+
+    head :no_content
+  rescue Alianza::ApiError => e
+    render json: { error: e.message }, status: :unprocessable_entity
+  end
+
+  private
+
+  def set_account
+    @account = Account.find(params[:id])
+  end
+
+  def account_params
+    params.require(:account).permit(
+      :name,
+      :account_number,
+      :calling_plan_id,
+      billing_address: [:street1, :street2, :city, :state, :postal_code, :country],
+      service_address: [:street1, :street2, :city, :state, :postal_code, :country]
+    )
+  end
+end</code></pre>
+      </div>
+
+      <h3>Background Job for Bulk Operations</h3>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">Ruby - app/jobs/bulk_user_provisioning_job.rb</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>class BulkUserProvisioningJob < ApplicationJob
+  queue_as :default
+
+  def perform(account_id, users_data)
+    account = Account.find(account_id)
+    client = Rails.application.config.alianza
+    user_service = Alianza::Services::UserService.new(client)
+    partition_id = client.partition_id
+
+    results = {
+      successful: [],
+      failed: []
+    }
+
+    users_data.each do |user_data|
+      begin
+        alianza_user = user_service.create(
+          partition_id,
+          account.alianza_id,
+          user_data
+        )
+
+        user = User.create!(
+          account: account,
+          alianza_id: alianza_user['id'],
+          first_name: alianza_user['firstName'],
+          last_name: alianza_user['lastName'],
+          email: alianza_user['emailAddress'],
+          extension: alianza_user['extension']
+        )
+
+        results[:successful] << user
+      rescue Alianza::ApiError, ActiveRecord::RecordInvalid => e
+        results[:failed] << {
+          user_data: user_data,
+          error: e.message
+        }
+      end
+    end
+
+    # Send notification email or update job status
+    BulkProvisioningMailer.completion_report(account, results).deliver_later
+
+    results
+  end
+end</code></pre>
+      </div>
+
+      <h2 id="error-handling">Advanced Error Handling</h2>
+
+      <h3>Retry with Exponential Backoff</h3>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">Ruby</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>module Alianza
+  module Retryable
+    def with_retry(max_attempts: 3, backoff_base: 2)
+      attempt = 0
+
+      begin
+        attempt += 1
+        yield
+      rescue RateLimitError, ServerError => e
+        if attempt < max_attempts
+          sleep_time = backoff_base ** attempt
+          Rails.logger.warn "Retry attempt #{attempt} after #{sleep_time}s: #{e.message}"
+          sleep sleep_time
+          retry
+        else
+          raise
+        end
+      end
+    end
+  end
+end
+
+# Usage
+class AccountSyncService
+  include Alianza::Retryable
+
+  def sync_account(account_id)
+    with_retry(max_attempts: 5) do
+      client = Rails.application.config.alianza
+      account_service = Alianza::Services::AccountService.new(client)
+
+      alianza_account = account_service.get(
+        client.partition_id,
+        account_id
+      )
+
+      # Update local database
+      Account.find_by(alianza_id: account_id).update!(
+        name: alianza_account['accountName'],
+        status: alianza_account['status']
+      )
+    end
+  end
+end</code></pre>
+      </div>
+
+      <h3>Circuit Breaker Pattern</h3>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">Ruby</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>class AlianzaCircuitBreaker
+  FAILURE_THRESHOLD = 5
+  TIMEOUT_SECONDS = 60
+
+  def initialize
+    @failures = 0
+    @last_failure_time = nil
+    @state = :closed  # :closed, :open, :half_open
+  end
+
+  def call
+    if @state == :open
+      if Time.now - @last_failure_time > TIMEOUT_SECONDS
+        @state = :half_open
+      else
+        raise Alianza::ApiError, "Circuit breaker is OPEN"
+      end
+    end
+
+    begin
+      result = yield
+      reset if @state == :half_open
+      result
+    rescue Alianza::ApiError => e
+      record_failure
+      raise
+    end
+  end
+
+  private
+
+  def record_failure
+    @failures += 1
+    @last_failure_time = Time.now
+
+    if @failures >= FAILURE_THRESHOLD
+      @state = :open
+      Rails.logger.error "Circuit breaker OPENED after #{@failures} failures"
+    end
+  end
+
+  def reset
+    @failures = 0
+    @state = :closed
+    Rails.logger.info "Circuit breaker CLOSED"
+  end
+end
+
+# Usage
+circuit_breaker = AlianzaCircuitBreaker.new
+
+circuit_breaker.call do
+  # API call
+  account_service.get(partition_id, account_id)
+end</code></pre>
+      </div>
+
+      <h2 id="testing">Testing with RSpec</h2>
+
+      <h3>Client Spec</h3>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">Ruby - spec/lib/alianza/client_spec.rb</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>require 'rails_helper'
+require 'webmock/rspec'
+
+RSpec.describe Alianza::Client do
+  let(:base_url) { 'https://api.test.alianza.com' }
+  let(:username) { 'test_user' }
+  let(:password) { 'test_pass' }
+  let(:client) { described_class.new(base_url: base_url, username: username, password: password) }
+
+  describe '#authenticate' do
+    it 'successfully authenticates and stores token' do
+      stub_request(:post, "#{base_url}/v2/authorize")
+        .with(body: { userName: username, password: password }.to_json)
+        .to_return(
+          status: 200,
+          body: {
+            authToken: 'test-token-123',
+            expiresIn: 3600,
+            partitionId: 'partition-123',
+            userName: username,
+            partitionName: 'Test Partition'
+          }.to_json
+        )
+
+      response = client.authenticate
+
+      expect(response['authToken']).to eq('test-token-123')
+      expect(client.partition_id).to eq('partition-123')
+    end
+
+    it 'raises AuthenticationError on invalid credentials' do
+      stub_request(:post, "#{base_url}/v2/authorize")
+        .to_return(status: 401, body: { error: 'Invalid credentials' }.to_json)
+
+      expect { client.authenticate }.to raise_error(Alianza::AuthenticationError)
+    end
+  end
+
+  describe '#get' do
+    before do
+      # Stub authentication
+      stub_request(:post, "#{base_url}/v2/authorize")
+        .to_return(
+          status: 200,
+          body: { authToken: 'test-token', expiresIn: 3600, partitionId: 'p123' }.to_json
+        )
+    end
+
+    it 'makes authenticated GET request' do
+      stub_request(:get, "#{base_url}/v2/partition/p123/account")
+        .with(headers: { 'X-AUTH-TOKEN' => 'test-token' })
+        .to_return(
+          status: 200,
+          body: { items: [], total: 0 }.to_json
+        )
+
+      response = client.get('/v2/partition/p123/account')
+      expect(response['items']).to eq([])
+    end
+  end
+end</code></pre>
+      </div>
+
+      <h3>Service Spec</h3>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">Ruby - spec/services/alianza_account_manager_spec.rb</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>require 'rails_helper'
+
+RSpec.describe AlianzaAccountManager do
+  let(:client) { instance_double(Alianza::Client, partition_id: 'p123') }
+  let(:account_service) { instance_double(Alianza::Services::AccountService) }
+  let(:manager) { described_class.new(client) }
+
+  before do
+    allow(Alianza::Services::AccountService).to receive(:new).and_return(account_service)
+  end
+
+  describe '#create_business_account' do
+    let(:business_params) do
+      {
+        name: 'Test Corp',
+        account_number: 'TEST-001',
+        billing_address: {
+          street1: '123 Main St',
+          city: 'TestCity',
+          state: 'CA',
+          postal_code: '12345'
+        },
+        service_address: {
+          street1: '123 Main St',
+          city: 'TestCity',
+          state: 'CA',
+          postal_code: '12345'
+        },
+        calling_plan_id: 'standard'
+      }
+    end
+
+    it 'creates account in Alianza and locally' do
+      alianza_response = {
+        'id' => 'alianza-123',
+        'accountName' => 'Test Corp',
+        'accountNumber' => 'TEST-001',
+        'status' => 'ACTIVE'
+      }
+
+      expect(account_service).to receive(:create)
+        .with('p123', hash_including(accountName: 'Test Corp'))
+        .and_return(alianza_response)
+
+      account = manager.create_business_account(business_params)
+
+      expect(account.alianza_id).to eq('alianza-123')
+      expect(account.name).to eq('Test Corp')
+    end
+  end
+end</code></pre>
+      </div>
+
+      <h2 id="complete-example">Complete Rake Task</h2>
+
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">Ruby - lib/tasks/alianza.rake</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>namespace :alianza do
+  desc "Sync all accounts from Alianza"
+  task sync_accounts: :environment do
+    client = Rails.application.config.alianza
+    account_service = Alianza::Services::AccountService.new(client)
+
+    puts "Starting account sync..."
+
+    begin
+      client.authenticate
+      accounts = account_service.list(client.partition_id)
+
+      puts "Found #{accounts['total']} accounts in Alianza"
+
+      accounts['items'].each do |alianza_account|
+        local_account = Account.find_or_initialize_by(alianza_id: alianza_account['id'])
+
+        local_account.update!(
+          name: alianza_account['accountName'],
+          account_number: alianza_account['accountNumber'],
+          status: alianza_account['status']
+        )
+
+        puts "  ✓ Synced: #{alianza_account['accountName']}"
+      end
+
+      puts "\nSync completed successfully!"
+    rescue Alianza::ApiError => e
+      puts "Error: #{e.message}"
+      exit 1
+    end
+  end
+
+  desc "Provision test account with users"
+  task provision_test_account: :environment do
+    manager = AlianzaAccountManager.new
+
+    puts "Creating test account..."
+
+    account = manager.create_business_account(
+      name: "Test Account #{Time.now.to_i}",
+      account_number: "TEST-#{rand(1000..9999)}",
+      billing_address: {
+        street1: '123 Test St',
+        city: 'San Francisco',
+        state: 'CA',
+        postal_code: '94105'
+      },
+      service_address: {
+        street1: '123 Test St',
+        city: 'San Francisco',
+        state: 'CA',
+        postal_code: '94105'
+      },
+      calling_plan_id: 'standard-unlimited'
+    )
+
+    puts "✓ Account created: #{account.name}"
+
+    # Create test users
+    %w[Alice Bob Charlie].each_with_index do |name, index|
+      user = manager.provision_user(account,
+        first_name: name,
+        last_name: 'Test',
+        email: "#{name.downcase}@test.com",
+        username: name.downcase,
+        password: 'TestP@ssw0rd123',
+        extension: "100#{index + 1}"
+      )
+
+      puts "  ✓ User created: #{user.first_name} (ext: #{user.extension})"
+    end
+
+    puts "\nTest account provisioned successfully!"
+  end
+end</code></pre>
+      </div>
+
+      <div class="alert alert-success">
+        <strong><i class="fas fa-check-circle"></i> Production Ready</strong>: This Ruby SDK includes automatic token management, comprehensive error handling, retry logic, and Rails integration patterns for production use.
+      </div>
+
+      <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border-color);">
+        <h2>Next Steps</h2>
+        <div class="nav-cards" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+          <a href="python-examples.html" class="card" style="text-decoration: none;">
+            <div class="card-title"><i class="fab fa-python"></i> Python Examples</div>
+            <p>Complete Python SDK and examples</p>
+          </a>
+          <a href="../guides/account-management.html" class="card" style="text-decoration: none;">
+            <div class="card-title"><i class="fas fa-building"></i> Account Management</div>
+            <p>Account management guide</p>
+          </a>
+          <a href="../advanced/error-handling.html" class="card" style="text-decoration: none;">
+            <div class="card-title"><i class="fas fa-exclamation-triangle"></i> Error Handling</div>
+            <p>Handle errors gracefully</p>
+          </a>
+          <a href="../advanced/webhooks.html" class="card" style="text-decoration: none;">
+            <div class="card-title"><i class="fas fa-webhook"></i> Webhooks</div>
+            <p>Real-time event notifications</p>
+          </a>
+        </div>
+      </div>
+
+      <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border-color);">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <a href="csharp-examples.html" class="btn btn-secondary">← C# Examples</a>
+          </div>
+          <div>
+            <a href="../guides/account-management.html" class="btn btn-primary">Account Management →</a>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="../js/main.js"></script>
+</body>
+</html>

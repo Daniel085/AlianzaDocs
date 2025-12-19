@@ -1,0 +1,1409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Complete C# .NET SDK and examples for the Alianza API">
+  <title>C# Code Examples - Alianza API</title>
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <header class="docs-header">
+    <a href="../../../index.html" class="docs-logo">
+      <span>📞</span> Alianza API
+    </a>
+    <nav class="docs-nav">
+      <a href="../../../index.html">Home</a>
+      <a href="../architecture/diagrams.html">Architecture</a>
+      <a href="../guides/account-management.html">Guides</a>
+      <a href="../../../openapi.yaml">API Reference</a>
+      <button id="theme-toggle" class="theme-toggle">🌙 Dark</button>
+    </nav>
+  </header>
+
+  <div class="docs-container">
+    <aside class="docs-sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-title">Getting Started</div>
+        <ul class="sidebar-links">
+          <li><a href="../getting-started/quick-start.html">Quick Start</a></li>
+          <li><a href="../getting-started/authentication.html">Authentication</a></li>
+        </ul>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-title">Architecture</div>
+        <ul class="sidebar-links">
+          <li><a href="../architecture/diagrams.html">Architecture Diagrams</a></li>
+        </ul>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-title">Guides</div>
+        <ul class="sidebar-links">
+          <li><a href="../guides/account-management.html">Account Management</a></li>
+          <li><a href="../guides/phone-numbers.html">Phone Numbers</a></li>
+          <li><a href="../guides/device-management.html">Device Management</a></li>
+          <li><a href="../guides/call-routing.html">Call Routing</a></li>
+          <li><a href="../guides/user-provisioning.html">User Provisioning</a></li>
+        </ul>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-title">Code Examples</div>
+        <ul class="sidebar-links">
+          <li><a href="python-examples.html">Python</a></li>
+          <li><a href="nodejs-examples.html">Node.js</a></li>
+          <li><a href="php-examples.html">PHP</a></li>
+          <li><a href="java-examples.html">Java</a></li>
+          <li><a href="csharp-examples.html" class="active">C#</a></li>
+          <li><a href="ruby-examples.html">Ruby</a></li>
+        </ul>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-title">Advanced</div>
+        <ul class="sidebar-links">
+          <li><a href="../advanced/error-handling.html">Error Handling</a></li>
+          <li><a href="../advanced/best-practices.html">Best Practices</a></li>
+          <li><a href="../advanced/webhooks.html">Webhooks</a></li>
+        </ul>
+      </div>
+    </aside>
+
+    <main class="docs-main">
+      <h1><i class="fab fa-microsoft"></i> C# / .NET Code Examples</h1>
+      <p style="font-size: 1.2rem;">Complete C# SDK and examples for integrating with the Alianza API using .NET Framework and .NET Core/5+.</p>
+
+      <div class="alert alert-info">
+        <strong><i class="fas fa-info-circle"></i> Requirements</strong>: .NET Framework 4.7.2+ or .NET Core 3.1+ / .NET 5+. Examples use modern C# features (async/await, nullable reference types).
+      </div>
+
+      <h2 id="installation">Installation</h2>
+
+      <h3>NuGet Packages</h3>
+      <p>Install required dependencies:</p>
+
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">Package Manager Console</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>Install-Package Newtonsoft.Json
+Install-Package Microsoft.Extensions.Http
+Install-Package Microsoft.Extensions.Configuration</code></pre>
+      </div>
+
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">.NET CLI</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>dotnet add package Newtonsoft.Json
+dotnet add package Microsoft.Extensions.Http
+dotnet add package Microsoft.Extensions.Configuration</code></pre>
+      </div>
+
+      <h2 id="sdk">Complete Alianza SDK Client</h2>
+
+      <h3>Core SDK Implementation</h3>
+      <p>A complete, production-ready C# SDK for the Alianza API:</p>
+
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">C# - AlianzaClient.cs</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>using System;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+
+namespace Alianza.SDK
+{
+    public class AlianzaClient : IDisposable
+    {
+        private readonly HttpClient _httpClient;
+        private readonly string _baseUrl;
+        private string? _authToken;
+        private DateTime _tokenExpiry;
+        private readonly string _username;
+        private readonly string _password;
+
+        public AlianzaClient(string baseUrl, string username, string password)
+        {
+            _baseUrl = baseUrl.TrimEnd('/');
+            _username = username;
+            _password = password;
+            _httpClient = new HttpClient
+            {
+                BaseAddress = new Uri(_baseUrl),
+                Timeout = TimeSpan.FromSeconds(30)
+            };
+            _httpClient.DefaultRequestHeaders.Accept.Add(
+                new MediaTypeWithQualityHeaderValue("application/json")
+            );
+        }
+
+        /// <summary>
+        /// Authenticate and obtain auth token
+        /// </summary>
+        public async Task<AuthResponse> AuthenticateAsync()
+        {
+            var payload = new
+            {
+                userName = _username,
+                password = _password
+            };
+
+            var content = new StringContent(
+                JsonConvert.SerializeObject(payload),
+                Encoding.UTF8,
+                "application/json"
+            );
+
+            var response = await _httpClient.PostAsync("/v2/authorize", content);
+            response.EnsureSuccessStatusCode();
+
+            var jsonResponse = await response.Content.ReadAsStringAsync();
+            var authResponse = JsonConvert.DeserializeObject<AuthResponse>(jsonResponse);
+
+            _authToken = authResponse.AuthToken;
+            _tokenExpiry = DateTime.UtcNow.AddSeconds(authResponse.ExpiresIn - 60); // 1 min buffer
+
+            return authResponse;
+        }
+
+        /// <summary>
+        /// Ensure we have a valid auth token
+        /// </summary>
+        private async Task EnsureAuthenticatedAsync()
+        {
+            if (string.IsNullOrEmpty(_authToken) || DateTime.UtcNow >= _tokenExpiry)
+            {
+                await AuthenticateAsync();
+            }
+        }
+
+        /// <summary>
+        /// Make authenticated GET request
+        /// </summary>
+        public async Task<T> GetAsync<T>(string endpoint)
+        {
+            await EnsureAuthenticatedAsync();
+
+            var request = new HttpRequestMessage(HttpMethod.Get, endpoint);
+            request.Headers.Add("X-AUTH-TOKEN", _authToken);
+
+            var response = await _httpClient.SendAsync(request);
+
+            if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            {
+                // Token expired, retry once
+                await AuthenticateAsync();
+                request = new HttpRequestMessage(HttpMethod.Get, endpoint);
+                request.Headers.Add("X-AUTH-TOKEN", _authToken);
+                response = await _httpClient.SendAsync(request);
+            }
+
+            response.EnsureSuccessStatusCode();
+            var jsonResponse = await response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<T>(jsonResponse);
+        }
+
+        /// <summary>
+        /// Make authenticated POST request
+        /// </summary>
+        public async Task<T> PostAsync<T>(string endpoint, object data)
+        {
+            await EnsureAuthenticatedAsync();
+
+            var content = new StringContent(
+                JsonConvert.SerializeObject(data),
+                Encoding.UTF8,
+                "application/json"
+            );
+
+            var request = new HttpRequestMessage(HttpMethod.Post, endpoint)
+            {
+                Content = content
+            };
+            request.Headers.Add("X-AUTH-TOKEN", _authToken);
+
+            var response = await _httpClient.SendAsync(request);
+
+            if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            {
+                await AuthenticateAsync();
+                request = new HttpRequestMessage(HttpMethod.Post, endpoint)
+                {
+                    Content = content
+                };
+                request.Headers.Add("X-AUTH-TOKEN", _authToken);
+                response = await _httpClient.SendAsync(request);
+            }
+
+            response.EnsureSuccessStatusCode();
+            var jsonResponse = await response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<T>(jsonResponse);
+        }
+
+        /// <summary>
+        /// Make authenticated PUT request
+        /// </summary>
+        public async Task<T> PutAsync<T>(string endpoint, object data)
+        {
+            await EnsureAuthenticatedAsync();
+
+            var content = new StringContent(
+                JsonConvert.SerializeObject(data),
+                Encoding.UTF8,
+                "application/json"
+            );
+
+            var request = new HttpRequestMessage(HttpMethod.Put, endpoint)
+            {
+                Content = content
+            };
+            request.Headers.Add("X-AUTH-TOKEN", _authToken);
+
+            var response = await _httpClient.SendAsync(request);
+
+            if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            {
+                await AuthenticateAsync();
+                request = new HttpRequestMessage(HttpMethod.Put, endpoint)
+                {
+                    Content = content
+                };
+                request.Headers.Add("X-AUTH-TOKEN", _authToken);
+                response = await _httpClient.SendAsync(request);
+            }
+
+            response.EnsureSuccessStatusCode();
+            var jsonResponse = await response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<T>(jsonResponse);
+        }
+
+        /// <summary>
+        /// Make authenticated DELETE request
+        /// </summary>
+        public async Task DeleteAsync(string endpoint)
+        {
+            await EnsureAuthenticatedAsync();
+
+            var request = new HttpRequestMessage(HttpMethod.Delete, endpoint);
+            request.Headers.Add("X-AUTH-TOKEN", _authToken);
+
+            var response = await _httpClient.SendAsync(request);
+
+            if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            {
+                await AuthenticateAsync();
+                request = new HttpRequestMessage(HttpMethod.Delete, endpoint);
+                request.Headers.Add("X-AUTH-TOKEN", _authToken);
+                response = await _httpClient.SendAsync(request);
+            }
+
+            response.EnsureSuccessStatusCode();
+        }
+
+        public void Dispose()
+        {
+            _httpClient?.Dispose();
+        }
+    }
+}</code></pre>
+      </div>
+
+      <h3>Model Classes</h3>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">C# - Models.cs</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>using System;
+using System.Collections.Generic;
+using Newtonsoft.Json;
+
+namespace Alianza.SDK.Models
+{
+    public class AuthResponse
+    {
+        [JsonProperty("authToken")]
+        public string AuthToken { get; set; }
+
+        [JsonProperty("tokenType")]
+        public string TokenType { get; set; }
+
+        [JsonProperty("expiresIn")]
+        public int ExpiresIn { get; set; }
+
+        [JsonProperty("userId")]
+        public string UserId { get; set; }
+
+        [JsonProperty("partitionId")]
+        public string PartitionId { get; set; }
+
+        [JsonProperty("userType")]
+        public string UserType { get; set; }
+
+        [JsonProperty("userName")]
+        public string UserName { get; set; }
+
+        [JsonProperty("partitionName")]
+        public string PartitionName { get; set; }
+    }
+
+    public class Account
+    {
+        [JsonProperty("id")]
+        public string Id { get; set; }
+
+        [JsonProperty("accountName")]
+        public string AccountName { get; set; }
+
+        [JsonProperty("accountNumber")]
+        public string AccountNumber { get; set; }
+
+        [JsonProperty("partitionId")]
+        public string PartitionId { get; set; }
+
+        [JsonProperty("status")]
+        public string Status { get; set; }
+
+        [JsonProperty("created")]
+        public DateTime Created { get; set; }
+
+        [JsonProperty("billingAddress")]
+        public Address BillingAddress { get; set; }
+
+        [JsonProperty("serviceAddress")]
+        public Address ServiceAddress { get; set; }
+    }
+
+    public class Address
+    {
+        [JsonProperty("street1")]
+        public string Street1 { get; set; }
+
+        [JsonProperty("street2")]
+        public string Street2 { get; set; }
+
+        [JsonProperty("city")]
+        public string City { get; set; }
+
+        [JsonProperty("state")]
+        public string State { get; set; }
+
+        [JsonProperty("postalCode")]
+        public string PostalCode { get; set; }
+
+        [JsonProperty("country")]
+        public string Country { get; set; }
+    }
+
+    public class EndUser
+    {
+        [JsonProperty("id")]
+        public string Id { get; set; }
+
+        [JsonProperty("accountId")]
+        public string AccountId { get; set; }
+
+        [JsonProperty("firstName")]
+        public string FirstName { get; set; }
+
+        [JsonProperty("lastName")]
+        public string LastName { get; set; }
+
+        [JsonProperty("emailAddress")]
+        public string EmailAddress { get; set; }
+
+        [JsonProperty("userName")]
+        public string UserName { get; set; }
+
+        [JsonProperty("extension")]
+        public string Extension { get; set; }
+
+        [JsonProperty("timeZone")]
+        public string TimeZone { get; set; }
+
+        [JsonProperty("language")]
+        public string Language { get; set; }
+
+        [JsonProperty("voicemailEnabled")]
+        public bool VoicemailEnabled { get; set; }
+    }
+
+    public class Device
+    {
+        [JsonProperty("id")]
+        public string Id { get; set; }
+
+        [JsonProperty("accountId")]
+        public string AccountId { get; set; }
+
+        [JsonProperty("deviceType")]
+        public string DeviceType { get; set; }
+
+        [JsonProperty("manufacturer")]
+        public string Manufacturer { get; set; }
+
+        [JsonProperty("model")]
+        public string Model { get; set; }
+
+        [JsonProperty("macAddress")]
+        public string MacAddress { get; set; }
+
+        [JsonProperty("status")]
+        public string Status { get; set; }
+    }
+
+    public class PhoneNumber
+    {
+        [JsonProperty("phoneNumber")]
+        public string Number { get; set; }
+
+        [JsonProperty("accountId")]
+        public string AccountId { get; set; }
+
+        [JsonProperty("userId")]
+        public string UserId { get; set; }
+
+        [JsonProperty("status")]
+        public string Status { get; set; }
+
+        [JsonProperty("numberType")]
+        public string NumberType { get; set; }
+    }
+
+    public class ListResponse<T>
+    {
+        [JsonProperty("items")]
+        public List<T> Items { get; set; }
+
+        [JsonProperty("total")]
+        public int Total { get; set; }
+
+        [JsonProperty("offset")]
+        public int Offset { get; set; }
+
+        [JsonProperty("limit")]
+        public int Limit { get; set; }
+    }
+}</code></pre>
+      </div>
+
+      <h2 id="account-service">Account Management Service</h2>
+
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">C# - AccountService.cs</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>using System.Threading.Tasks;
+using Alianza.SDK.Models;
+
+namespace Alianza.SDK.Services
+{
+    public class AccountService
+    {
+        private readonly AlianzaClient _client;
+
+        public AccountService(AlianzaClient client)
+        {
+            _client = client;
+        }
+
+        /// <summary>
+        /// Get all accounts in a partition
+        /// </summary>
+        public async Task<ListResponse<Account>> GetAccountsAsync(string partitionId)
+        {
+            var endpoint = $"/v2/partition/{partitionId}/account";
+            return await _client.GetAsync<ListResponse<Account>>(endpoint);
+        }
+
+        /// <summary>
+        /// Get specific account details
+        /// </summary>
+        public async Task<Account> GetAccountAsync(string partitionId, string accountId)
+        {
+            var endpoint = $"/v2/partition/{partitionId}/account/{accountId}";
+            return await _client.GetAsync<Account>(endpoint);
+        }
+
+        /// <summary>
+        /// Create a new account
+        /// </summary>
+        public async Task<Account> CreateAccountAsync(string partitionId, CreateAccountRequest request)
+        {
+            var endpoint = $"/v2/partition/{partitionId}/account";
+            return await _client.PostAsync<Account>(endpoint, request);
+        }
+
+        /// <summary>
+        /// Update an existing account
+        /// </summary>
+        public async Task<Account> UpdateAccountAsync(string partitionId, string accountId, UpdateAccountRequest request)
+        {
+            var endpoint = $"/v2/partition/{partitionId}/account/{accountId}";
+            return await _client.PutAsync<Account>(endpoint, request);
+        }
+
+        /// <summary>
+        /// Delete an account
+        /// </summary>
+        public async Task DeleteAccountAsync(string partitionId, string accountId)
+        {
+            var endpoint = $"/v2/partition/{partitionId}/account/{accountId}";
+            await _client.DeleteAsync(endpoint);
+        }
+    }
+
+    public class CreateAccountRequest
+    {
+        [JsonProperty("accountName")]
+        public string AccountName { get; set; }
+
+        [JsonProperty("accountNumber")]
+        public string AccountNumber { get; set; }
+
+        [JsonProperty("billingAddress")]
+        public Address BillingAddress { get; set; }
+
+        [JsonProperty("serviceAddress")]
+        public Address ServiceAddress { get; set; }
+
+        [JsonProperty("callingPlanId")]
+        public string CallingPlanId { get; set; }
+    }
+
+    public class UpdateAccountRequest
+    {
+        [JsonProperty("accountName")]
+        public string AccountName { get; set; }
+
+        [JsonProperty("billingAddress")]
+        public Address BillingAddress { get; set; }
+
+        [JsonProperty("serviceAddress")]
+        public Address ServiceAddress { get; set; }
+    }
+}</code></pre>
+      </div>
+
+      <h2 id="user-service">User Management Service</h2>
+
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">C# - UserService.cs</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>using System.Threading.Tasks;
+using Alianza.SDK.Models;
+
+namespace Alianza.SDK.Services
+{
+    public class UserService
+    {
+        private readonly AlianzaClient _client;
+
+        public UserService(AlianzaClient client)
+        {
+            _client = client;
+        }
+
+        /// <summary>
+        /// Get all users for an account
+        /// </summary>
+        public async Task<ListResponse<EndUser>> GetUsersAsync(string partitionId, string accountId)
+        {
+            var endpoint = $"/v2/partition/{partitionId}/account/{accountId}/enduser";
+            return await _client.GetAsync<ListResponse<EndUser>>(endpoint);
+        }
+
+        /// <summary>
+        /// Get specific user details
+        /// </summary>
+        public async Task<EndUser> GetUserAsync(string partitionId, string accountId, string userId)
+        {
+            var endpoint = $"/v2/partition/{partitionId}/account/{accountId}/enduser/{userId}";
+            return await _client.GetAsync<EndUser>(endpoint);
+        }
+
+        /// <summary>
+        /// Create a new end user
+        /// </summary>
+        public async Task<EndUser> CreateUserAsync(string partitionId, string accountId, CreateUserRequest request)
+        {
+            var endpoint = $"/v2/partition/{partitionId}/account/{accountId}/enduser";
+            return await _client.PostAsync<EndUser>(endpoint, request);
+        }
+
+        /// <summary>
+        /// Update user information
+        /// </summary>
+        public async Task<EndUser> UpdateUserAsync(string partitionId, string accountId, string userId, UpdateUserRequest request)
+        {
+            var endpoint = $"/v2/partition/{partitionId}/account/{accountId}/enduser/{userId}";
+            return await _client.PutAsync<EndUser>(endpoint, request);
+        }
+
+        /// <summary>
+        /// Delete a user
+        /// </summary>
+        public async Task DeleteUserAsync(string partitionId, string accountId, string userId)
+        {
+            var endpoint = $"/v2/partition/{partitionId}/account/{accountId}/enduser/{userId}";
+            await _client.DeleteAsync(endpoint);
+        }
+
+        /// <summary>
+        /// Configure voicemail for a user
+        /// </summary>
+        public async Task<VoicemailSettings> ConfigureVoicemailAsync(
+            string partitionId,
+            string accountId,
+            string userId,
+            VoicemailSettings settings)
+        {
+            var endpoint = $"/v2/partition/{partitionId}/account/{accountId}/enduser/{userId}/voicemail";
+            return await _client.PutAsync<VoicemailSettings>(endpoint, settings);
+        }
+    }
+
+    public class CreateUserRequest
+    {
+        [JsonProperty("firstName")]
+        public string FirstName { get; set; }
+
+        [JsonProperty("lastName")]
+        public string LastName { get; set; }
+
+        [JsonProperty("emailAddress")]
+        public string EmailAddress { get; set; }
+
+        [JsonProperty("userName")]
+        public string UserName { get; set; }
+
+        [JsonProperty("password")]
+        public string Password { get; set; }
+
+        [JsonProperty("extension")]
+        public string Extension { get; set; }
+
+        [JsonProperty("timeZone")]
+        public string TimeZone { get; set; }
+
+        [JsonProperty("language")]
+        public string Language { get; set; }
+    }
+
+    public class UpdateUserRequest
+    {
+        [JsonProperty("firstName")]
+        public string FirstName { get; set; }
+
+        [JsonProperty("lastName")]
+        public string LastName { get; set; }
+
+        [JsonProperty("emailAddress")]
+        public string EmailAddress { get; set; }
+
+        [JsonProperty("timeZone")]
+        public string TimeZone { get; set; }
+    }
+
+    public class VoicemailSettings
+    {
+        [JsonProperty("enabled")]
+        public bool Enabled { get; set; }
+
+        [JsonProperty("pin")]
+        public string Pin { get; set; }
+
+        [JsonProperty("emailNotification")]
+        public bool EmailNotification { get; set; }
+
+        [JsonProperty("emailAddress")]
+        public string EmailAddress { get; set; }
+
+        [JsonProperty("attachAudioToEmail")]
+        public bool AttachAudioToEmail { get; set; }
+
+        [JsonProperty("transcriptionEnabled")]
+        public bool TranscriptionEnabled { get; set; }
+    }
+}</code></pre>
+      </div>
+
+      <h2 id="phone-service">Phone Number Service</h2>
+
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">C# - PhoneNumberService.cs</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>using System.Threading.Tasks;
+using System.Collections.Generic;
+using Alianza.SDK.Models;
+
+namespace Alianza.SDK.Services
+{
+    public class PhoneNumberService
+    {
+        private readonly AlianzaClient _client;
+
+        public PhoneNumberService(AlianzaClient client)
+        {
+            _client = client;
+        }
+
+        /// <summary>
+        /// Search for available phone numbers
+        /// </summary>
+        public async Task<ListResponse<PhoneNumber>> SearchAvailableNumbersAsync(
+            string partitionId,
+            string areaCode,
+            int limit = 10)
+        {
+            var endpoint = $"/v2/partition/{partitionId}/phonenumber/available?areaCode={areaCode}&limit={limit}";
+            return await _client.GetAsync<ListResponse<PhoneNumber>>(endpoint);
+        }
+
+        /// <summary>
+        /// Provision a phone number
+        /// </summary>
+        public async Task<PhoneNumber> ProvisionNumberAsync(
+            string partitionId,
+            string accountId,
+            ProvisionNumberRequest request)
+        {
+            var endpoint = $"/v2/partition/{partitionId}/account/{accountId}/phonenumber";
+            return await _client.PostAsync<PhoneNumber>(endpoint, request);
+        }
+
+        /// <summary>
+        /// Assign phone number to user
+        /// </summary>
+        public async Task<PhoneNumber> AssignNumberToUserAsync(
+            string partitionId,
+            string accountId,
+            string phoneNumber,
+            string userId)
+        {
+            var endpoint = $"/v2/partition/{partitionId}/account/{accountId}/phonenumber/{phoneNumber}/assign";
+            var request = new { userId = userId };
+            return await _client.PostAsync<PhoneNumber>(endpoint, request);
+        }
+
+        /// <summary>
+        /// Release a phone number
+        /// </summary>
+        public async Task ReleaseNumberAsync(
+            string partitionId,
+            string accountId,
+            string phoneNumber)
+        {
+            var endpoint = $"/v2/partition/{partitionId}/account/{accountId}/phonenumber/{phoneNumber}";
+            await _client.DeleteAsync(endpoint);
+        }
+    }
+
+    public class ProvisionNumberRequest
+    {
+        [JsonProperty("phoneNumber")]
+        public string PhoneNumber { get; set; }
+
+        [JsonProperty("numberType")]
+        public string NumberType { get; set; }
+    }
+}</code></pre>
+      </div>
+
+      <h2 id="usage-examples">Usage Examples</h2>
+
+      <h3>Basic Authentication and Account Listing</h3>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">C#</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>using System;
+using System.Threading.Tasks;
+using Alianza.SDK;
+using Alianza.SDK.Services;
+
+class Program
+{
+    static async Task Main(string[] args)
+    {
+        // Initialize client
+        var client = new AlianzaClient(
+            "https://api.alianza.com",
+            "your-username",
+            "your-password"
+        );
+
+        try
+        {
+            // Authenticate
+            var authResponse = await client.AuthenticateAsync();
+            Console.WriteLine($"Authenticated as: {authResponse.UserName}");
+            Console.WriteLine($"Partition: {authResponse.PartitionName}");
+
+            // Get accounts
+            var accountService = new AccountService(client);
+            var accounts = await accountService.GetAccountsAsync(authResponse.PartitionId);
+
+            Console.WriteLine($"\nFound {accounts.Total} accounts:");
+            foreach (var account in accounts.Items)
+            {
+                Console.WriteLine($"  - {account.AccountName} ({account.AccountNumber})");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
+        }
+        finally
+        {
+            client.Dispose();
+        }
+    }
+}</code></pre>
+      </div>
+
+      <h3>Create Account with Users</h3>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">C#</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>using System;
+using System.Threading.Tasks;
+using Alianza.SDK;
+using Alianza.SDK.Services;
+using Alianza.SDK.Models;
+
+public async Task CreateAccountWithUsersAsync()
+{
+    var client = new AlianzaClient(
+        "https://api.alianza.com",
+        Environment.GetEnvironmentVariable("ALIANZA_USERNAME"),
+        Environment.GetEnvironmentVariable("ALIANZA_PASSWORD")
+    );
+
+    var authResponse = await client.AuthenticateAsync();
+    var partitionId = authResponse.PartitionId;
+
+    // Create account
+    var accountService = new AccountService(client);
+    var accountRequest = new CreateAccountRequest
+    {
+        AccountName = "Acme Corporation",
+        AccountNumber = "ACME-001",
+        BillingAddress = new Address
+        {
+            Street1 = "123 Main St",
+            City = "San Francisco",
+            State = "CA",
+            PostalCode = "94105",
+            Country = "US"
+        },
+        ServiceAddress = new Address
+        {
+            Street1 = "123 Main St",
+            City = "San Francisco",
+            State = "CA",
+            PostalCode = "94105",
+            Country = "US"
+        },
+        CallingPlanId = "standard-unlimited"
+    };
+
+    var account = await accountService.CreateAccountAsync(partitionId, accountRequest);
+    Console.WriteLine($"Account created: {account.Id}");
+
+    // Create users
+    var userService = new UserService(client);
+    var userRequest = new CreateUserRequest
+    {
+        FirstName = "John",
+        LastName = "Doe",
+        EmailAddress = "john.doe@acme.com",
+        UserName = "jdoe",
+        Password = "SecureP@ssw0rd123",
+        Extension = "1001",
+        TimeZone = "America/Los_Angeles",
+        Language = "en_US"
+    };
+
+    var user = await userService.CreateUserAsync(partitionId, account.Id, userRequest);
+    Console.WriteLine($"User created: {user.Id}");
+
+    // Configure voicemail
+    var voicemailSettings = new VoicemailSettings
+    {
+        Enabled = true,
+        Pin = "6789",
+        EmailNotification = true,
+        EmailAddress = "john.doe@acme.com",
+        AttachAudioToEmail = true,
+        TranscriptionEnabled = true
+    };
+
+    await userService.ConfigureVoicemailAsync(partitionId, account.Id, user.Id, voicemailSettings);
+    Console.WriteLine("Voicemail configured");
+
+    client.Dispose();
+}</code></pre>
+      </div>
+
+      <h3>Provision and Assign Phone Numbers</h3>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">C#</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>using System;
+using System.Threading.Tasks;
+using System.Linq;
+using Alianza.SDK;
+using Alianza.SDK.Services;
+
+public async Task ProvisionPhoneNumbersAsync(string partitionId, string accountId)
+{
+    var client = new AlianzaClient(
+        "https://api.alianza.com",
+        Environment.GetEnvironmentVariable("ALIANZA_USERNAME"),
+        Environment.GetEnvironmentVariable("ALIANZA_PASSWORD")
+    );
+
+    await client.AuthenticateAsync();
+
+    var phoneService = new PhoneNumberService(client);
+
+    // Search for available numbers in 415 area code
+    var availableNumbers = await phoneService.SearchAvailableNumbersAsync(
+        partitionId,
+        "415",
+        limit: 10
+    );
+
+    Console.WriteLine($"Found {availableNumbers.Total} available numbers");
+
+    if (availableNumbers.Items.Count > 0)
+    {
+        // Provision first available number
+        var numberToProvision = availableNumbers.Items.First();
+        var provisionRequest = new ProvisionNumberRequest
+        {
+            PhoneNumber = numberToProvision.Number,
+            NumberType = "DID"
+        };
+
+        var provisionedNumber = await phoneService.ProvisionNumberAsync(
+            partitionId,
+            accountId,
+            provisionRequest
+        );
+
+        Console.WriteLine($"Provisioned number: {provisionedNumber.Number}");
+
+        // Assign to user
+        var userService = new UserService(client);
+        var users = await userService.GetUsersAsync(partitionId, accountId);
+
+        if (users.Items.Count > 0)
+        {
+            var userId = users.Items.First().Id;
+            await phoneService.AssignNumberToUserAsync(
+                partitionId,
+                accountId,
+                provisionedNumber.Number,
+                userId
+            );
+
+            Console.WriteLine($"Number assigned to user: {userId}");
+        }
+    }
+
+    client.Dispose();
+}</code></pre>
+      </div>
+
+      <h2 id="aspnet-integration">ASP.NET Core Integration</h2>
+
+      <h3>Dependency Injection Setup</h3>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">C# - Startup.cs</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration;
+using Alianza.SDK;
+using Alianza.SDK.Services;
+
+public class Startup
+{
+    public IConfiguration Configuration { get; }
+
+    public Startup(IConfiguration configuration)
+    {
+        Configuration = configuration;
+    }
+
+    public void ConfigureServices(IServiceCollection services)
+    {
+        // Register Alianza client as singleton
+        services.AddSingleton(sp =>
+        {
+            var baseUrl = Configuration["Alianza:BaseUrl"];
+            var username = Configuration["Alianza:Username"];
+            var password = Configuration["Alianza:Password"];
+            return new AlianzaClient(baseUrl, username, password);
+        });
+
+        // Register services
+        services.AddScoped<AccountService>();
+        services.AddScoped<UserService>();
+        services.AddScoped<PhoneNumberService>();
+
+        services.AddControllers();
+    }
+}</code></pre>
+      </div>
+
+      <h3>Controller Example</h3>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">C# - AccountsController.cs</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
+using Alianza.SDK.Services;
+using Alianza.SDK.Models;
+
+[ApiController]
+[Route("api/[controller]")]
+public class AccountsController : ControllerBase
+{
+    private readonly AccountService _accountService;
+    private readonly string _partitionId;
+
+    public AccountsController(AccountService accountService, IConfiguration configuration)
+    {
+        _accountService = accountService;
+        _partitionId = configuration["Alianza:PartitionId"];
+    }
+
+    [HttpGet]
+    public async Task<ActionResult<ListResponse<Account>>> GetAccounts()
+    {
+        try
+        {
+            var accounts = await _accountService.GetAccountsAsync(_partitionId);
+            return Ok(accounts);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { error = ex.Message });
+        }
+    }
+
+    [HttpGet("{accountId}")]
+    public async Task<ActionResult<Account>> GetAccount(string accountId)
+    {
+        try
+        {
+            var account = await _accountService.GetAccountAsync(_partitionId, accountId);
+            return Ok(account);
+        }
+        catch (HttpRequestException ex) when (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
+        {
+            return NotFound(new { error = "Account not found" });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { error = ex.Message });
+        }
+    }
+
+    [HttpPost]
+    public async Task<ActionResult<Account>> CreateAccount([FromBody] CreateAccountRequest request)
+    {
+        try
+        {
+            var account = await _accountService.CreateAccountAsync(_partitionId, request);
+            return CreatedAtAction(nameof(GetAccount), new { accountId = account.Id }, account);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { error = ex.Message });
+        }
+    }
+}</code></pre>
+      </div>
+
+      <h3>Configuration (appsettings.json)</h3>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">JSON</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>{
+  "Alianza": {
+    "BaseUrl": "https://api.alianza.com",
+    "Username": "your-username",
+    "Password": "your-password",
+    "PartitionId": "your-partition-id"
+  },
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft": "Warning"
+    }
+  }
+}</code></pre>
+      </div>
+
+      <div class="alert alert-warning">
+        <strong><i class="fas fa-exclamation-triangle"></i> Security Note</strong>: Never commit credentials to source control. Use environment variables or Azure Key Vault for production.
+      </div>
+
+      <h2 id="error-handling">Error Handling</h2>
+
+      <h3>Custom Exception Classes</h3>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">C# - Exceptions.cs</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>using System;
+
+namespace Alianza.SDK.Exceptions
+{
+    public class AlianzaApiException : Exception
+    {
+        public int StatusCode { get; set; }
+        public string ErrorCode { get; set; }
+
+        public AlianzaApiException(string message, int statusCode, string errorCode = null)
+            : base(message)
+        {
+            StatusCode = statusCode;
+            ErrorCode = errorCode;
+        }
+    }
+
+    public class AuthenticationException : AlianzaApiException
+    {
+        public AuthenticationException(string message)
+            : base(message, 401, "AUTHENTICATION_FAILED")
+        {
+        }
+    }
+
+    public class RateLimitException : AlianzaApiException
+    {
+        public int RetryAfterSeconds { get; set; }
+
+        public RateLimitException(string message, int retryAfter)
+            : base(message, 429, "RATE_LIMIT_EXCEEDED")
+        {
+            RetryAfterSeconds = retryAfter;
+        }
+    }
+}</code></pre>
+      </div>
+
+      <h3>Retry Logic with Polly</h3>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">C#</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>// Install-Package Polly
+using Polly;
+using Polly.Retry;
+using System;
+using System.Net.Http;
+using System.Threading.Tasks;
+
+public class ResilientAlianzaClient
+{
+    private readonly AlianzaClient _client;
+    private readonly AsyncRetryPolicy _retryPolicy;
+
+    public ResilientAlianzaClient(AlianzaClient client)
+    {
+        _client = client;
+
+        // Retry policy: 3 retries with exponential backoff
+        _retryPolicy = Policy
+            .Handle<HttpRequestException>()
+            .Or<TaskCanceledException>()
+            .WaitAndRetryAsync(
+                retryCount: 3,
+                sleepDurationProvider: retryAttempt =>
+                    TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
+                onRetry: (exception, timeSpan, retryCount, context) =>
+                {
+                    Console.WriteLine($"Retry {retryCount} after {timeSpan.TotalSeconds}s due to: {exception.Message}");
+                }
+            );
+    }
+
+    public async Task<T> GetWithRetryAsync<T>(string endpoint)
+    {
+        return await _retryPolicy.ExecuteAsync(async () =>
+        {
+            return await _client.GetAsync<T>(endpoint);
+        });
+    }
+
+    public async Task<T> PostWithRetryAsync<T>(string endpoint, object data)
+    {
+        return await _retryPolicy.ExecuteAsync(async () =>
+        {
+            return await _client.PostAsync<T>(endpoint, data);
+        });
+    }
+}</code></pre>
+      </div>
+
+      <h2 id="complete-example">Complete Console Application</h2>
+
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">C# - Program.cs</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>using System;
+using System.Threading.Tasks;
+using Alianza.SDK;
+using Alianza.SDK.Services;
+using Alianza.SDK.Models;
+
+class Program
+{
+    static async Task Main(string[] args)
+    {
+        Console.WriteLine("Alianza API Integration Example\n");
+
+        // Load credentials from environment
+        var baseUrl = Environment.GetEnvironmentVariable("ALIANZA_BASE_URL")
+            ?? "https://api.alianza.com";
+        var username = Environment.GetEnvironmentVariable("ALIANZA_USERNAME");
+        var password = Environment.GetEnvironmentVariable("ALIANZA_PASSWORD");
+
+        if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+        {
+            Console.WriteLine("Error: Set ALIANZA_USERNAME and ALIANZA_PASSWORD environment variables");
+            return;
+        }
+
+        using var client = new AlianzaClient(baseUrl, username, password);
+
+        try
+        {
+            // Authenticate
+            Console.WriteLine("Authenticating...");
+            var auth = await client.AuthenticateAsync();
+            Console.WriteLine($"✓ Authenticated as {auth.UserName}");
+            Console.WriteLine($"  Partition: {auth.PartitionName}\n");
+
+            var partitionId = auth.PartitionId;
+
+            // List accounts
+            Console.WriteLine("Fetching accounts...");
+            var accountService = new AccountService(client);
+            var accounts = await accountService.GetAccountsAsync(partitionId);
+            Console.WriteLine($"✓ Found {accounts.Total} accounts\n");
+
+            if (accounts.Items.Count > 0)
+            {
+                var firstAccount = accounts.Items[0];
+                Console.WriteLine($"Account Details:");
+                Console.WriteLine($"  Name: {firstAccount.AccountName}");
+                Console.WriteLine($"  Number: {firstAccount.AccountNumber}");
+                Console.WriteLine($"  Status: {firstAccount.Status}\n");
+
+                // List users in first account
+                Console.WriteLine("Fetching users...");
+                var userService = new UserService(client);
+                var users = await userService.GetUsersAsync(partitionId, firstAccount.Id);
+                Console.WriteLine($"✓ Found {users.Total} users");
+
+                foreach (var user in users.Items)
+                {
+                    Console.WriteLine($"  - {user.FirstName} {user.LastName} (ext: {user.Extension})");
+                }
+            }
+
+            Console.WriteLine("\n✓ Integration test completed successfully!");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"\n✗ Error: {ex.Message}");
+            Console.WriteLine($"  Type: {ex.GetType().Name}");
+            if (ex.InnerException != null)
+            {
+                Console.WriteLine($"  Inner: {ex.InnerException.Message}");
+            }
+        }
+    }
+}</code></pre>
+      </div>
+
+      <div class="alert alert-success">
+        <strong><i class="fas fa-check-circle"></i> Production Ready</strong>: This SDK includes authentication management, automatic token refresh, retry logic, and comprehensive error handling for production use.
+      </div>
+
+      <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border-color);">
+        <h2>Next Steps</h2>
+        <div class="nav-cards" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+          <a href="ruby-examples.html" class="card" style="text-decoration: none;">
+            <div class="card-title"><i class="fas fa-gem"></i> Ruby Examples</div>
+            <p>Complete Ruby SDK and examples</p>
+          </a>
+          <a href="../guides/account-management.html" class="card" style="text-decoration: none;">
+            <div class="card-title"><i class="fas fa-building"></i> Account Management</div>
+            <p>Account management guide</p>
+          </a>
+          <a href="../advanced/error-handling.html" class="card" style="text-decoration: none;">
+            <div class="card-title"><i class="fas fa-exclamation-triangle"></i> Error Handling</div>
+            <p>Handle errors gracefully</p>
+          </a>
+          <a href="../advanced/webhooks.html" class="card" style="text-decoration: none;">
+            <div class="card-title"><i class="fas fa-webhook"></i> Webhooks</div>
+            <p>Real-time event notifications</p>
+          </a>
+        </div>
+      </div>
+
+      <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border-color);">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <a href="java-examples.html" class="btn btn-secondary">← Java Examples</a>
+          </div>
+          <div>
+            <a href="ruby-examples.html" class="btn btn-primary">Ruby Examples →</a>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="../js/main.js"></script>
+</body>
+</html>
