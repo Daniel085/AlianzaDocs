@@ -3,24 +3,44 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Complete guide to account management in the Alianza API">
   <title>Account Management Guide - Alianza API</title>
   <link rel="stylesheet" href="../css/main.css">
   <style>
-    .markdown-note {
-      background: var(--accent-tertiary);
-      border-left: 4px solid var(--accent-primary);
-      padding: 1rem;
+    .hierarchy-diagram {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 1.5rem;
       margin: 2rem 0;
-      border-radius: var(--radius-md);
+      overflow-x: auto;
     }
-    .view-markdown-btn {
-      display: inline-block;
-      margin-top: 1rem;
-      padding: 0.5rem 1rem;
-      background: var(--accent-primary);
-      color: white;
-      text-decoration: none;
-      border-radius: var(--radius-md);
+    .hierarchy-diagram pre {
+      margin: 0;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+    .properties-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+    }
+    .properties-table th,
+    .properties-table td {
+      padding: 0.75rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .properties-table th {
+      background: var(--bg-secondary);
+      font-weight: 600;
+    }
+    .properties-table code {
+      background: var(--bg-tertiary);
+      padding: 0.2rem 0.4rem;
+      border-radius: 3px;
+      font-size: 0.9em;
     }
   </style>
 </head>
@@ -31,6 +51,9 @@
     </a>
     <nav class="docs-nav">
       <a href="../../../index.html">Home</a>
+      <a href="../architecture/diagrams.html">Architecture</a>
+      <a href="../guides/account-management.html" class="active">Guides</a>
+      <a href="../../../openapi.yaml">API Reference</a>
       <button id="theme-toggle" class="theme-toggle">🌙 Dark</button>
     </nav>
   </header>
@@ -44,20 +67,34 @@
           <li><a href="../getting-started/authentication.html">Authentication</a></li>
         </ul>
       </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-title">Architecture</div>
+        <ul class="sidebar-links">
+          <li><a href="../architecture/diagrams.html">Architecture Diagrams</a></li>
+        </ul>
+      </div>
+
       <div class="sidebar-section">
         <div class="sidebar-title">Guides</div>
         <ul class="sidebar-links">
-          <li><a href="../guides/account-management.html">Account Management</a></li>
-          <li><a href="../guides/phone-numbers.html">Phone Numbers</a></li>
+          <li><a href="account-management.html" class="active">Account Management</a></li>
+          <li><a href="phone-numbers.html">Phone Numbers</a></li>
+          <li><a href="device-management.html">Device Management</a></li>
+          <li><a href="call-routing.html">Call Routing</a></li>
         </ul>
       </div>
+
       <div class="sidebar-section">
         <div class="sidebar-title">Code Examples</div>
         <ul class="sidebar-links">
           <li><a href="../code-examples/python-examples.html">Python</a></li>
           <li><a href="../code-examples/nodejs-examples.html">Node.js</a></li>
+          <li><a href="../code-examples/php-examples.html">PHP</a></li>
+          <li><a href="../code-examples/java-examples.html">Java</a></li>
         </ul>
       </div>
+
       <div class="sidebar-section">
         <div class="sidebar-title">Advanced</div>
         <ul class="sidebar-links">
@@ -69,14 +106,798 @@
 
     <main class="docs-main">
       <h1>Account Management Guide</h1>
+      <p style="font-size: 1.2rem;">Complete guide to creating, managing, and configuring accounts in the Alianza platform.</p>
 
-      <div class="markdown-note">
-        <strong>📝 Note:</strong> This page is being converted from markdown to interactive HTML.
-        <br>
-        <a href="../../../docs/guides/account-management.md" class="view-markdown-btn">View Markdown Version →</a>
+      <div class="card" style="background: var(--bg-tertiary); border-left: 4px solid var(--accent-primary);">
+        <h3 style="margin-top: 0;">Table of Contents</h3>
+        <ol style="margin-bottom: 0;">
+          <li><a href="#overview">Overview</a></li>
+          <li><a href="#account-basics">Account Basics</a></li>
+          <li><a href="#creating">Creating an Account</a></li>
+          <li><a href="#managing">Managing Accounts</a></li>
+          <li><a href="#account-users">Account Users</a></li>
+          <li><a href="#end-users">End Users</a></li>
+          <li><a href="#best-practices">Best Practices</a></li>
+        </ol>
       </div>
 
-      <p>Interactive HTML version coming soon. For now, please refer to the markdown version above.</p>
+      <h2 id="overview">Overview</h2>
+      <p>An <strong>Account</strong> is the basic unit of telephone service for a business or residential customer. Each account:</p>
+      <ul>
+        <li>Belongs to a partition (your service provider space)</li>
+        <li>Contains end users (people with phones)</li>
+        <li>Has devices (physical/software phones)</li>
+        <li>Owns phone numbers</li>
+        <li>Has billing and service configuration</li>
+      </ul>
+
+      <h3>Account Hierarchy</h3>
+      <div class="hierarchy-diagram">
+        <pre>Partition
+  └── Account
+       ├── End Users
+       │    └── Phone Numbers
+       ├── Devices
+       │    └── Device Lines
+       ├── Account Users (managers)
+       └── Services (IVR, hunt groups, etc.)</pre>
+      </div>
+
+      <h2 id="account-basics">Account Basics</h2>
+
+      <h3>Key Account Properties</h3>
+      <table class="properties-table">
+        <thead>
+          <tr>
+            <th>Property</th>
+            <th>Description</th>
+            <th>Required</th>
+            <th>Example</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>accountNumber</code></td>
+            <td>Unique identifier within partition</td>
+            <td>Yes</td>
+            <td>"1001", "ACME-001"</td>
+          </tr>
+          <tr>
+            <td><code>name</code></td>
+            <td>Account display name</td>
+            <td>Yes</td>
+            <td>"Acme Corporation"</td>
+          </tr>
+          <tr>
+            <td><code>timeZone</code></td>
+            <td>Account timezone</td>
+            <td>Yes</td>
+            <td>"America/New_York"</td>
+          </tr>
+          <tr>
+            <td><code>status</code></td>
+            <td>Account status</td>
+            <td>No</td>
+            <td>"ACTIVE", "SUSPENDED"</td>
+          </tr>
+          <tr>
+            <td><code>address</code></td>
+            <td>Physical address</td>
+            <td>Recommended</td>
+            <td>For E911</td>
+          </tr>
+          <tr>
+            <td><code>callingPlanId</code></td>
+            <td>Default calling plan</td>
+            <td>No</td>
+            <td>Long distance rules</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Account Status Values</h3>
+      <div class="card">
+        <ul>
+          <li><strong>ACTIVE</strong>: Normal operation, can make/receive calls</li>
+          <li><strong>SUSPENDED</strong>: Temporarily disabled, no call service</li>
+          <li><strong>PENDING</strong>: Being provisioned</li>
+          <li><strong>CANCELLED</strong>: Terminated service</li>
+        </ul>
+      </div>
+
+      <h2 id="creating">Creating an Account</h2>
+
+      <h3>Step-by-Step Account Creation</h3>
+
+      <h4>Step 1: Validate Address (E911 Requirement)</h4>
+      <p>Before creating an account, validate the service address for E911 compliance.</p>
+
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">Request</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>GET /v2/address/validate?address=135 Front St&country=USA&postalCode=13905</code></pre>
+      </div>
+
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">Response</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>{
+  "valid": true,
+  "formatted": {
+    "street": "135 Front St",
+    "city": "Binghamton",
+    "state": "NY",
+    "zipCode": "13905",
+    "country": "USA"
+  },
+  "customerServiceRecord": {
+    "latitude": 42.0987,
+    "longitude": -75.9180,
+    "geocodingAccuracy": "ROOFTOP"
+  }
+}</code></pre>
+      </div>
+
+      <h4>Step 2: Create Account</h4>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">Request</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>POST /v2/partition/{partitionId}/account
+Content-Type: application/json
+X-AUTH-TOKEN: your-token
+
+{
+  "accountNumber": "2001",
+  "name": "Acme Corporation",
+  "timeZone": "America/New_York",
+  "status": "ACTIVE",
+  "address": {
+    "street": "135 Front St",
+    "city": "Binghamton",
+    "state": "NY",
+    "zipCode": "13905",
+    "country": "USA"
+  },
+  "billingAddress": {
+    "street": "135 Front St",
+    "city": "Binghamton",
+    "state": "NY",
+    "zipCode": "13905",
+    "country": "USA"
+  },
+  "serviceType": "BUSINESS",
+  "callingPlanId": "unlimited-us-canada"
+}</code></pre>
+      </div>
+
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">Response</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>{
+  "accountId": "acc_abc123",
+  "accountNumber": "2001",
+  "name": "Acme Corporation",
+  "status": "ACTIVE",
+  "timeZone": "America/New_York",
+  "partitionId": "part_xyz789",
+  "createdDate": "2025-12-18T10:30:00Z",
+  "serviceType": "BUSINESS",
+  "address": {
+    "street": "135 Front St",
+    "city": "Binghamton",
+    "state": "NY",
+    "zipCode": "13905",
+    "country": "USA"
+  }
+}</code></pre>
+      </div>
+
+      <h3>Complete Account Setup Workflow</h3>
+      <div class="alert alert-info">
+        <strong>💡 Complete Provisioning Flow</strong>
+        <p>Creating an account is just the first step. See the <a href="../architecture/diagrams.html#diagram3">Account Creation Workflow diagram</a> for the complete provisioning process.</p>
+      </div>
+
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">Complete Workflow</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code># 1. Validate address
+GET /v2/address/validate?...
+
+# 2. Create account
+POST /v2/partition/{partitionId}/account
+
+# 3. Create end user
+POST /v2/partition/{partitionId}/account/{accountId}/user
+
+# 4. Provision phone number
+POST /v2/partition/{partitionId}/telephone-number/order
+
+# 5. Assign number to user
+PUT /v2/partition/{partitionId}/account/{accountId}/user/{userId}/telephone-number
+
+# 6. Configure device
+POST /v2/partition/{partitionId}/account/{accountId}/device
+
+# 7. Configure device line
+POST /v2/partition/{partitionId}/account/{accountId}/device/{deviceId}/line</code></pre>
+      </div>
+
+      <h2 id="managing">Managing Accounts</h2>
+
+      <h3>List All Accounts</h3>
+      <p>Retrieve all accounts in your partition:</p>
+
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">Request</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>GET /v2/partition/{partitionId}/account
+X-AUTH-TOKEN: your-token</code></pre>
+      </div>
+
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">Response</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>[
+  {
+    "accountId": "acc_123",
+    "accountNumber": "1001",
+    "name": "Acme Corporation",
+    "status": "ACTIVE",
+    "createdDate": "2025-01-15T10:30:00Z"
+  },
+  {
+    "accountId": "acc_456",
+    "accountNumber": "1002",
+    "name": "Widget Industries",
+    "status": "ACTIVE",
+    "createdDate": "2025-02-20T14:15:00Z"
+  }
+]</code></pre>
+      </div>
+
+      <h3>Get Account Details</h3>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">Bash</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>GET /v2/partition/{partitionId}/account/{accountId}
+X-AUTH-TOKEN: your-token</code></pre>
+      </div>
+
+      <h3>Update Account</h3>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">Request</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>PUT /v2/partition/{partitionId}/account/{accountId}
+Content-Type: application/json
+X-AUTH-TOKEN: your-token
+
+{
+  "accountId": "acc_123",
+  "name": "Acme Corporation (Updated)",
+  "status": "ACTIVE",
+  "timeZone": "America/Los_Angeles",
+  "callingPlanId": "new-calling-plan"
+}</code></pre>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Common Updates</div>
+        <ul>
+          <li>Change account name</li>
+          <li>Update timezone</li>
+          <li>Change calling plan</li>
+          <li>Update address (for E911)</li>
+          <li>Suspend/reactivate account</li>
+        </ul>
+      </div>
+
+      <h3>Delete Account</h3>
+      <div class="alert alert-warning">
+        <strong>⚠️ Prerequisites for Account Deletion</strong>
+        <ul>
+          <li>Remove all users first</li>
+          <li>Disconnect all phone numbers</li>
+          <li>Delete all devices</li>
+          <li>Cancel all services</li>
+        </ul>
+      </div>
+
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">Request</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>DELETE /v2/partition/{partitionId}/account/{accountId}
+X-AUTH-TOKEN: your-token</code></pre>
+      </div>
+
+      <h3>Search Accounts</h3>
+      <p>Search by various criteria:</p>
+
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">Search Examples</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code># By account number
+GET /v2/partition/{partitionId}/account?accountNumber=1001
+
+# By name
+GET /v2/partition/{partitionId}/account?name=Acme
+
+# By status
+GET /v2/partition/{partitionId}/account?status=ACTIVE</code></pre>
+      </div>
+
+      <h2 id="account-users">Account Users</h2>
+      <p><strong>Account Users</strong> are account managers without devices who can administer the account.</p>
+
+      <h3>Create Account User</h3>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">Request</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>POST /v2/partition/{partitionId}/account/{accountId}/account-user
+Content-Type: application/json
+X-AUTH-TOKEN: your-token
+
+{
+  "firstName": "Jane",
+  "lastName": "Manager",
+  "email": "jane@acme.com",
+  "userName": "jane.manager",
+  "password": "SecurePass123!",
+  "role": "ACCOUNT_ADMIN"
+}</code></pre>
+      </div>
+
+      <h3>Account User Permissions</h3>
+      <div class="card">
+        <ul>
+          <li><strong>ACCOUNT_ADMIN</strong>: Full account management</li>
+          <li><strong>ACCOUNT_USER</strong>: Limited management (users, call settings)</li>
+          <li><strong>BILLING_ADMIN</strong>: Billing and usage reports only</li>
+        </ul>
+      </div>
+
+      <h3>List Account Users</h3>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">Bash</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>GET /v2/partition/{partitionId}/account/{accountId}/account-user
+X-AUTH-TOKEN: your-token</code></pre>
+      </div>
+
+      <h2 id="end-users">End Users</h2>
+      <p><strong>End Users</strong> are individuals with devices and phone numbers.</p>
+
+      <h3>Create End User</h3>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">Request</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>POST /v2/partition/{partitionId}/account/{accountId}/user
+Content-Type: application/json
+X-AUTH-TOKEN: your-token
+
+{
+  "firstName": "John",
+  "lastName": "Doe",
+  "extension": "1001",
+  "email": "john.doe@acme.com",
+  "callingPlanId": "unlimited-us-canada",
+  "voicemail": {
+    "enabled": true,
+    "pin": "1234",
+    "emailNotification": true
+  },
+  "callForwarding": {
+    "enabled": false
+  }
+}</code></pre>
+      </div>
+
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">Response</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>{
+  "userId": "user_xyz789",
+  "accountId": "acc_123",
+  "firstName": "John",
+  "lastName": "Doe",
+  "extension": "1001",
+  "email": "john.doe@acme.com",
+  "status": "ACTIVE",
+  "createdDate": "2025-12-18T11:00:00Z"
+}</code></pre>
+      </div>
+
+      <h3>User Configuration Options</h3>
+
+      <div class="card">
+        <div class="card-title">Voicemail Configuration</div>
+        <div class="code-block">
+          <pre><code>{
+  "voicemail": {
+    "enabled": true,
+    "pin": "1234",
+    "emailNotification": true,
+    "emailAddress": "john@acme.com",
+    "transcription": true,
+    "greeting": "custom-greeting-media-id"
+  }
+}</code></pre>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Call Forwarding Configuration</div>
+        <div class="code-block">
+          <pre><code>{
+  "callForwarding": {
+    "enabled": true,
+    "forwardTo": "+15551234567",
+    "alwaysForward": false,
+    "noAnswerForward": true,
+    "noAnswerTimeout": 20,
+    "busyForward": true
+  }
+}</code></pre>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Call Screening Configuration</div>
+        <div class="code-block">
+          <pre><code>{
+  "callScreening": {
+    "enabled": true,
+    "screenUnknown": true,
+    "announceCallerName": true,
+    "allowedNumbers": ["+15551111111"],
+    "blockedNumbers": ["+15552222222"]
+  }
+}</code></pre>
+        </div>
+      </div>
+
+      <h3>User Management Operations</h3>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">Operations</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code># List Users
+GET /v2/partition/{partitionId}/account/{accountId}/user
+
+# Update User
+PUT /v2/partition/{partitionId}/account/{accountId}/user/{userId}
+
+# Delete User
+DELETE /v2/partition/{partitionId}/account/{accountId}/user/{userId}</code></pre>
+      </div>
+
+      <div class="alert alert-warning">
+        <strong>⚠️ Prerequisites for User Deletion</strong>
+        <ul>
+          <li>Unassign all phone numbers</li>
+          <li>Remove device associations</li>
+          <li>Disable voicemail</li>
+        </ul>
+      </div>
+
+      <h2 id="best-practices">Best Practices</h2>
+
+      <div class="card">
+        <div class="card-title">1. Address Validation</div>
+        <p><strong>Always validate addresses</strong> before account creation:</p>
+        <ul>
+          <li>Required for E911 compliance</li>
+          <li>Prevents service activation failures</li>
+          <li>Ensures accurate emergency services</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-title">2. Account Numbering</div>
+        <p>Use a consistent account numbering scheme:</p>
+        <p><strong>Good</strong>:</p>
+        <ul>
+          <li><code>ACME-001</code>, <code>ACME-002</code> (for partner/reseller tracking)</li>
+          <li><code>1001</code>, <code>1002</code>, <code>1003</code> (simple sequential)</li>
+          <li><code>{customerId}-{siteId}</code> (multi-location)</li>
+        </ul>
+        <p><strong>Avoid</strong>:</p>
+        <ul>
+          <li>Random numbers</li>
+          <li>Phone numbers as account numbers</li>
+          <li>Duplicate numbers across partitions</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-title">3. Timezone Configuration</div>
+        <p>Set correct timezone to ensure:</p>
+        <ul>
+          <li>Accurate CDR timestamps</li>
+          <li>Proper business hours routing</li>
+          <li>Correct voicemail timestamps</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-title">4. Bulk User Management</div>
+        <p>For accounts with many users:</p>
+        <ul>
+          <li>Use Bulk Operations API</li>
+          <li>Batch creates in groups of 100-500</li>
+          <li>Validate templates before bulk execution</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-title">5. Account Status Management</div>
+        <p>Use status appropriately:</p>
+        <p><strong>ACTIVE</strong>:</p>
+        <ul>
+          <li>Normal operation</li>
+          <li>All services available</li>
+        </ul>
+        <p><strong>SUSPENDED</strong>:</p>
+        <ul>
+          <li>Temporary hold (non-payment, etc.)</li>
+          <li>No incoming/outgoing calls</li>
+          <li>Voicemail still accessible</li>
+          <li>Reversible</li>
+        </ul>
+        <p><strong>CANCELLED</strong>:</p>
+        <ul>
+          <li>Permanent termination</li>
+          <li>Release phone numbers</li>
+          <li>Archive data before cancelling</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-title">6. Error Handling</div>
+        <p>Common account creation errors:</p>
+        <table class="properties-table">
+          <thead>
+            <tr>
+              <th>Error</th>
+              <th>Cause</th>
+              <th>Solution</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>DUPLICATE_ACCOUNT_NUMBER</code></td>
+              <td>Account number exists</td>
+              <td>Use unique number</td>
+            </tr>
+            <tr>
+              <td><code>INVALID_ADDRESS</code></td>
+              <td>Address validation failed</td>
+              <td>Validate first</td>
+            </tr>
+            <tr>
+              <td><code>INVALID_CALLING_PLAN</code></td>
+              <td>Plan doesn't exist</td>
+              <td>Check available plans</td>
+            </tr>
+            <tr>
+              <td><code>INVALID_TIMEZONE</code></td>
+              <td>Bad timezone string</td>
+              <td>Use IANA timezone</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card">
+        <div class="card-title">7. Prevalidation</div>
+        <p>Use the prevalidation endpoint before creating accounts:</p>
+        <div class="code-block">
+          <pre><code>POST /v2/partition/{partitionId}/account/prevalidate</code></pre>
+        </div>
+        <p>This checks:</p>
+        <ul>
+          <li>Account number availability</li>
+          <li>Address validity</li>
+          <li>Calling plan existence</li>
+          <li>Service availability at address</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-title">8. Account History</div>
+        <p>Track changes with account history:</p>
+        <div class="code-block">
+          <pre><code>GET /v2/partition/{partitionId}/account/accounthistorysearch?accountNumber=1001</code></pre>
+        </div>
+        <p>Returns:</p>
+        <ul>
+          <li>All modifications</li>
+          <li>Timestamps</li>
+          <li>User who made changes</li>
+          <li>Before/after values</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-title">9. Multi-Location Accounts</div>
+        <p>For businesses with multiple locations:</p>
+        <p><strong>Option 1: Separate Accounts</strong></p>
+        <div class="code-block">
+          <pre><code>Account 1001 (HQ - New York)
+Account 1002 (Branch - LA)
+Account 1003 (Branch - Chicago)</code></pre>
+        </div>
+        <p><strong>Option 2: Single Account with Hunt Groups</strong></p>
+        <div class="code-block">
+          <pre><code>Account 1001 (Corporate)
+  └── Hunt Groups per location</code></pre>
+        </div>
+        <p>Choose based on:</p>
+        <ul>
+          <li>Billing requirements</li>
+          <li>Dial plan complexity</li>
+          <li>Management structure</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-title">10. Service Type Selection</div>
+        <ul>
+          <li><strong>BUSINESS</strong>: Multi-user, hunt groups, IVR, etc.</li>
+          <li><strong>RESIDENTIAL</strong>: Simple, single-user focused</li>
+          <li><strong>BEYOC</strong>: Bring Your Own Carrier integration</li>
+        </ul>
+      </div>
+
+      <h2>Code Examples</h2>
+
+      <h3>Python: Complete Account Setup</h3>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">Python</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>import requests
+
+class AlianzaAccountManager:
+    def __init__(self, base_url, token, partition_id):
+        self.base_url = base_url
+        self.headers = {
+            'X-AUTH-TOKEN': token,
+            'Content-Type': 'application/json'
+        }
+        self.partition_id = partition_id
+
+    def validate_address(self, address, postal_code):
+        """Validate address for E911"""
+        response = requests.get(
+            f'{self.base_url}/v2/address/validate',
+            params={
+                'address': address,
+                'country': 'USA',
+                'postalCode': postal_code
+            },
+            headers=self.headers
+        )
+        return response.json()
+
+    def create_account(self, account_data):
+        """Create new account"""
+        response = requests.post(
+            f'{self.base_url}/v2/partition/{self.partition_id}/account',
+            json=account_data,
+            headers=self.headers
+        )
+        response.raise_for_status()
+        return response.json()
+
+    def create_user(self, account_id, user_data):
+        """Create end user"""
+        response = requests.post(
+            f'{self.base_url}/v2/partition/{self.partition_id}/account/{account_id}/user',
+            json=user_data,
+            headers=self.headers
+        )
+        response.raise_for_status()
+        return response.json()
+
+# Usage
+manager = AlianzaAccountManager(
+    'https://api.alianza.com',
+    'your-token',
+    'your-partition-id'
+)
+
+# Validate address
+address = manager.validate_address('135 Front St', '13905')
+
+# Create account
+account = manager.create_account({
+    'accountNumber': '2001',
+    'name': 'Acme Corporation',
+    'timeZone': 'America/New_York',
+    'address': address['formatted']
+})
+
+# Create user
+user = manager.create_user(account['accountId'], {
+    'firstName': 'John',
+    'lastName': 'Doe',
+    'extension': '1001',
+    'email': 'john@acme.com'
+})
+
+print(f"Account created: {account['accountId']}")
+print(f"User created: {user['userId']}")</code></pre>
+      </div>
+
+      <div class="alert alert-success">
+        <strong>✅ Ready to Manage Accounts!</strong> You now have comprehensive knowledge of account management. Explore the guides below to continue building your integration.
+      </div>
+
+      <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border-color);">
+        <h2>Next Steps</h2>
+        <div class="nav-cards" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+          <a href="phone-numbers.html" class="card" style="text-decoration: none;">
+            <div class="card-title">Phone Numbers Guide</div>
+            <p>Provision numbers for accounts</p>
+          </a>
+          <a href="device-management.html" class="card" style="text-decoration: none;">
+            <div class="card-title">Device Management</div>
+            <p>Configure phones</p>
+          </a>
+          <a href="call-routing.html" class="card" style="text-decoration: none;">
+            <div class="card-title">Call Routing</div>
+            <p>Set up IVRs and hunt groups</p>
+          </a>
+          <a href="../code-examples/python-examples.html" class="card" style="text-decoration: none;">
+            <div class="card-title">Code Examples</div>
+            <p>More implementation examples</p>
+          </a>
+        </div>
+      </div>
+
+      <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border-color);">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <a href="../getting-started/authentication.html" class="btn btn-secondary">← Authentication</a>
+          </div>
+          <div>
+            <a href="phone-numbers.html" class="btn btn-primary">Phone Numbers →</a>
+          </div>
+        </div>
+      </div>
     </main>
   </div>
 

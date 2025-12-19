@@ -1,85 +1,674 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Error Handling Guide - Alianza API</title>
-  <link rel="stylesheet" href="../css/main.css">
-  <style>
-    .markdown-note {
-      background: var(--accent-tertiary);
-      border-left: 4px solid var(--accent-primary);
-      padding: 1rem;
-      margin: 2rem 0;
-      border-radius: var(--radius-md);
-    }
-    .view-markdown-btn {
-      display: inline-block;
-      margin-top: 1rem;
-      padding: 0.5rem 1rem;
-      background: var(--accent-primary);
-      color: white;
-      text-decoration: none;
-      border-radius: var(--radius-md);
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error Handling Guide - Alianza API Documentation</title>
+    <link rel="stylesheet" href="../css/main.css">
 </head>
 <body>
-  <header class="docs-header">
-    <a href="../../../index.html" class="docs-logo">
-      <span>📞</span> Alianza API
-    </a>
-    <nav class="docs-nav">
-      <a href="../../../index.html">Home</a>
-      <button id="theme-toggle" class="theme-toggle">🌙 Dark</button>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <a href="../index.html">Alianza API Docs</a>
+            </div>
+            <button class="mobile-menu-toggle" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-menu">
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="../getting-started/quick-start.html">Quick Start</a></li>
+                <li><a href="../getting-started/authentication.html">Authentication</a></li>
+                <li><a href="../api-reference/endpoints.html">API Reference</a></li>
+                <li><a href="../guides/account-management.html">Guides</a></li>
+            </ul>
+            <button class="theme-toggle" aria-label="Toggle theme">
+                <svg class="sun-icon" width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"/>
+                </svg>
+                <svg class="moon-icon" width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/>
+                </svg>
+            </button>
+        </div>
     </nav>
-  </header>
 
-  <div class="docs-container">
-    <aside class="docs-sidebar">
-      <div class="sidebar-section">
-        <div class="sidebar-title">Getting Started</div>
-        <ul class="sidebar-links">
-          <li><a href="../getting-started/quick-start.html">Quick Start</a></li>
-          <li><a href="../getting-started/authentication.html">Authentication</a></li>
-        </ul>
-      </div>
-      <div class="sidebar-section">
-        <div class="sidebar-title">Guides</div>
-        <ul class="sidebar-links">
-          <li><a href="../guides/account-management.html">Account Management</a></li>
-          <li><a href="../guides/phone-numbers.html">Phone Numbers</a></li>
-        </ul>
-      </div>
-      <div class="sidebar-section">
-        <div class="sidebar-title">Code Examples</div>
-        <ul class="sidebar-links">
-          <li><a href="../code-examples/python-examples.html">Python</a></li>
-          <li><a href="../code-examples/nodejs-examples.html">Node.js</a></li>
-        </ul>
-      </div>
-      <div class="sidebar-section">
-        <div class="sidebar-title">Advanced</div>
-        <ul class="sidebar-links">
-          <li><a href="../advanced/error-handling.html">Error Handling</a></li>
-          <li><a href="../advanced/best-practices.html">Best Practices</a></li>
-        </ul>
-      </div>
+    <aside class="sidebar">
+        <div class="sidebar-section">
+            <h3>Getting Started</h3>
+            <ul>
+                <li><a href="../getting-started/quick-start.html">Quick Start</a></li>
+                <li><a href="../getting-started/authentication.html">Authentication</a></li>
+            </ul>
+        </div>
+        <div class="sidebar-section">
+            <h3>Guides</h3>
+            <ul>
+                <li><a href="../guides/account-management.html">Account Management</a></li>
+                <li><a href="../guides/phone-numbers.html">Phone Number Management</a></li>
+                <li><a href="../guides/device-management.html">Device Management</a></li>
+                <li><a href="../guides/call-routing.html">Call Routing</a></li>
+            </ul>
+        </div>
+        <div class="sidebar-section">
+            <h3>Code Examples</h3>
+            <ul>
+                <li><a href="../code-examples/python-examples.html">Python</a></li>
+                <li><a href="../code-examples/nodejs-examples.html">Node.js</a></li>
+                <li><a href="../code-examples/php-examples.html">PHP</a></li>
+                <li><a href="../code-examples/java-examples.html">Java</a></li>
+            </ul>
+        </div>
+        <div class="sidebar-section">
+            <h3>Advanced</h3>
+            <ul>
+                <li><a href="error-handling.html" class="active">Error Handling</a></li>
+                <li><a href="best-practices.html">Best Practices</a></li>
+            </ul>
+        </div>
+        <div class="sidebar-section">
+            <h3>Architecture</h3>
+            <ul>
+                <li><a href="../architecture/diagrams.html">Diagrams</a></li>
+            </ul>
+        </div>
     </aside>
 
-    <main class="docs-main">
-      <h1>Error Handling Guide</h1>
+    <main class="main-content">
+        <div class="content-wrapper">
+            <h1>Error Handling Guide</h1>
+            <p class="lead">Comprehensive guide to handling errors when working with the Alianza API, including HTTP status codes, retry strategies, and error recovery patterns.</p>
 
-      <div class="markdown-note">
-        <strong>📝 Note:</strong> This page is being converted from markdown to interactive HTML.
-        <br>
-        <a href="../../../docs/advanced/error-handling.md" class="view-markdown-btn">View Markdown Version →</a>
-      </div>
+            <div class="toc-box">
+                <h4>On This Page</h4>
+                <ul>
+                    <li><a href="#error-format">Error Response Format</a></li>
+                    <li><a href="#http-status-codes">HTTP Status Codes</a></li>
+                    <li><a href="#retry-strategies">Retry Strategies</a></li>
+                    <li><a href="#common-scenarios">Common Error Scenarios</a></li>
+                    <li><a href="#error-patterns">Error Handling Patterns</a></li>
+                    <li><a href="#logging">Logging & Monitoring</a></li>
+                    <li><a href="#best-practices-summary">Best Practices</a></li>
+                </ul>
+            </div>
 
-      <p>Interactive HTML version coming soon. For now, please refer to the markdown version above.</p>
+            <section id="error-format">
+                <h2>Error Response Format</h2>
+                <p>All Alianza API errors follow a consistent JSON structure with standardized fields for easy parsing and handling.</p>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-title">Standard Error Response</span>
+                        <button class="copy-button" aria-label="Copy code">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M13.5 2h-10A1.5 1.5 0 002 3.5v10A1.5 1.5 0 003.5 15h10a1.5 1.5 0 001.5-1.5v-10A1.5 1.5 0 0013.5 2z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5.5 1v2M10.5 1v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code>{
+  "errorCode": "ERROR_TYPE",
+  "message": "Human-readable error description",
+  "details": "Additional context about the error",
+  "timestamp": "2025-12-18T15:30:00Z",
+  "path": "/v2/partition/123/account",
+  "requestId": "req_abc123"
+}</code></pre>
+                </div>
+
+                <table class="properties-table">
+                    <thead>
+                        <tr>
+                            <th>Field</th>
+                            <th>Description</th>
+                            <th>Always Present</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>errorCode</code></td>
+                            <td>Machine-readable error identifier</td>
+                            <td>Yes</td>
+                        </tr>
+                        <tr>
+                            <td><code>message</code></td>
+                            <td>Human-readable error description</td>
+                            <td>Yes</td>
+                        </tr>
+                        <tr>
+                            <td><code>details</code></td>
+                            <td>Additional context and suggestions</td>
+                            <td>Sometimes</td>
+                        </tr>
+                        <tr>
+                            <td><code>timestamp</code></td>
+                            <td>When the error occurred (ISO 8601)</td>
+                            <td>Yes</td>
+                        </tr>
+                        <tr>
+                            <td><code>path</code></td>
+                            <td>API endpoint that generated the error</td>
+                            <td>Yes</td>
+                        </tr>
+                        <tr>
+                            <td><code>requestId</code></td>
+                            <td>Unique request identifier for support</td>
+                            <td>Yes</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <section id="http-status-codes">
+                <h2>HTTP Status Codes</h2>
+
+                <h3>Status Code Summary</h3>
+                <table class="properties-table">
+                    <thead>
+                        <tr>
+                            <th>Status</th>
+                            <th>Meaning</th>
+                            <th>Retry?</th>
+                            <th>Common Cause</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="badge badge-danger">400</span></td>
+                            <td>Bad Request</td>
+                            <td>No</td>
+                            <td>Invalid input data</td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-warning">401</span></td>
+                            <td>Unauthorized</td>
+                            <td>Yes (re-auth)</td>
+                            <td>Token expired/invalid</td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-warning">403</span></td>
+                            <td>Forbidden</td>
+                            <td>No</td>
+                            <td>Insufficient permissions</td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-info">404</span></td>
+                            <td>Not Found</td>
+                            <td>No</td>
+                            <td>Resource doesn't exist</td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-warning">409</span></td>
+                            <td>Conflict</td>
+                            <td>No</td>
+                            <td>Resource state conflict</td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-danger">429</span></td>
+                            <td>Too Many Requests</td>
+                            <td>Yes (backoff)</td>
+                            <td>Rate limit exceeded</td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-danger">500</span></td>
+                            <td>Internal Server Error</td>
+                            <td>Yes (backoff)</td>
+                            <td>Server-side issue</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>400 Bad Request</h3>
+                <p>Invalid request parameters or malformed data.</p>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-title">Handle 400 Errors</span>
+                        <button class="copy-button" aria-label="Copy code">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M13.5 2h-10A1.5 1.5 0 002 3.5v10A1.5 1.5 0 003.5 15h10a1.5 1.5 0 001.5-1.5v-10A1.5 1.5 0 0013.5 2z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5.5 1v2M10.5 1v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code># Python
+try:
+    account = client.create_account(data)
+except HTTPError as e:
+    if e.response.status_code == 400:
+        error = e.response.json()
+        print(f"Validation error: {error['message']}")
+        print(f"Details: {error.get('details')}")
+        # Fix the data and retry</code></pre>
+                </div>
+
+                <h3>401 Unauthorized</h3>
+                <p>Missing, invalid, or expired authentication token (typically after 1 hour).</p>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-title">Auto Re-Authentication</span>
+                        <button class="copy-button" aria-label="Copy code">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M13.5 2h-10A1.5 1.5 0 002 3.5v10A1.5 1.5 0 003.5 15h10a1.5 1.5 0 001.5-1.5v-10A1.5 1.5 0 0013.5 2z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5.5 1v2M10.5 1v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code>def make_request_with_retry(client, method, *args, **kwargs):
+    try:
+        return getattr(client, method)(*args, **kwargs)
+    except HTTPError as e:
+        if e.response.status_code == 401:
+            # Re-authenticate and retry once
+            client.authenticate()
+            return getattr(client, method)(*args, **kwargs)
+        raise</code></pre>
+                </div>
+
+                <h3>429 Too Many Requests</h3>
+                <p>Rate limit exceeded. Use the <code>Retry-After</code> header to determine wait time.</p>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-title">Respect Rate Limits</span>
+                        <button class="copy-button" aria-label="Copy code">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M13.5 2h-10A1.5 1.5 0 002 3.5v10A1.5 1.5 0 003.5 15h10a1.5 1.5 0 001.5-1.5v-10A1.5 1.5 0 0013.5 2z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5.5 1v2M10.5 1v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code>import time
+
+try:
+    result = client.list_accounts()
+except HTTPError as e:
+    if e.response.status_code == 429:
+        retry_after = int(e.response.headers.get('Retry-After', 5))
+        print(f"Rate limited. Waiting {retry_after} seconds...")
+        time.sleep(retry_after)
+        result = client.list_accounts()  # Retry</code></pre>
+                </div>
+            </section>
+
+            <section id="retry-strategies">
+                <h2>Retry Strategies</h2>
+
+                <h3>Exponential Backoff</h3>
+                <p>For transient errors (429, 500, 503), use exponential backoff to avoid overwhelming the service.</p>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-title">Python Exponential Backoff</span>
+                        <button class="copy-button" aria-label="Copy code">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M13.5 2h-10A1.5 1.5 0 002 3.5v10A1.5 1.5 0 003.5 15h10a1.5 1.5 0 001.5-1.5v-10A1.5 1.5 0 0013.5 2z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5.5 1v2M10.5 1v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code>import time
+
+def retry_with_backoff(func, max_retries=3):
+    for attempt in range(max_retries):
+        try:
+            return func()
+        except HTTPError as e:
+            if e.response.status_code in [429, 500, 503]:
+                if attempt < max_retries - 1:
+                    wait_time = 2 ** attempt  # 1s, 2s, 4s
+                    print(f"Retry {attempt + 1}/{max_retries} after {wait_time}s")
+                    time.sleep(wait_time)
+                else:
+                    raise
+            else:
+                raise
+
+# Usage
+accounts = retry_with_backoff(lambda: client.list_accounts())</code></pre>
+                </div>
+
+                <h3>Circuit Breaker Pattern</h3>
+                <p>For high-volume integrations, implement circuit breakers to prevent cascading failures.</p>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-title">Simple Circuit Breaker</span>
+                        <button class="copy-button" aria-label="Copy code">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M13.5 2h-10A1.5 1.5 0 002 3.5v10A1.5 1.5 0 003.5 15h10a1.5 1.5 0 001.5-1.5v-10A1.5 1.5 0 0013.5 2z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5.5 1v2M10.5 1v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code>class CircuitBreaker:
+    def __init__(self, failure_threshold=5, timeout=60):
+        self.failure_count = 0
+        self.failure_threshold = failure_threshold
+        self.timeout = timeout
+        self.last_failure_time = None
+        self.state = 'CLOSED'  # CLOSED, OPEN, HALF_OPEN
+
+    def call(self, func):
+        if self.state == 'OPEN':
+            if time.time() - self.last_failure_time > self.timeout:
+                self.state = 'HALF_OPEN'
+            else:
+                raise Exception("Circuit breaker is OPEN")
+
+        try:
+            result = func()
+            if self.state == 'HALF_OPEN':
+                self.state = 'CLOSED'
+                self.failure_count = 0
+            return result
+
+        except Exception as e:
+            self.failure_count += 1
+            self.last_failure_time = time.time()
+
+            if self.failure_count >= self.failure_threshold:
+                self.state = 'OPEN'
+            raise</code></pre>
+                </div>
+            </section>
+
+            <section id="common-scenarios">
+                <h2>Common Error Scenarios</h2>
+
+                <h3>Duplicate Account Number</h3>
+                <p>Handle account number conflicts by generating unique numbers.</p>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-title">Auto-Generate Unique Account Number</span>
+                        <button class="copy-button" aria-label="Copy code">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M13.5 2h-10A1.5 1.5 0 002 3.5v10A1.5 1.5 0 003.5 15h10a1.5 1.5 0 001.5-1.5v-10A1.5 1.5 0 0013.5 2z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5.5 1v2M10.5 1v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code>import random
+
+def create_account_with_unique_number(client, base_data):
+    for attempt in range(10):
+        try:
+            account_data = base_data.copy()
+            if attempt > 0:
+                suffix = random.randint(1000, 9999)
+                account_data['accountNumber'] = f"{base_data['accountNumber']}-{suffix}"
+
+            return client.create_account(account_data)
+
+        except HTTPError as e:
+            if e.response.status_code == 400:
+                error = e.response.json()
+                if 'already exists' in error['message'].lower():
+                    continue
+            raise
+
+    raise Exception("Failed to create unique account number")</code></pre>
+                </div>
+
+                <h3>Phone Number Not Available</h3>
+                <p>Search results may become unavailable. Try multiple numbers from search results.</p>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-title">Order with Fallback</span>
+                        <button class="copy-button" aria-label="Copy code">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M13.5 2h-10A1.5 1.5 0 002 3.5v10A1.5 1.5 0 003.5 15h10a1.5 1.5 0 001.5-1.5v-10A1.5 1.5 0 0013.5 2z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5.5 1v2M10.5 1v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code>def order_number_with_fallback(client, npa, account_id):
+    numbers = client.search_numbers(npa=npa, quantity=10)
+
+    for number in numbers:
+        try:
+            result = client.order_number(number['telephoneNumber'], account_id)
+            print(f"Successfully ordered: {number['formatted']}")
+            return result
+
+        except HTTPError as e:
+            if e.response.status_code == 409:
+                # Number no longer available, try next
+                continue
+            raise
+
+    raise Exception(f"No available numbers in area code {npa}")</code></pre>
+                </div>
+
+                <h3>Port Request Rejection</h3>
+                <p>Handle port rejections with helpful messages and solutions.</p>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-title">Handle Port Rejections</span>
+                        <button class="copy-button" aria-label="Copy code">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M13.5 2h-10A1.5 1.5 0 002 3.5v10A1.5 1.5 0 003.5 15h10a1.5 1.5 0 001.5-1.5v-10A1.5 1.5 0 0013.5 2z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5.5 1v2M10.5 1v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code>def handle_port_rejection(client, port_request_id):
+    port_status = client.check_port_status(port_request_id)
+
+    if port_status['status'] == 'REJECTED':
+        reason = port_status.get('rejectionReason', 'Unknown')
+
+        solutions = {
+            'ACCOUNT_MISMATCH': 'Verify account holder name matches exactly',
+            'INVALID_PIN': 'Check PIN with current carrier',
+            'SERVICE_ACTIVE': 'Do not cancel service before port completes',
+            'INVALID_ADDRESS': 'Verify address matches carrier records'
+        }
+
+        solution = solutions.get(reason, 'Contact current carrier')
+
+        return {
+            'rejected': True,
+            'reason': reason,
+            'solution': solution,
+            'details': port_status.get('rejectionDetails')
+        }</code></pre>
+                </div>
+            </section>
+
+            <section id="error-patterns">
+                <h2>Error Handling Patterns</h2>
+
+                <h3>Comprehensive Error Handler</h3>
+                <p>Production-ready error handler with logging and retry logic.</p>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-title">Complete Error Handler</span>
+                        <button class="copy-button" aria-label="Copy code">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M13.5 2h-10A1.5 1.5 0 002 3.5v10A1.5 1.5 0 003.5 15h10a1.5 1.5 0 001.5-1.5v-10A1.5 1.5 0 0013.5 2z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5.5 1v2M10.5 1v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code>import logging
+import time
+
+logger = logging.getLogger(__name__)
+
+class AlianzaAPIError(Exception):
+    def __init__(self, status_code, error_data):
+        self.status_code = status_code
+        self.error_code = error_data.get('errorCode')
+        self.message = error_data.get('message')
+        self.details = error_data.get('details')
+        self.request_id = error_data.get('requestId')
+        super().__init__(self.message)
+
+def handle_api_errors(func):
+    def wrapper(*args, **kwargs):
+        max_retries = kwargs.pop('max_retries', 3)
+
+        for attempt in range(max_retries):
+            try:
+                return func(*args, **kwargs)
+
+            except HTTPError as e:
+                status = e.response.status_code
+                error_data = e.response.json()
+
+                logger.error(
+                    f"API Error: {status} - {error_data.get('message')}",
+                    extra={'request_id': error_data.get('requestId')}
+                )
+
+                # Retry on 401
+                if status == 401 and attempt < max_retries - 1:
+                    continue
+
+                # Retry on 429 with backoff
+                elif status == 429 and attempt < max_retries - 1:
+                    retry_after = int(e.response.headers.get('Retry-After', 5))
+                    time.sleep(retry_after)
+                    continue
+
+                # Retry on 5xx with exponential backoff
+                elif status >= 500 and attempt < max_retries - 1:
+                    delay = 2 ** attempt
+                    time.sleep(delay)
+                    continue
+
+                raise AlianzaAPIError(status, error_data)
+
+    return wrapper
+
+# Usage
+@handle_api_errors
+def create_account_safe(client, account_data):
+    return client.create_account(account_data)</code></pre>
+                </div>
+            </section>
+
+            <section id="logging">
+                <h2>Logging & Monitoring</h2>
+
+                <h3>Structured Logging</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-title">Log Request/Response</span>
+                        <button class="copy-button" aria-label="Copy code">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M13.5 2h-10A1.5 1.5 0 002 3.5v10A1.5 1.5 0 003.5 15h10a1.5 1.5 0 001.5-1.5v-10A1.5 1.5 0 0013.5 2z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5.5 1v2M10.5 1v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code>import logging
+
+class AlianzaLogger:
+    def __init__(self, name):
+        self.logger = logging.getLogger(name)
+
+    def log_request(self, method, endpoint, **kwargs):
+        self.logger.info(
+            "API Request",
+            extra={
+                'method': method,
+                'endpoint': endpoint,
+                'has_body': 'json' in kwargs
+            }
+        )
+
+    def log_response(self, status_code, duration_ms):
+        self.logger.info(
+            "API Response",
+            extra={
+                'status_code': status_code,
+                'duration_ms': duration_ms
+            }
+        )
+
+    def log_error(self, error, **kwargs):
+        self.logger.error(
+            "API Error",
+            extra={
+                'error_type': type(error).__name__,
+                'error_message': str(error),
+                **kwargs
+            },
+            exc_info=True
+        )</code></pre>
+                </div>
+            </section>
+
+            <section id="best-practices-summary">
+                <h2>Best Practices Summary</h2>
+
+                <div class="two-column-list">
+                    <div class="column">
+                        <h3>✅ Do</h3>
+                        <ul>
+                            <li>Validate input before API calls</li>
+                            <li>Implement retry logic for transient errors</li>
+                            <li>Log requestId for support</li>
+                            <li>Handle 401 with automatic re-authentication</li>
+                            <li>Use exponential backoff for rate limits</li>
+                            <li>Implement circuit breakers for high volume</li>
+                            <li>Monitor error rates and set alerts</li>
+                            <li>Transform API errors to user-friendly messages</li>
+                        </ul>
+                    </div>
+                    <div class="column">
+                        <h3>❌ Don't</h3>
+                        <ul>
+                            <li>Retry on 400 errors (fix the input instead)</li>
+                            <li>Ignore Retry-After headers on 429 errors</li>
+                            <li>Retry infinitely (set max retries)</li>
+                            <li>Log sensitive data (tokens, passwords)</li>
+                            <li>Make bulk operations without throttling</li>
+                            <li>Ignore error details (they contain solutions)</li>
+                            <li>Hard-code error messages (use error codes)</li>
+                            <li>Skip validation to save time</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section class="next-steps">
+                <h2>Next Steps</h2>
+                <div class="card-grid">
+                    <a href="best-practices.html" class="card">
+                        <h3>Best Practices</h3>
+                        <p>Security, performance, and reliability best practices</p>
+                    </a>
+                    <a href="../code-examples/python-examples.html" class="card">
+                        <h3>Python Examples</h3>
+                        <p>Complete Python error handling examples</p>
+                    </a>
+                    <a href="../code-examples/nodejs-examples.html" class="card">
+                        <h3>Node.js Examples</h3>
+                        <p>JavaScript/TypeScript error handling patterns</p>
+                    </a>
+                    <a href="../getting-started/authentication.html" class="card">
+                        <h3>Authentication</h3>
+                        <p>Handle authentication errors and token refresh</p>
+                    </a>
+                </div>
+            </section>
+        </div>
     </main>
-  </div>
 
-  <script src="../js/main.js"></script>
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2025 Alianza Inc. All rights reserved.</p>
+            <p>API Documentation | <a href="https://api.alianza.com">api.alianza.com</a></p>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
 </body>
 </html>

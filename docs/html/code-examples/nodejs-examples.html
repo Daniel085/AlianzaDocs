@@ -1,85 +1,1024 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Node.js Code Examples - Alianza API</title>
-  <link rel="stylesheet" href="../css/main.css">
-  <style>
-    .markdown-note {
-      background: var(--accent-tertiary);
-      border-left: 4px solid var(--accent-primary);
-      padding: 1rem;
-      margin: 2rem 0;
-      border-radius: var(--radius-md);
-    }
-    .view-markdown-btn {
-      display: inline-block;
-      margin-top: 1rem;
-      padding: 0.5rem 1rem;
-      background: var(--accent-primary);
-      color: white;
-      text-decoration: none;
-      border-radius: var(--radius-md);
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Node.js Code Examples - Alianza API Documentation</title>
+    <link rel="stylesheet" href="../css/main.css">
 </head>
 <body>
-  <header class="docs-header">
-    <a href="../../../index.html" class="docs-logo">
-      <span>📞</span> Alianza API
-    </a>
-    <nav class="docs-nav">
-      <a href="../../../index.html">Home</a>
-      <button id="theme-toggle" class="theme-toggle">🌙 Dark</button>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <a href="../index.html">Alianza API Docs</a>
+            </div>
+            <button class="mobile-menu-toggle" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-menu">
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="../getting-started/quick-start.html">Quick Start</a></li>
+                <li><a href="../getting-started/authentication.html">Authentication</a></li>
+                <li><a href="../api-reference/endpoints.html">API Reference</a></li>
+                <li><a href="../guides/account-management.html">Guides</a></li>
+            </ul>
+            <button class="theme-toggle" aria-label="Toggle theme">
+                <svg class="sun-icon" width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"/>
+                </svg>
+                <svg class="moon-icon" width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/>
+                </svg>
+            </button>
+        </div>
     </nav>
-  </header>
 
-  <div class="docs-container">
-    <aside class="docs-sidebar">
-      <div class="sidebar-section">
-        <div class="sidebar-title">Getting Started</div>
-        <ul class="sidebar-links">
-          <li><a href="../getting-started/quick-start.html">Quick Start</a></li>
-          <li><a href="../getting-started/authentication.html">Authentication</a></li>
-        </ul>
-      </div>
-      <div class="sidebar-section">
-        <div class="sidebar-title">Guides</div>
-        <ul class="sidebar-links">
-          <li><a href="../guides/account-management.html">Account Management</a></li>
-          <li><a href="../guides/phone-numbers.html">Phone Numbers</a></li>
-        </ul>
-      </div>
-      <div class="sidebar-section">
-        <div class="sidebar-title">Code Examples</div>
-        <ul class="sidebar-links">
-          <li><a href="../code-examples/python-examples.html">Python</a></li>
-          <li><a href="../code-examples/nodejs-examples.html">Node.js</a></li>
-        </ul>
-      </div>
-      <div class="sidebar-section">
-        <div class="sidebar-title">Advanced</div>
-        <ul class="sidebar-links">
-          <li><a href="../advanced/error-handling.html">Error Handling</a></li>
-          <li><a href="../advanced/best-practices.html">Best Practices</a></li>
-        </ul>
-      </div>
+    <aside class="sidebar">
+        <div class="sidebar-section">
+            <h3>Getting Started</h3>
+            <ul>
+                <li><a href="../getting-started/quick-start.html">Quick Start</a></li>
+                <li><a href="../getting-started/authentication.html">Authentication</a></li>
+            </ul>
+        </div>
+        <div class="sidebar-section">
+            <h3>Guides</h3>
+            <ul>
+                <li><a href="../guides/account-management.html">Account Management</a></li>
+                <li><a href="../guides/phone-numbers.html">Phone Number Management</a></li>
+                <li><a href="../guides/device-management.html">Device Management</a></li>
+                <li><a href="../guides/call-routing.html">Call Routing</a></li>
+            </ul>
+        </div>
+        <div class="sidebar-section">
+            <h3>Code Examples</h3>
+            <ul>
+                <li><a href="python-examples.html">Python</a></li>
+                <li><a href="nodejs-examples.html" class="active">Node.js</a></li>
+                <li><a href="php-examples.html">PHP</a></li>
+                <li><a href="java-examples.html">Java</a></li>
+            </ul>
+        </div>
+        <div class="sidebar-section">
+            <h3>Advanced</h3>
+            <ul>
+                <li><a href="../advanced/error-handling.html">Error Handling</a></li>
+                <li><a href="../advanced/best-practices.html">Best Practices</a></li>
+            </ul>
+        </div>
+        <div class="sidebar-section">
+            <h3>Architecture</h3>
+            <ul>
+                <li><a href="../architecture/diagrams.html">Diagrams</a></li>
+            </ul>
+        </div>
     </aside>
 
-    <main class="docs-main">
-      <h1>Node.js Code Examples</h1>
+    <main class="main-content">
+        <div class="content-wrapper">
+            <h1>Node.js Code Examples</h1>
+            <p class="lead">Complete JavaScript and TypeScript examples for working with the Alianza API, including async/await patterns, error handling, and production-ready SDK.</p>
 
-      <div class="markdown-note">
-        <strong>📝 Note:</strong> This page is being converted from markdown to interactive HTML.
-        <br>
-        <a href="../../../docs/code-examples/nodejs-examples.md" class="view-markdown-btn">View Markdown Version →</a>
-      </div>
+            <div class="toc-box">
+                <h4>On This Page</h4>
+                <ul>
+                    <li><a href="#setup">Setup & Installation</a></li>
+                    <li><a href="#javascript-sdk">JavaScript SDK</a></li>
+                    <li><a href="#typescript-sdk">TypeScript SDK</a></li>
+                    <li><a href="#authentication">Authentication</a></li>
+                    <li><a href="#accounts">Account Management</a></li>
+                    <li><a href="#users">User Management</a></li>
+                    <li><a href="#phone-numbers">Phone Numbers</a></li>
+                    <li><a href="#error-handling">Error Handling</a></li>
+                    <li><a href="#express-integration">Express.js Integration</a></li>
+                    <li><a href="#complete-example">Complete Example</a></li>
+                </ul>
+            </div>
 
-      <p>Interactive HTML version coming soon. For now, please refer to the markdown version above.</p>
+            <section id="setup">
+                <h2>Setup & Installation</h2>
+
+                <h3>Install Dependencies</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-title">npm install</span>
+                        <button class="copy-button" aria-label="Copy code">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M13.5 2h-10A1.5 1.5 0 002 3.5v10A1.5 1.5 0 003.5 15h10a1.5 1.5 0 001.5-1.5v-10A1.5 1.5 0 0013.5 2z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5.5 1v2M10.5 1v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code>npm install axios dotenv</code></pre>
+                </div>
+
+                <h3>Environment Configuration</h3>
+                <p>Create a <code>.env</code> file in your project root:</p>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-title">.env</span>
+                        <button class="copy-button" aria-label="Copy code">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M13.5 2h-10A1.5 1.5 0 002 3.5v10A1.5 1.5 0 003.5 15h10a1.5 1.5 0 001.5-1.5v-10A1.5 1.5 0 0013.5 2z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5.5 1v2M10.5 1v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code>ALIANZA_USERNAME=your-username
+ALIANZA_PASSWORD=your-password
+ALIANZA_BASE_URL=https://api.alianza.com
+ALIANZA_PARTITION_ID=your-partition-id</code></pre>
+                </div>
+
+                <div class="warning-box">
+                    <strong>Security:</strong> Never commit <code>.env</code> to version control. Add it to <code>.gitignore</code>.
+                </div>
+            </section>
+
+            <section id="javascript-sdk">
+                <h2>JavaScript SDK</h2>
+                <p>Production-ready SDK with automatic authentication, token refresh, and axios interceptors.</p>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-title">alianza-client.js</span>
+                        <button class="copy-button" aria-label="Copy code">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M13.5 2h-10A1.5 1.5 0 002 3.5v10A1.5 1.5 0 003.5 15h10a1.5 1.5 0 001.5-1.5v-10A1.5 1.5 0 0013.5 2z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5.5 1v2M10.5 1v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code>const axios = require('axios');
+require('dotenv').config();
+
+class AlianzaClient {
+    constructor({
+        username = process.env.ALIANZA_USERNAME,
+        password = process.env.ALIANZA_PASSWORD,
+        baseUrl = process.env.ALIANZA_BASE_URL,
+        partitionId = process.env.ALIANZA_PARTITION_ID
+    } = {}) {
+        this.username = username;
+        this.password = password;
+        this.baseUrl = baseUrl.replace(/\/$/, '');
+        this.partitionId = partitionId;
+
+        this.token = null;
+        this.tokenExpiry = null;
+        this.userId = null;
+
+        // Create axios instance
+        this.client = axios.create({
+            baseURL: this.baseUrl,
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        // Add request interceptor for authentication
+        this.client.interceptors.request.use(
+            async (config) => {
+                await this._ensureAuthenticated();
+                config.headers['X-AUTH-TOKEN'] = this.token;
+                return config;
+            },
+            (error) => Promise.reject(error)
+        );
+
+        // Add response interceptor for retry on 401
+        this.client.interceptors.response.use(
+            (response) => response,
+            async (error) => {
+                if (error.response?.status === 401 && !error.config._retry) {
+                    error.config._retry = true;
+                    await this.authenticate();
+                    error.config.headers['X-AUTH-TOKEN'] = this.token;
+                    return this.client(error.config);
+                }
+                return Promise.reject(error);
+            }
+        );
+    }
+
+    async authenticate() {
+        const response = await axios.post(`${this.baseUrl}/v2/authorize`, {
+            userName: this.username,
+            password: this.password
+        });
+
+        const data = response.data;
+        this.token = data.authToken;
+        this.tokenExpiry = new Date(Date.now() + data.expiresIn * 1000);
+        this.userId = data.userId;
+
+        return data;
+    }
+
+    async _ensureAuthenticated() {
+        const now = new Date();
+        const fiveMinutes = 5 * 60 * 1000;
+
+        if (!this.token || now >= new Date(this.tokenExpiry - fiveMinutes)) {
+            await this.authenticate();
+        }
+    }
+
+    async logout() {
+        if (this.token) {
+            await axios.put(
+                `${this.baseUrl}/v2/authorize/logout`,
+                {},
+                { headers: { 'X-AUTH-TOKEN': this.token } }
+            );
+            this.token = null;
+            this.tokenExpiry = null;
+        }
+    }
+
+    // Account Methods
+    async listAccounts() {
+        const response = await this.client.get(
+            `/v2/partition/${this.partitionId}/account`
+        );
+        return response.data;
+    }
+
+    async getAccount(accountId) {
+        const response = await this.client.get(
+            `/v2/partition/${this.partitionId}/account/${accountId}`
+        );
+        return response.data;
+    }
+
+    async createAccount(accountData) {
+        const response = await this.client.post(
+            `/v2/partition/${this.partitionId}/account`,
+            accountData
+        );
+        return response.data;
+    }
+
+    async updateAccount(accountId, accountData) {
+        const response = await this.client.put(
+            `/v2/partition/${this.partitionId}/account/${accountId}`,
+            accountData
+        );
+        return response.data;
+    }
+
+    async deleteAccount(accountId) {
+        await this.client.delete(
+            `/v2/partition/${this.partitionId}/account/${accountId}`
+        );
+    }
+
+    // User Methods
+    async listUsers(accountId) {
+        const response = await this.client.get(
+            `/v2/partition/${this.partitionId}/account/${accountId}/user`
+        );
+        return response.data;
+    }
+
+    async createUser(accountId, userData) {
+        const response = await this.client.post(
+            `/v2/partition/${this.partitionId}/account/${accountId}/user`,
+            userData
+        );
+        return response.data;
+    }
+
+    // Phone Number Methods
+    async searchNumbers({ npa, nxx, quantity = 10 } = {}) {
+        const params = { quantity };
+        if (npa) params.npa = npa;
+        if (nxx) params.nxx = nxx;
+
+        const response = await this.client.get(
+            `/v2/partition/${this.partitionId}/telephone-number/search`,
+            { params }
+        );
+        return response.data.telephoneNumbers;
+    }
+
+    async orderNumber(telephoneNumber, accountId) {
+        const response = await this.client.post(
+            `/v2/partition/${this.partitionId}/telephone-number/order`,
+            {
+                telephoneNumbers: [telephoneNumber],
+                accountId
+            }
+        );
+        return response.data;
+    }
+
+    async assignNumber(accountId, userId, telephoneNumber, e911Address) {
+        const response = await this.client.put(
+            `/v2/partition/${this.partitionId}/account/${accountId}/user/${userId}/telephone-number`,
+            {
+                telephoneNumber,
+                primary: true,
+                e911Address
+            }
+        );
+        return response.data;
+    }
+
+    // Address Methods
+    async validateAddress(address, postalCode, country = 'USA') {
+        const response = await this.client.get('/v2/address/validate', {
+            params: { address, postalCode, country }
+        });
+        return response.data;
+    }
+}
+
+module.exports = AlianzaClient;</code></pre>
+                </div>
+            </section>
+
+            <section id="typescript-sdk">
+                <h2>TypeScript SDK</h2>
+                <p>Fully typed TypeScript SDK with interfaces and type safety.</p>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-title">alianza-client.ts</span>
+                        <button class="copy-button" aria-label="Copy code">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M13.5 2h-10A1.5 1.5 0 002 3.5v10A1.5 1.5 0 003.5 15h10a1.5 1.5 0 001.5-1.5v-10A1.5 1.5 0 0013.5 2z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5.5 1v2M10.5 1v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code>import axios, { AxiosInstance } from 'axios';
+
+interface AuthResponse {
+    authToken: string;
+    expiresIn: number;
+    userId: string;
+    partitionId: string;
+    userName: string;
+    userType: string;
+}
+
+interface Account {
+    accountId?: string;
+    accountNumber: string;
+    name: string;
+    timeZone: string;
+    status?: string;
+    accountType?: string;
+}
+
+interface User {
+    userId?: string;
+    firstName: string;
+    lastName: string;
+    extension?: string;
+    voicemail?: {
+        enabled: boolean;
+        pin?: string;
+        emailNotification?: string;
+    };
+}
+
+interface PhoneNumber {
+    telephoneNumber: string;
+    formatted: string;
+    npa: string;
+    nxx: string;
+    rateCenter: string;
+    state: string;
+    available?: boolean;
+}
+
+interface E911Address {
+    street: string;
+    city: string;
+    state: string;
+    zipCode: string;
+    location?: string;
+}
+
+class AlianzaClient {
+    private token: string | null = null;
+    private tokenExpiry: Date | null = null;
+    private userId: string | null = null;
+    private client: AxiosInstance;
+
+    constructor(
+        private username: string = process.env.ALIANZA_USERNAME || '',
+        private password: string = process.env.ALIANZA_PASSWORD || '',
+        private baseUrl: string = process.env.ALIANZA_BASE_URL || '',
+        private partitionId: string = process.env.ALIANZA_PARTITION_ID || ''
+    ) {
+        this.baseUrl = this.baseUrl.replace(/\/$/, '');
+
+        this.client = axios.create({
+            baseURL: this.baseUrl,
+            headers: { 'Content-Type': 'application/json' }
+        });
+
+        // Request interceptor
+        this.client.interceptors.request.use(
+            async (config) => {
+                await this.ensureAuthenticated();
+                config.headers['X-AUTH-TOKEN'] = this.token;
+                return config;
+            }
+        );
+
+        // Response interceptor
+        this.client.interceptors.response.use(
+            (response) => response,
+            async (error) => {
+                if (error.response?.status === 401 && !error.config._retry) {
+                    error.config._retry = true;
+                    await this.authenticate();
+                    error.config.headers['X-AUTH-TOKEN'] = this.token;
+                    return this.client(error.config);
+                }
+                throw error;
+            }
+        );
+    }
+
+    async authenticate(): Promise<AuthResponse> {
+        const response = await axios.post<AuthResponse>(
+            `${this.baseUrl}/v2/authorize`,
+            {
+                userName: this.username,
+                password: this.password
+            }
+        );
+
+        this.token = response.data.authToken;
+        this.tokenExpiry = new Date(Date.now() + response.data.expiresIn * 1000);
+        this.userId = response.data.userId;
+
+        return response.data;
+    }
+
+    private async ensureAuthenticated(): Promise<void> {
+        const now = new Date();
+        const fiveMinutes = 5 * 60 * 1000;
+
+        if (!this.token || now >= new Date(this.tokenExpiry!.getTime() - fiveMinutes)) {
+            await this.authenticate();
+        }
+    }
+
+    async createAccount(accountData: Account): Promise<Account> {
+        const response = await this.client.post<Account>(
+            `/v2/partition/${this.partitionId}/account`,
+            accountData
+        );
+        return response.data;
+    }
+
+    async listAccounts(): Promise<Account[]> {
+        const response = await this.client.get<Account[]>(
+            `/v2/partition/${this.partitionId}/account`
+        );
+        return response.data;
+    }
+
+    async createUser(accountId: string, userData: User): Promise<User> {
+        const response = await this.client.post<User>(
+            `/v2/partition/${this.partitionId}/account/${accountId}/user`,
+            userData
+        );
+        return response.data;
+    }
+
+    async searchNumbers(options: {
+        npa?: string;
+        nxx?: string;
+        quantity?: number;
+    } = {}): Promise<PhoneNumber[]> {
+        const { npa, nxx, quantity = 10 } = options;
+        const params: any = { quantity };
+        if (npa) params.npa = npa;
+        if (nxx) params.nxx = nxx;
+
+        const response = await this.client.get(
+            `/v2/partition/${this.partitionId}/telephone-number/search`,
+            { params }
+        );
+        return response.data.telephoneNumbers;
+    }
+
+    async assignNumber(
+        accountId: string,
+        userId: string,
+        telephoneNumber: string,
+        e911Address: E911Address
+    ): Promise<any> {
+        const response = await this.client.put(
+            `/v2/partition/${this.partitionId}/account/${accountId}/user/${userId}/telephone-number`,
+            {
+                telephoneNumber,
+                primary: true,
+                e911Address
+            }
+        );
+        return response.data;
+    }
+}
+
+export default AlianzaClient;</code></pre>
+                </div>
+            </section>
+
+            <section id="authentication">
+                <h2>Authentication</h2>
+
+                <h3>Basic Authentication</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-title">Simple Login</span>
+                        <button class="copy-button" aria-label="Copy code">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M13.5 2h-10A1.5 1.5 0 002 3.5v10A1.5 1.5 0 003.5 15h10a1.5 1.5 0 001.5-1.5v-10A1.5 1.5 0 0013.5 2z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5.5 1v2M10.5 1v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code>const axios = require('axios');
+
+async function authenticate() {
+    const response = await axios.post(
+        'https://api.alianza.com/v2/authorize',
+        {
+            userName: 'user',
+            password: 'pass'
+        }
+    );
+
+    const { authToken, expiresIn } = response.data;
+    console.log(`Token: ${authToken}`);
+    console.log(`Expires in: ${expiresIn} seconds`);
+
+    return authToken;
+}</code></pre>
+                </div>
+
+                <h3>Using the SDK</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-title">SDK Authentication</span>
+                        <button class="copy-button" aria-label="Copy code">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M13.5 2h-10A1.5 1.5 0 002 3.5v10A1.5 1.5 0 003.5 15h10a1.5 1.5 0 001.5-1.5v-10A1.5 1.5 0 0013.5 2z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5.5 1v2M10.5 1v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code>const AlianzaClient = require('./alianza-client');
+
+async function main() {
+    const client = new AlianzaClient();
+
+    // Authenticate
+    const loginInfo = await client.authenticate();
+    console.log(`Logged in as: ${loginInfo.userName}`);
+    console.log(`User type: ${loginInfo.userType}`);
+
+    // Token is now automatically included in all requests
+}</code></pre>
+                </div>
+            </section>
+
+            <section id="accounts">
+                <h2>Account Management</h2>
+
+                <h3>Create Account</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-title">Create New Account</span>
+                        <button class="copy-button" aria-label="Copy code">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M13.5 2h-10A1.5 1.5 0 002 3.5v10A1.5 1.5 0 003.5 15h10a1.5 1.5 0 001.5-1.5v-10A1.5 1.5 0 0013.5 2z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5.5 1v2M10.5 1v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code>const accountData = {
+    accountNumber: '3002',
+    name: 'Node.js Test Account',
+    timeZone: 'America/New_York',
+    status: 'ACTIVE',
+    accountType: 'BUSINESS'
+};
+
+const newAccount = await client.createAccount(accountData);
+console.log(`Created account: ${newAccount.accountId}`);
+console.log(`Account name: ${newAccount.name}`);</code></pre>
+                </div>
+
+                <h3>List Accounts</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-title">Get All Accounts</span>
+                        <button class="copy-button" aria-label="Copy code">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M13.5 2h-10A1.5 1.5 0 002 3.5v10A1.5 1.5 0 003.5 15h10a1.5 1.5 0 001.5-1.5v-10A1.5 1.5 0 0013.5 2z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5.5 1v2M10.5 1v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code>const accounts = await client.listAccounts();
+
+accounts.forEach(account => {
+    console.log(`${account.name} (${account.accountNumber})`);
+    console.log(`  Status: ${account.status}`);
+    console.log(`  Time Zone: ${account.timeZone}`);
+});</code></pre>
+                </div>
+            </section>
+
+            <section id="users">
+                <h2>User Management</h2>
+
+                <h3>Create User</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-title">Create End User</span>
+                        <button class="copy-button" aria-label="Copy code">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M13.5 2h-10A1.5 1.5 0 002 3.5v10A1.5 1.5 0 003.5 15h10a1.5 1.5 0 001.5-1.5v-10A1.5 1.5 0 0013.5 2z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5.5 1v2M10.5 1v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code>const userData = {
+    firstName: 'John',
+    lastName: 'Doe',
+    extension: '1001',
+    voicemail: {
+        enabled: true,
+        pin: '1234',
+        emailNotification: 'john.doe@example.com'
+    }
+};
+
+const user = await client.createUser(accountId, userData);
+console.log(`Created user: ${user.firstName} ${user.lastName}`);
+console.log(`Extension: ${user.extension}`);</code></pre>
+                </div>
+            </section>
+
+            <section id="phone-numbers">
+                <h2>Phone Number Management</h2>
+
+                <h3>Search and Order</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-title">Complete Number Provisioning</span>
+                        <button class="copy-button" aria-label="Copy code">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M13.5 2h-10A1.5 1.5 0 002 3.5v10A1.5 1.5 0 003.5 15h10a1.5 1.5 0 001.5-1.5v-10A1.5 1.5 0 0013.5 2z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5.5 1v2M10.5 1v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code>// Search for numbers
+const numbers = await client.searchNumbers({ npa: '607', quantity: 5 });
+console.log('Available numbers:');
+numbers.forEach(n => console.log(`  ${n.formatted}`));
+
+// Order first number
+const selectedNumber = numbers[0].telephoneNumber;
+await client.orderNumber(selectedNumber, accountId);
+console.log(`Ordered: ${selectedNumber}`);
+
+// Assign to user with E911
+const e911Address = {
+    street: '135 Front St',
+    city: 'Binghamton',
+    state: 'NY',
+    zipCode: '13905',
+    location: 'Suite 200'
+};
+
+await client.assignNumber(accountId, userId, selectedNumber, e911Address);
+console.log(`Assigned ${selectedNumber} to user ${userId}`);</code></pre>
+                </div>
+            </section>
+
+            <section id="error-handling">
+                <h2>Error Handling</h2>
+
+                <h3>Try-Catch Pattern</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-title">Error Handling with Axios</span>
+                        <button class="copy-button" aria-label="Copy code">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M13.5 2h-10A1.5 1.5 0 002 3.5v10A1.5 1.5 0 003.5 15h10a1.5 1.5 0 001.5-1.5v-10A1.5 1.5 0 0013.5 2z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5.5 1v2M10.5 1v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code>try {
+    const accounts = await client.listAccounts();
+    console.log(`Found ${accounts.length} accounts`);
+
+} catch (error) {
+    if (error.response) {
+        // Server responded with error status
+        const status = error.response.status;
+        const data = error.response.data;
+
+        if (status === 401) {
+            console.error('Authentication failed');
+        } else if (status === 404) {
+            console.error('Resource not found');
+        } else if (status === 429) {
+            console.error('Rate limit exceeded');
+        } else {
+            console.error(`Server error: ${status}`, data);
+        }
+    } else if (error.request) {
+        // Request made but no response
+        console.error('Network error:', error.message);
+    } else {
+        // Error setting up request
+        console.error('Error:', error.message);
+    }
+}</code></pre>
+                </div>
+
+                <h3>Retry with Exponential Backoff</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-title">Retry Logic</span>
+                        <button class="copy-button" aria-label="Copy code">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M13.5 2h-10A1.5 1.5 0 002 3.5v10A1.5 1.5 0 003.5 15h10a1.5 1.5 0 001.5-1.5v-10A1.5 1.5 0 0013.5 2z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5.5 1v2M10.5 1v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code>async function retryWithBackoff(fn, maxAttempts = 3) {
+    for (let attempt = 0; attempt < maxAttempts; attempt++) {
+        try {
+            return await fn();
+        } catch (error) {
+            if (error.response?.status === 429 && attempt < maxAttempts - 1) {
+                const waitTime = Math.pow(2, attempt) * 1000;
+                console.log(`Rate limited. Waiting ${waitTime}ms...`);
+                await new Promise(resolve => setTimeout(resolve, waitTime));
+            } else {
+                throw error;
+            }
+        }
+    }
+}
+
+// Usage
+const accounts = await retryWithBackoff(() => client.listAccounts());</code></pre>
+                </div>
+            </section>
+
+            <section id="express-integration">
+                <h2>Express.js Integration</h2>
+                <p>Integrate the Alianza SDK into an Express.js application.</p>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-title">Express API Server</span>
+                        <button class="copy-button" aria-label="Copy code">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M13.5 2h-10A1.5 1.5 0 002 3.5v10A1.5 1.5 0 003.5 15h10a1.5 1.5 0 001.5-1.5v-10A1.5 1.5 0 0013.5 2z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5.5 1v2M10.5 1v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code>const express = require('express');
+const AlianzaClient = require('./alianza-client');
+
+const app = express();
+app.use(express.json());
+
+// Initialize client (singleton)
+const alianzaClient = new AlianzaClient();
+
+// GET /api/accounts
+app.get('/api/accounts', async (req, res) => {
+    try {
+        const accounts = await alianzaClient.listAccounts();
+        res.json({ accounts });
+    } catch (error) {
+        res.status(error.response?.status || 500).json({
+            error: error.message
+        });
+    }
+});
+
+// POST /api/accounts
+app.post('/api/accounts', async (req, res) => {
+    try {
+        const account = await alianzaClient.createAccount(req.body);
+        res.status(201).json({ account });
+    } catch (error) {
+        res.status(error.response?.status || 500).json({
+            error: error.message
+        });
+    }
+});
+
+// GET /api/numbers/search
+app.get('/api/numbers/search', async (req, res) => {
+    try {
+        const { npa, quantity } = req.query;
+        const numbers = await alianzaClient.searchNumbers({
+            npa,
+            quantity: parseInt(quantity) || 10
+        });
+        res.json({ numbers });
+    } catch (error) {
+        res.status(error.response?.status || 500).json({
+            error: error.message
+        });
+    }
+});
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+});</code></pre>
+                </div>
+            </section>
+
+            <section id="complete-example">
+                <h2>Complete Integration Example</h2>
+                <p>Full end-to-end provisioning example with error handling and logging.</p>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-title">provision-account.js</span>
+                        <button class="copy-button" aria-label="Copy code">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M13.5 2h-10A1.5 1.5 0 002 3.5v10A1.5 1.5 0 003.5 15h10a1.5 1.5 0 001.5-1.5v-10A1.5 1.5 0 0013.5 2z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5.5 1v2M10.5 1v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code>const AlianzaClient = require('./alianza-client');
+
+async function provisionAccount(accountName, users, areaCode) {
+    const client = new AlianzaClient();
+
+    try {
+        // Step 1: Authenticate
+        console.log('1. Authenticating...');
+        await client.authenticate();
+        console.log('   ✓ Authenticated');
+
+        // Step 2: Create account
+        console.log(`\n2. Creating account: ${accountName}`);
+        const account = await client.createAccount({
+            accountNumber: `AUTO_${Date.now()}`,
+            name: accountName,
+            timeZone: 'America/New_York',
+            status: 'ACTIVE',
+            accountType: 'BUSINESS'
+        });
+        console.log(`   ✓ Created: ${account.accountId}`);
+
+        // Step 3: Search for numbers
+        console.log(`\n3. Searching for ${users.length} numbers in ${areaCode}`);
+        const numbers = await client.searchNumbers({
+            npa: areaCode,
+            quantity: users.length
+        });
+        console.log(`   ✓ Found ${numbers.length} numbers`);
+
+        // Step 4: Order numbers
+        console.log('\n4. Ordering numbers...');
+        for (const number of numbers) {
+            await client.orderNumber(number.telephoneNumber, account.accountId);
+        }
+        console.log(`   ✓ Ordered ${numbers.length} numbers`);
+
+        // Step 5: Create users and assign numbers
+        console.log('\n5. Creating users...');
+        const provisionedUsers = [];
+
+        for (let i = 0; i < users.length; i++) {
+            const userInfo = users[i];
+
+            // Create user
+            const user = await client.createUser(account.accountId, {
+                firstName: userInfo.firstName,
+                lastName: userInfo.lastName,
+                extension: String(1000 + i),
+                voicemail: {
+                    enabled: true,
+                    pin: '1234',
+                    emailNotification: userInfo.email
+                }
+            });
+
+            // Assign number
+            await client.assignNumber(
+                account.accountId,
+                user.userId,
+                numbers[i].telephoneNumber,
+                {
+                    street: '135 Front St',
+                    city: 'Binghamton',
+                    state: 'NY',
+                    zipCode: '13905'
+                }
+            );
+
+            provisionedUsers.push({
+                name: `${userInfo.firstName} ${userInfo.lastName}`,
+                number: numbers[i].formatted,
+                extension: user.extension
+            });
+
+            console.log(`   ✓ ${userInfo.firstName} ${userInfo.lastName}: ${numbers[i].formatted}`);
+        }
+
+        // Step 6: Summary
+        console.log('\n' + '='.repeat(60));
+        console.log('PROVISIONING COMPLETE');
+        console.log('='.repeat(60));
+        console.log(`Account: ${accountName} (${account.accountId})`);
+        console.log(`Users: ${provisionedUsers.length}`);
+        console.log('\nUser Details:');
+        provisionedUsers.forEach(user => {
+            console.log(`  • ${user.name}: ${user.number} (ext ${user.extension})`);
+        });
+
+        return { account, users: provisionedUsers };
+
+    } catch (error) {
+        console.error('\n❌ Provisioning failed:', error.message);
+        if (error.response) {
+            console.error('   Status:', error.response.status);
+            console.error('   Data:', error.response.data);
+        }
+        throw error;
+    }
+}
+
+// Run provisioning
+const users = [
+    { firstName: 'Alice', lastName: 'Johnson', email: 'alice@example.com' },
+    { firstName: 'Bob', lastName: 'Smith', email: 'bob@example.com' },
+    { firstName: 'Carol', lastName: 'Williams', email: 'carol@example.com' }
+];
+
+provisionAccount('Node.js Integration Test', users, '607')
+    .then(result => {
+        console.log('\n✓ Success!');
+    })
+    .catch(error => {
+        console.error('\n✗ Failed');
+        process.exit(1);
+    });</code></pre>
+                </div>
+            </section>
+
+            <section class="next-steps">
+                <h2>Next Steps</h2>
+                <div class="card-grid">
+                    <a href="python-examples.html" class="card">
+                        <h3>Python Examples</h3>
+                        <p>Python SDK and code examples</p>
+                    </a>
+                    <a href="php-examples.html" class="card">
+                        <h3>PHP Examples</h3>
+                        <p>PHP integration examples</p>
+                    </a>
+                    <a href="../guides/phone-numbers.html" class="card">
+                        <h3>Phone Number Guide</h3>
+                        <p>Complete phone number management guide</p>
+                    </a>
+                    <a href="../advanced/error-handling.html" class="card">
+                        <h3>Error Handling</h3>
+                        <p>Best practices for error handling</p>
+                    </a>
+                </div>
+            </section>
+        </div>
     </main>
-  </div>
 
-  <script src="../js/main.js"></script>
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2025 Alianza Inc. All rights reserved.</p>
+            <p>API Documentation | <a href="https://api.alianza.com">api.alianza.com</a></p>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
 </body>
 </html>

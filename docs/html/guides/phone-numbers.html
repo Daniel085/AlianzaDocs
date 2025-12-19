@@ -1,85 +1,1283 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Phone Number Management Guide - Alianza API</title>
-  <link rel="stylesheet" href="../css/main.css">
-  <style>
-    .markdown-note {
-      background: var(--accent-tertiary);
-      border-left: 4px solid var(--accent-primary);
-      padding: 1rem;
-      margin: 2rem 0;
-      border-radius: var(--radius-md);
-    }
-    .view-markdown-btn {
-      display: inline-block;
-      margin-top: 1rem;
-      padding: 0.5rem 1rem;
-      background: var(--accent-primary);
-      color: white;
-      text-decoration: none;
-      border-radius: var(--radius-md);
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phone Number Management - Alianza API Documentation</title>
+    <link rel="stylesheet" href="../css/main.css">
 </head>
 <body>
-  <header class="docs-header">
-    <a href="../../../index.html" class="docs-logo">
-      <span>📞</span> Alianza API
-    </a>
-    <nav class="docs-nav">
-      <a href="../../../index.html">Home</a>
-      <button id="theme-toggle" class="theme-toggle">🌙 Dark</button>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <a href="../index.html">Alianza API Docs</a>
+            </div>
+            <button class="mobile-menu-toggle" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-menu">
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="../getting-started/quick-start.html">Quick Start</a></li>
+                <li><a href="../getting-started/authentication.html">Authentication</a></li>
+                <li><a href="../api-reference/endpoints.html">API Reference</a></li>
+                <li><a href="phone-numbers.html" class="active">Guides</a></li>
+            </ul>
+            <button class="theme-toggle" aria-label="Toggle theme">
+                <svg class="sun-icon" width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"/>
+                </svg>
+                <svg class="moon-icon" width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/>
+                </svg>
+            </button>
+        </div>
     </nav>
-  </header>
 
-  <div class="docs-container">
-    <aside class="docs-sidebar">
-      <div class="sidebar-section">
-        <div class="sidebar-title">Getting Started</div>
-        <ul class="sidebar-links">
-          <li><a href="../getting-started/quick-start.html">Quick Start</a></li>
-          <li><a href="../getting-started/authentication.html">Authentication</a></li>
-        </ul>
-      </div>
-      <div class="sidebar-section">
-        <div class="sidebar-title">Guides</div>
-        <ul class="sidebar-links">
-          <li><a href="../guides/account-management.html">Account Management</a></li>
-          <li><a href="../guides/phone-numbers.html">Phone Numbers</a></li>
-        </ul>
-      </div>
-      <div class="sidebar-section">
-        <div class="sidebar-title">Code Examples</div>
-        <ul class="sidebar-links">
-          <li><a href="../code-examples/python-examples.html">Python</a></li>
-          <li><a href="../code-examples/nodejs-examples.html">Node.js</a></li>
-        </ul>
-      </div>
-      <div class="sidebar-section">
-        <div class="sidebar-title">Advanced</div>
-        <ul class="sidebar-links">
-          <li><a href="../advanced/error-handling.html">Error Handling</a></li>
-          <li><a href="../advanced/best-practices.html">Best Practices</a></li>
-        </ul>
-      </div>
+    <aside class="sidebar">
+        <div class="sidebar-section">
+            <h3>Getting Started</h3>
+            <ul>
+                <li><a href="../getting-started/quick-start.html">Quick Start</a></li>
+                <li><a href="../getting-started/authentication.html">Authentication</a></li>
+            </ul>
+        </div>
+        <div class="sidebar-section">
+            <h3>Guides</h3>
+            <ul>
+                <li><a href="account-management.html">Account Management</a></li>
+                <li><a href="phone-numbers.html" class="active">Phone Number Management</a></li>
+                <li><a href="device-management.html">Device Management</a></li>
+                <li><a href="call-routing.html">Call Routing</a></li>
+            </ul>
+        </div>
+        <div class="sidebar-section">
+            <h3>Code Examples</h3>
+            <ul>
+                <li><a href="../code-examples/python.html">Python</a></li>
+                <li><a href="../code-examples/nodejs.html">Node.js</a></li>
+                <li><a href="../code-examples/php.html">PHP</a></li>
+                <li><a href="../code-examples/java.html">Java</a></li>
+            </ul>
+        </div>
+        <div class="sidebar-section">
+            <h3>Advanced</h3>
+            <ul>
+                <li><a href="../advanced/error-handling.html">Error Handling</a></li>
+                <li><a href="../advanced/best-practices.html">Best Practices</a></li>
+            </ul>
+        </div>
+        <div class="sidebar-section">
+            <h3>Architecture</h3>
+            <ul>
+                <li><a href="../architecture/diagrams.html">Diagrams</a></li>
+            </ul>
+        </div>
     </aside>
 
-    <main class="docs-main">
-      <h1>Phone Number Management Guide</h1>
+    <main class="main-content">
+        <div class="content-wrapper">
+            <h1>Phone Number Management</h1>
+            <p class="lead">Complete guide to searching, ordering, porting, and managing telephone numbers in the Alianza platform.</p>
 
-      <div class="markdown-note">
-        <strong>📝 Note:</strong> This page is being converted from markdown to interactive HTML.
-        <br>
-        <a href="../../../docs/guides/phone-numbers.md" class="view-markdown-btn">View Markdown Version →</a>
-      </div>
+            <div class="toc-box">
+                <h4>On This Page</h4>
+                <ul>
+                    <li><a href="#overview">Overview</a></li>
+                    <li><a href="#phone-number-types">Phone Number Types</a></li>
+                    <li><a href="#searching">Searching for Numbers</a></li>
+                    <li><a href="#ordering">Ordering Numbers</a></li>
+                    <li><a href="#porting">Porting Numbers</a></li>
+                    <li><a href="#assigning">Assigning Numbers</a></li>
+                    <li><a href="#managing">Managing Numbers</a></li>
+                    <li><a href="#specialty-lines">Specialty Lines</a></li>
+                    <li><a href="#best-practices">Best Practices</a></li>
+                    <li><a href="#code-examples">Code Examples</a></li>
+                </ul>
+            </div>
 
-      <p>Interactive HTML version coming soon. For now, please refer to the markdown version above.</p>
+            <section id="overview">
+                <h2>Overview</h2>
+                <p>Phone numbers are critical resources in the Alianza platform. This guide covers the complete lifecycle of telephone number management, from searching available inventory to porting existing numbers and assigning them to users and devices.</p>
+
+                <div class="diagram-block">
+                    <h3>Phone Number Lifecycle</h3>
+                    <pre class="diagram">
+┌─────────────────────────────────────────────────────────────────┐
+│                    PHONE NUMBER LIFECYCLE                        │
+└─────────────────────────────────────────────────────────────────┘
+
+    ┌──────────┐         ┌──────────┐         ┌──────────┐
+    │ SEARCH   │────────▶│  ORDER   │────────▶│ ASSIGNED │
+    │Available │         │ Reserved │         │  Active  │
+    └──────────┘         └──────────┘         └──────────┘
+         │                     │                     │
+         │                     │                     │
+         │              ┌──────────┐                 │
+         └─────────────▶│   PORT   │◀────────────────┘
+                        │ Transfer │
+                        └──────────┘
+                              │
+                              │
+                        ┌──────────┐
+                        │ RELEASED │
+                        │ Returned │
+                        └──────────┘
+
+Steps:
+1. SEARCH: Query available numbers by area code, exchange, or pattern
+2. ORDER: Reserve numbers from carrier inventory
+3. ASSIGN: Attach to end user, device, or service (IVR, queue)
+4. PORT: Transfer existing numbers from another carrier
+5. RELEASE: Return number to carrier inventory
+                    </pre>
+                </div>
+
+                <div class="info-box">
+                    <strong>Key Concepts:</strong>
+                    <ul>
+                        <li><strong>DID (Direct Inward Dialing):</strong> Standard local phone numbers</li>
+                        <li><strong>Toll-Free:</strong> 800/888/877/866/855/844/833 numbers</li>
+                        <li><strong>E911:</strong> Emergency services address registration (required)</li>
+                        <li><strong>Porting:</strong> Transferring numbers from another carrier (7-10 business days)</li>
+                        <li><strong>NPA-NXX:</strong> Area code (NPA) and exchange (NXX) pattern</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="phone-number-types">
+                <h2>Phone Number Types</h2>
+
+                <h3>Local DID Numbers</h3>
+                <p>Standard geographic telephone numbers for specific area codes.</p>
+                <table class="properties-table">
+                    <thead>
+                        <tr>
+                            <th>Feature</th>
+                            <th>Description</th>
+                            <th>Example</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Format</strong></td>
+                            <td>+1 (NPA) NXX-XXXX</td>
+                            <td>+1 (607) 123-4567</td>
+                        </tr>
+                        <tr>
+                            <td><strong>NPA</strong></td>
+                            <td>3-digit area code</td>
+                            <td>607, 212, 415</td>
+                        </tr>
+                        <tr>
+                            <td><strong>NXX</strong></td>
+                            <td>3-digit exchange</td>
+                            <td>123, 456, 789</td>
+                        </tr>
+                        <tr>
+                            <td><strong>E911</strong></td>
+                            <td>Required for all US numbers</td>
+                            <td>Physical address</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Use Case</strong></td>
+                            <td>Business lines, individual users</td>
+                            <td>Main office number</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Toll-Free Numbers</h3>
+                <p>Numbers that allow callers to reach you without charges (you pay for incoming calls).</p>
+                <table class="properties-table">
+                    <thead>
+                        <tr>
+                            <th>Prefix</th>
+                            <th>Year Introduced</th>
+                            <th>Availability</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>800</code></td>
+                            <td>1967</td>
+                            <td>Very limited</td>
+                        </tr>
+                        <tr>
+                            <td><code>888</code></td>
+                            <td>1996</td>
+                            <td>Limited</td>
+                        </tr>
+                        <tr>
+                            <td><code>877</code></td>
+                            <td>1998</td>
+                            <td>Moderate</td>
+                        </tr>
+                        <tr>
+                            <td><code>866</code></td>
+                            <td>2000</td>
+                            <td>Good</td>
+                        </tr>
+                        <tr>
+                            <td><code>855</code></td>
+                            <td>2010</td>
+                            <td>Good</td>
+                        </tr>
+                        <tr>
+                            <td><code>844</code></td>
+                            <td>2013</td>
+                            <td>Good</td>
+                        </tr>
+                        <tr>
+                            <td><code>833</code></td>
+                            <td>2017</td>
+                            <td>Excellent</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="warning-box">
+                    <strong>Toll-Free Considerations:</strong>
+                    <ul>
+                        <li>Higher monthly recurring charges</li>
+                        <li>Per-minute inbound call fees</li>
+                        <li>May require business verification</li>
+                        <li>Vanity patterns (e.g., 1-800-FLOWERS) rarely available</li>
+                    </ul>
+                </div>
+
+                <h3>Vanity Numbers</h3>
+                <p>Memorable numbers that spell words or follow patterns.</p>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-title">Examples</span>
+                        <button class="copy-button" aria-label="Copy code">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M13.5 2h-10A1.5 1.5 0 002 3.5v10A1.5 1.5 0 003.5 15h10a1.5 1.5 0 001.5-1.5v-10A1.5 1.5 0 0013.5 2z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5.5 1v2M10.5 1v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code>1-800-FLOWERS  → 1-800-356-9377
+1-888-CALL-NOW → 1-888-225-5669
+1-877-PAY-BILL → 1-877-729-2455
+
+Sequential: (607) 123-4567
+Repeating:  (607) 777-7777
+Pattern:    (607) 123-1234</code></pre>
+                </div>
+            </section>
+
+            <section id="searching">
+                <h2>Searching for Numbers</h2>
+
+                <h3>Search by Area Code (NPA)</h3>
+                <p>Find available numbers in a specific area code:</p>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-title">Search by NPA</span>
+                        <button class="copy-button" aria-label="Copy code">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M13.5 2h-10A1.5 1.5 0 002 3.5v10A1.5 1.5 0 003.5 15h10a1.5 1.5 0 001.5-1.5v-10A1.5 1.5 0 0013.5 2z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5.5 1v2M10.5 1v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code>GET /v2/partition/{partitionId}/telephone-number/search?npa=607&quantity=10
+X-AUTH-TOKEN: your-token</code></pre>
+                </div>
+
+                <p><strong>Response:</strong></p>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-title">Response</span>
+                        <button class="copy-button" aria-label="Copy code">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M13.5 2h-10A1.5 1.5 0 002 3.5v10A1.5 1.5 0 003.5 15h10a1.5 1.5 0 001.5-1.5v-10A1.5 1.5 0 0013.5 2z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5.5 1v2M10.5 1v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code>{
+  "telephoneNumbers": [
+    {
+      "telephoneNumber": "+16071234567",
+      "formatted": "(607) 123-4567",
+      "npa": "607",
+      "nxx": "123",
+      "rateCenter": "BINGHAMTON",
+      "state": "NY",
+      "available": true
+    }
+  ],
+  "count": 10
+}</code></pre>
+                </div>
+
+                <h3>Search by NPA-NXX</h3>
+                <p>Narrow search to specific exchange:</p>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-title">Search by Exchange</span>
+                        <button class="copy-button" aria-label="Copy code">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M13.5 2h-10A1.5 1.5 0 002 3.5v10A1.5 1.5 0 003.5 15h10a1.5 1.5 0 001.5-1.5v-10A1.5 1.5 0 0013.5 2z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5.5 1v2M10.5 1v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code>GET /v2/partition/{partitionId}/telephone-number/search?npa=607&nxx=123&quantity=5
+X-AUTH-TOKEN: your-token</code></pre>
+                </div>
+
+                <h3>Search by Rate Center</h3>
+                <p>Find numbers in a specific geographic rate center:</p>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-title">Search by Rate Center</span>
+                        <button class="copy-button" aria-label="Copy code">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M13.5 2h-10A1.5 1.5 0 002 3.5v10A1.5 1.5 0 003.5 15h10a1.5 1.5 0 001.5-1.5v-10A1.5 1.5 0 0013.5 2z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5.5 1v2M10.5 1v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code>GET /v2/partition/{partitionId}/telephone-number/search?rateCenter=BINGHAMTON&state=NY&quantity=10
+X-AUTH-TOKEN: your-token</code></pre>
+                </div>
+
+                <h3>Pattern Matching</h3>
+                <p>Search for vanity or sequential numbers:</p>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-title">Pattern Search</span>
+                        <button class="copy-button" aria-label="Copy code">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M13.5 2h-10A1.5 1.5 0 002 3.5v10A1.5 1.5 0 003.5 15h10a1.5 1.5 0 001.5-1.5v-10A1.5 1.5 0 0013.5 2z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5.5 1v2M10.5 1v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code>GET /v2/partition/{partitionId}/telephone-number/search?pattern=*7777&quantity=10
+GET /v2/partition/{partitionId}/telephone-number/search?pattern=123*&quantity=5</code></pre>
+                </div>
+
+                <h3>Toll-Free Search</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-title">Search Toll-Free</span>
+                        <button class="copy-button" aria-label="Copy code">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M13.5 2h-10A1.5 1.5 0 002 3.5v10A1.5 1.5 0 003.5 15h10a1.5 1.5 0 001.5-1.5v-10A1.5 1.5 0 0013.5 2z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5.5 1v2M10.5 1v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code>GET /v2/partition/{partitionId}/telephone-number/search/toll-free?quantity=10
+GET /v2/partition/{partitionId}/telephone-number/search/toll-free?pattern=*HELP&quantity=5</code></pre>
+                </div>
+            </section>
+
+            <section id="ordering">
+                <h2>Ordering Numbers</h2>
+
+                <h3>Order Single Number</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-title">Order Number</span>
+                        <button class="copy-button" aria-label="Copy code">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M13.5 2h-10A1.5 1.5 0 002 3.5v10A1.5 1.5 0 003.5 15h10a1.5 1.5 0 001.5-1.5v-10A1.5 1.5 0 0013.5 2z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5.5 1v2M10.5 1v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code>POST /v2/partition/{partitionId}/telephone-number/order
+Content-Type: application/json
+X-AUTH-TOKEN: your-token
+
+{
+  "telephoneNumbers": ["+16071234567"],
+  "accountId": "acc_123"
+}</code></pre>
+                </div>
+
+                <h3>Bulk Order</h3>
+                <p>Order multiple numbers at once:</p>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-title">Bulk Order</span>
+                        <button class="copy-button" aria-label="Copy code">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M13.5 2h-10A1.5 1.5 0 002 3.5v10A1.5 1.5 0 003.5 15h10a1.5 1.5 0 001.5-1.5v-10A1.5 1.5 0 0013.5 2z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5.5 1v2M10.5 1v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code>POST /v2/partition/{partitionId}/telephone-number/order
+Content-Type: application/json
+X-AUTH-TOKEN: your-token
+
+{
+  "telephoneNumbers": [
+    "+16071234567",
+    "+16071234568",
+    "+16071234569"
+  ],
+  "accountId": "acc_123"
+}</code></pre>
+                </div>
+
+                <p><strong>Response:</strong></p>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-title">Order Response</span>
+                        <button class="copy-button" aria-label="Copy code">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M13.5 2h-10A1.5 1.5 0 002 3.5v10A1.5 1.5 0 003.5 15h10a1.5 1.5 0 001.5-1.5v-10A1.5 1.5 0 0013.5 2z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5.5 1v2M10.5 1v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code>{
+  "orderId": "order_abc123",
+  "status": "COMPLETED",
+  "telephoneNumbers": [
+    {
+      "telephoneNumber": "+16071234567",
+      "status": "RESERVED",
+      "accountId": "acc_123"
+    }
+  ],
+  "createdAt": "2025-12-18T10:30:00Z"
+}</code></pre>
+                </div>
+
+                <h3>Order Toll-Free</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-title">Order Toll-Free</span>
+                        <button class="copy-button" aria-label="Copy code">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M13.5 2h-10A1.5 1.5 0 002 3.5v10A1.5 1.5 0 003.5 15h10a1.5 1.5 0 001.5-1.5v-10A1.5 1.5 0 0013.5 2z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5.5 1v2M10.5 1v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code>POST /v2/partition/{partitionId}/telephone-number/order/toll-free
+Content-Type: application/json
+X-AUTH-TOKEN: your-token
+
+{
+  "telephoneNumbers": ["+18885551234"],
+  "accountId": "acc_123"
+}</code></pre>
+                </div>
+
+                <div class="info-box">
+                    <strong>Note:</strong> Numbers are typically provisioned within seconds to minutes. Toll-free numbers may take up to 24 hours for full activation.
+                </div>
+            </section>
+
+            <section id="porting">
+                <h2>Porting Numbers</h2>
+                <p>Transfer existing telephone numbers from another carrier to Alianza. Ports typically take <strong>7-10 business days</strong>.</p>
+
+                <h3>Port Request Fields</h3>
+                <table class="properties-table">
+                    <thead>
+                        <tr>
+                            <th>Field</th>
+                            <th>Description</th>
+                            <th>Required</th>
+                            <th>Example</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>telephoneNumbers</code></td>
+                            <td>Numbers to port</td>
+                            <td>Yes</td>
+                            <td>["+16071234567"]</td>
+                        </tr>
+                        <tr>
+                            <td><code>accountId</code></td>
+                            <td>Destination account</td>
+                            <td>Yes</td>
+                            <td>"acc_123"</td>
+                        </tr>
+                        <tr>
+                            <td><code>currentCarrier</code></td>
+                            <td>Current service provider</td>
+                            <td>Yes</td>
+                            <td>"Verizon"</td>
+                        </tr>
+                        <tr>
+                            <td><code>accountNumber</code></td>
+                            <td>Account # with current carrier</td>
+                            <td>Yes</td>
+                            <td>"987654321"</td>
+                        </tr>
+                        <tr>
+                            <td><code>pin</code></td>
+                            <td>Account PIN (if required)</td>
+                            <td>Conditional</td>
+                            <td>"1234"</td>
+                        </tr>
+                        <tr>
+                            <td><code>authorizedName</code></td>
+                            <td>Name on current account</td>
+                            <td>Yes</td>
+                            <td>"John Smith"</td>
+                        </tr>
+                        <tr>
+                            <td><code>serviceAddress</code></td>
+                            <td>Current service address</td>
+                            <td>Yes</td>
+                            <td>Address object</td>
+                        </tr>
+                        <tr>
+                            <td><code>requestedFOCDate</code></td>
+                            <td>Desired port date (FOC = Firm Order Commitment)</td>
+                            <td>No</td>
+                            <td>"2025-12-25"</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Submit Port Request</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-title">Create Port Request</span>
+                        <button class="copy-button" aria-label="Copy code">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M13.5 2h-10A1.5 1.5 0 002 3.5v10A1.5 1.5 0 003.5 15h10a1.5 1.5 0 001.5-1.5v-10A1.5 1.5 0 0013.5 2z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5.5 1v2M10.5 1v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code>POST /v2/partition/{partitionId}/telephone-number/port
+Content-Type: application/json
+X-AUTH-TOKEN: your-token
+
+{
+  "telephoneNumbers": ["+16071234567"],
+  "accountId": "acc_123",
+  "currentCarrier": "Verizon",
+  "accountNumber": "987654321",
+  "pin": "1234",
+  "authorizedName": "John Smith",
+  "serviceAddress": {
+    "street": "135 Front St",
+    "city": "Binghamton",
+    "state": "NY",
+    "zipCode": "13905"
+  },
+  "requestedFOCDate": "2025-12-25"
+}</code></pre>
+                </div>
+
+                <p><strong>Response:</strong></p>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-title">Port Response</span>
+                        <button class="copy-button" aria-label="Copy code">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M13.5 2h-10A1.5 1.5 0 002 3.5v10A1.5 1.5 0 003.5 15h10a1.5 1.5 0 001.5-1.5v-10A1.5 1.5 0 0013.5 2z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5.5 1v2M10.5 1v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code>{
+  "portRequestId": "port_xyz789",
+  "status": "PENDING",
+  "telephoneNumbers": ["+16071234567"],
+  "estimatedFOCDate": "2025-12-25",
+  "submittedAt": "2025-12-18T10:30:00Z"
+}</code></pre>
+                </div>
+
+                <h3>Check Port Status</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-title">Get Port Status</span>
+                        <button class="copy-button" aria-label="Copy code">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M13.5 2h-10A1.5 1.5 0 002 3.5v10A1.5 1.5 0 003.5 15h10a1.5 1.5 0 001.5-1.5v-10A1.5 1.5 0 0013.5 2z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5.5 1v2M10.5 1v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code>GET /v2/partition/{partitionId}/telephone-number/port/{portRequestId}
+X-AUTH-TOKEN: your-token</code></pre>
+                </div>
+
+                <h3>Port Statuses</h3>
+                <table class="properties-table">
+                    <thead>
+                        <tr>
+                            <th>Status</th>
+                            <th>Description</th>
+                            <th>Action Required</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="badge badge-warning">PENDING</span></td>
+                            <td>Submitted to carrier</td>
+                            <td>Wait for carrier response</td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-info">APPROVED</span></td>
+                            <td>Carrier approved with FOC date</td>
+                            <td>Wait for FOC date</td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-info">IN_PROGRESS</span></td>
+                            <td>Port is actively being processed</td>
+                            <td>None - in progress</td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-success">COMPLETED</span></td>
+                            <td>Successfully ported to Alianza</td>
+                            <td>Assign numbers to users</td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-danger">REJECTED</span></td>
+                            <td>Carrier rejected (see reason)</td>
+                            <td>Fix issues and resubmit</td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge">CANCELLED</span></td>
+                            <td>Port request cancelled</td>
+                            <td>None</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Cancel Port Request</h3>
+                <p>Can only cancel before carrier approval:</p>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-title">Cancel Port</span>
+                        <button class="copy-button" aria-label="Copy code">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M13.5 2h-10A1.5 1.5 0 002 3.5v10A1.5 1.5 0 003.5 15h10a1.5 1.5 0 001.5-1.5v-10A1.5 1.5 0 0013.5 2z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5.5 1v2M10.5 1v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code>DELETE /v2/partition/{partitionId}/telephone-number/port/{portRequestId}
+X-AUTH-TOKEN: your-token</code></pre>
+                </div>
+            </section>
+
+            <section id="assigning">
+                <h2>Assigning Numbers</h2>
+
+                <h3>Assign to End User</h3>
+                <p>Assign a telephone number to an end user with E911 address:</p>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-title">Assign to User</span>
+                        <button class="copy-button" aria-label="Copy code">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M13.5 2h-10A1.5 1.5 0 002 3.5v10A1.5 1.5 0 003.5 15h10a1.5 1.5 0 001.5-1.5v-10A1.5 1.5 0 0013.5 2z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5.5 1v2M10.5 1v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code>PUT /v2/partition/{partitionId}/account/{accountId}/user/{userId}/telephone-number
+Content-Type: application/json
+X-AUTH-TOKEN: your-token
+
+{
+  "telephoneNumber": "+16071234567",
+  "primary": true,
+  "e911Address": {
+    "street": "135 Front St",
+    "city": "Binghamton",
+    "state": "NY",
+    "zipCode": "13905",
+    "location": "Suite 200"
+  }
+}</code></pre>
+                </div>
+
+                <h3>Assign to Device Line</h3>
+                <p>Assign directly to a device line:</p>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-title">Assign to Device</span>
+                        <button class="copy-button" aria-label="Copy code">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M13.5 2h-10A1.5 1.5 0 002 3.5v10A1.5 1.5 0 003.5 15h10a1.5 1.5 0 001.5-1.5v-10A1.5 1.5 0 0013.5 2z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5.5 1v2M10.5 1v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code>PUT /v2/partition/{partitionId}/account/{accountId}/device/{deviceId}/line/{lineNumber}/telephone-number
+Content-Type: application/json
+X-AUTH-TOKEN: your-token</code></pre>
+                </div>
+
+                <h3>Assign to Service</h3>
+                <p>Assign to IVR, hunt group, or other service:</p>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-title">Assign to IVR</span>
+                        <button class="copy-button" aria-label="Copy code">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M13.5 2h-10A1.5 1.5 0 002 3.5v10A1.5 1.5 0 003.5 15h10a1.5 1.5 0 001.5-1.5v-10A1.5 1.5 0 0013.5 2z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5.5 1v2M10.5 1v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code>PUT /v2/partition/{partitionId}/account/{accountId}/ivr/{ivrId}/telephone-number
+Content-Type: application/json
+X-AUTH-TOKEN: your-token
+
+{
+  "telephoneNumber": "+16071234567"
+}</code></pre>
+                </div>
+
+                <div class="warning-box">
+                    <strong>E911 Required:</strong> All US telephone numbers must have an E911 address registered. This is a legal requirement for emergency services (911 calls).
+                </div>
+            </section>
+
+            <section id="managing">
+                <h2>Managing Numbers</h2>
+
+                <h3>List Account Numbers</h3>
+                <p>Get all numbers for an account:</p>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-title">List Numbers</span>
+                        <button class="copy-button" aria-label="Copy code">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M13.5 2h-10A1.5 1.5 0 002 3.5v10A1.5 1.5 0 003.5 15h10a1.5 1.5 0 001.5-1.5v-10A1.5 1.5 0 0013.5 2z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5.5 1v2M10.5 1v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code>GET /v2/partition/{partitionId}/account/{accountId}/telephone-number
+X-AUTH-TOKEN: your-token</code></pre>
+                </div>
+
+                <p><strong>Response:</strong></p>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-title">Number List Response</span>
+                        <button class="copy-button" aria-label="Copy code">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M13.5 2h-10A1.5 1.5 0 002 3.5v10A1.5 1.5 0 003.5 15h10a1.5 1.5 0 001.5-1.5v-10A1.5 1.5 0 0013.5 2z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5.5 1v2M10.5 1v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code>[
+  {
+    "telephoneNumber": "+16071234567",
+    "formatted": "(607) 123-4567",
+    "assignedTo": "user_xyz789",
+    "assignmentType": "END_USER",
+    "primary": true,
+    "status": "ACTIVE",
+    "e911Registered": true
+  },
+  {
+    "telephoneNumber": "+16071234568",
+    "formatted": "(607) 123-4568",
+    "assignedTo": "ivr_abc123",
+    "assignmentType": "IVR",
+    "primary": false,
+    "status": "ACTIVE",
+    "e911Registered": true
+  }
+]</code></pre>
+                </div>
+
+                <h3>Get Number Details</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-title">Get Number Details</span>
+                        <button class="copy-button" aria-label="Copy code">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M13.5 2h-10A1.5 1.5 0 002 3.5v10A1.5 1.5 0 003.5 15h10a1.5 1.5 0 001.5-1.5v-10A1.5 1.5 0 0013.5 2z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5.5 1v2M10.5 1v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code>GET /v2/partition/{partitionId}/telephone-number/{telephoneNumber}
+X-AUTH-TOKEN: your-token</code></pre>
+                </div>
+
+                <p><strong>Response:</strong></p>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-title">Number Details Response</span>
+                        <button class="copy-button" aria-label="Copy code">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M13.5 2h-10A1.5 1.5 0 002 3.5v10A1.5 1.5 0 003.5 15h10a1.5 1.5 0 001.5-1.5v-10A1.5 1.5 0 0013.5 2z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5.5 1v2M10.5 1v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code>{
+  "telephoneNumber": "+16071234567",
+  "formatted": "(607) 123-4567",
+  "npa": "607",
+  "nxx": "123",
+  "status": "ACTIVE",
+  "accountId": "acc_123",
+  "assignedTo": "user_xyz789",
+  "assignmentType": "END_USER",
+  "e911": {
+    "registered": true,
+    "address": {
+      "street": "135 Front St",
+      "city": "Binghamton",
+      "state": "NY",
+      "zipCode": "13905",
+      "location": "Suite 200"
+    }
+  },
+  "directoryListing": {
+    "listed": true,
+    "name": "Acme Corporation",
+    "address": "135 Front St, Binghamton, NY"
+  },
+  "callerIdName": "ACME CORP"
+}</code></pre>
+                </div>
+
+                <h3>Update Number Configuration</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-title">Update Number</span>
+                        <button class="copy-button" aria-label="Copy code">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M13.5 2h-10A1.5 1.5 0 002 3.5v10A1.5 1.5 0 003.5 15h10a1.5 1.5 0 001.5-1.5v-10A1.5 1.5 0 0013.5 2z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5.5 1v2M10.5 1v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code>PUT /v2/partition/{partitionId}/telephone-number/{telephoneNumber}
+Content-Type: application/json
+X-AUTH-TOKEN: your-token
+
+{
+  "callerIdName": "ACME SUPPORT",
+  "e911Address": {
+    "street": "135 Front St",
+    "city": "Binghamton",
+    "state": "NY",
+    "zipCode": "13905",
+    "location": "Suite 300"
+  },
+  "directoryListing": {
+    "listed": false
+  }
+}</code></pre>
+                </div>
+
+                <h3>Unassign Number</h3>
+                <p>Remove number from user/device (number remains in account inventory):</p>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-title">Unassign Number</span>
+                        <button class="copy-button" aria-label="Copy code">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M13.5 2h-10A1.5 1.5 0 002 3.5v10A1.5 1.5 0 003.5 15h10a1.5 1.5 0 001.5-1.5v-10A1.5 1.5 0 0013.5 2z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5.5 1v2M10.5 1v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code>DELETE /v2/partition/{partitionId}/account/{accountId}/user/{userId}/telephone-number/{telephoneNumber}
+X-AUTH-TOKEN: your-token</code></pre>
+                </div>
+
+                <h3>Disconnect/Release Number</h3>
+                <p>Return number to carrier inventory (number will be released and may become unavailable):</p>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-title">Release Number</span>
+                        <button class="copy-button" aria-label="Copy code">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M13.5 2h-10A1.5 1.5 0 002 3.5v10A1.5 1.5 0 003.5 15h10a1.5 1.5 0 001.5-1.5v-10A1.5 1.5 0 0013.5 2z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5.5 1v2M10.5 1v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code>DELETE /v2/partition/{partitionId}/telephone-number/{telephoneNumber}
+X-AUTH-TOKEN: your-token</code></pre>
+                </div>
+
+                <div class="warning-box">
+                    <strong>Warning:</strong> Releasing a number is permanent. The number will be returned to inventory and may be assigned to another customer.
+                </div>
+            </section>
+
+            <section id="specialty-lines">
+                <h2>Specialty Lines</h2>
+
+                <h3>Call Queues</h3>
+                <p>Assign numbers to call queues for ACD (Automatic Call Distribution) functionality:</p>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-title">Assign to Call Queue</span>
+                        <button class="copy-button" aria-label="Copy code">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M13.5 2h-10A1.5 1.5 0 002 3.5v10A1.5 1.5 0 003.5 15h10a1.5 1.5 0 001.5-1.5v-10A1.5 1.5 0 0013.5 2z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5.5 1v2M10.5 1v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code>PUT /v2/partition/{partitionId}/account/{accountId}/call-queue/{queueId}/telephone-number</code></pre>
+                </div>
+
+                <h3>Business Lines</h3>
+                <p>Enterprise features with advanced routing:</p>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-title">Create Business Line</span>
+                        <button class="copy-button" aria-label="Copy code">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M13.5 2h-10A1.5 1.5 0 002 3.5v10A1.5 1.5 0 003.5 15h10a1.5 1.5 0 001.5-1.5v-10A1.5 1.5 0 0013.5 2z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5.5 1v2M10.5 1v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code>POST /v2/partition/{partitionId}/account/{accountId}/business-line</code></pre>
+                </div>
+
+                <div class="info-box">
+                    See <strong>Alianza Specialty Lines via API.pdf</strong> for detailed workflows on advanced line configurations.
+                </div>
+            </section>
+
+            <section id="best-practices">
+                <h2>Best Practices</h2>
+
+                <h3>1. E911 Registration</h3>
+                <p><strong>Always register E911 addresses</strong> for all US numbers:</p>
+                <ul>
+                    <li>Legal requirement for emergency services (911 calls)</li>
+                    <li>Register immediately after assignment</li>
+                    <li>Update when user location changes</li>
+                    <li>Include suite/floor in location field for large buildings</li>
+                </ul>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-title">E911 Example</span>
+                        <button class="copy-button" aria-label="Copy code">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M13.5 2h-10A1.5 1.5 0 002 3.5v10A1.5 1.5 0 003.5 15h10a1.5 1.5 0 001.5-1.5v-10A1.5 1.5 0 0013.5 2z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5.5 1v2M10.5 1v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code>{
+  "e911Address": {
+    "street": "135 Front St",
+    "city": "Binghamton",
+    "state": "NY",
+    "zipCode": "13905",
+    "location": "Floor 3, Desk 42"  // Important for large buildings
+  }
+}</code></pre>
+                </div>
+
+                <h3>2. Number Inventory Management</h3>
+                <p><strong>Monitor your number usage:</strong></p>
+                <ul>
+                    <li>Track assigned vs unassigned numbers</li>
+                    <li>Release unused numbers to avoid monthly charges</li>
+                    <li>Reserve numbers for future use when planning expansion</li>
+                    <li>Use consistent numbering patterns (e.g., sequential)</li>
+                </ul>
+
+                <h3>3. Porting Best Practices</h3>
+                <p><strong>Successful ports require accurate information:</strong></p>
+
+                <div class="two-column-list">
+                    <div class="column">
+                        <h4>✅ Do:</h4>
+                        <ul>
+                            <li>Verify current carrier account info exactly matches billing</li>
+                            <li>Request ports at least 2 weeks in advance</li>
+                            <li>Submit during business hours</li>
+                            <li>Keep current service active until port completes</li>
+                            <li>Provide LOA (Letter of Authorization) if required</li>
+                        </ul>
+                    </div>
+                    <div class="column">
+                        <h4>❌ Don't:</h4>
+                        <ul>
+                            <li>Cancel current service before port completes</li>
+                            <li>Rush port requests (minimum 7 business days)</li>
+                            <li>Mismatch account holder names</li>
+                            <li>Forget PIN if carrier requires one</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3>4. Caller ID Configuration</h3>
+                <p>Set meaningful caller ID names for better call recognition:</p>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-title">Caller ID Example</span>
+                        <button class="copy-button" aria-label="Copy code">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M13.5 2h-10A1.5 1.5 0 002 3.5v10A1.5 1.5 0 003.5 15h10a1.5 1.5 0 001.5-1.5v-10A1.5 1.5 0 0013.5 2z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5.5 1v2M10.5 1v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code>{
+  "callerIdName": "ACME SUPPORT"  // Max 15 characters
+}</code></pre>
+                </div>
+
+                <p><strong>Guidelines:</strong></p>
+                <ul>
+                    <li>Use all caps for consistency</li>
+                    <li>Maximum 15 characters</li>
+                    <li>No special characters</li>
+                    <li>Be descriptive (SUPPORT, SALES, BILLING)</li>
+                </ul>
+
+                <h3>5. Directory Listing</h3>
+                <p>Configure directory listing appropriately for privacy and discoverability:</p>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-title">Listed vs Unlisted</span>
+                        <button class="copy-button" aria-label="Copy code">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M13.5 2h-10A1.5 1.5 0 002 3.5v10A1.5 1.5 0 003.5 15h10a1.5 1.5 0 001.5-1.5v-10A1.5 1.5 0 0013.5 2z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5.5 1v2M10.5 1v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code>// Listed
+{
+  "directoryListing": {
+    "listed": true,
+    "name": "Acme Corporation",
+    "address": "135 Front St, Binghamton, NY"
+  }
+}
+
+// Unlisted
+{
+  "directoryListing": {
+    "listed": false
+  }
+}</code></pre>
+                </div>
+
+                <h3>6. Number Search Strategy</h3>
+                <p><strong>For best availability:</strong></p>
+                <ol>
+                    <li>Search broad area first (NPA only) to see overall inventory</li>
+                    <li>Narrow to specific exchange (NPA-NXX) if needed</li>
+                    <li>Use pattern matching for vanity numbers</li>
+                    <li>Order immediately if found (popular patterns go quickly)</li>
+                </ol>
+
+                <h3>7. Bulk Operations</h3>
+                <p>For large number orders:</p>
+                <ul>
+                    <li>Order in batches of 50-100 numbers</li>
+                    <li>Check inventory availability before bulk operations</li>
+                    <li>Use async job tracking for large operations</li>
+                    <li>Validate all assignments before deployment</li>
+                </ul>
+
+                <h3>8. Toll-Free Considerations</h3>
+                <ul>
+                    <li>Higher monthly recurring costs</li>
+                    <li>Inbound call charges (per-minute fees)</li>
+                    <li>May require business verification documents</li>
+                    <li>Popular patterns (e.g., *-FLOWERS) rarely available</li>
+                    <li>Reserve memorable patterns early in planning</li>
+                </ul>
+
+                <h3>9. Number Recycling</h3>
+                <p>When releasing numbers:</p>
+                <ul>
+                    <li>Remove all assignments first (users, devices, services)</li>
+                    <li>Clear E911 registration</li>
+                    <li>Remove from call routing rules</li>
+                    <li>Wait 90 days before reassignment (FCC rule)</li>
+                </ul>
+
+                <h3>10. Monitoring and Alerts</h3>
+                <p>Track important number events:</p>
+                <ul>
+                    <li>Port status changes (webhook recommended)</li>
+                    <li>Assignment changes</li>
+                    <li>E911 registration updates</li>
+                    <li>Directory listing publication status</li>
+                </ul>
+            </section>
+
+            <section id="code-examples">
+                <h2>Code Examples</h2>
+
+                <h3>Python: Complete Number Management</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-title">Python Number Manager Class</span>
+                        <button class="copy-button" aria-label="Copy code">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M13.5 2h-10A1.5 1.5 0 002 3.5v10A1.5 1.5 0 003.5 15h10a1.5 1.5 0 001.5-1.5v-10A1.5 1.5 0 0013.5 2z" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5.5 1v2M10.5 1v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code>import requests
+import time
+
+class AlianzaNumberManager:
+    def __init__(self, base_url, token, partition_id):
+        self.base_url = base_url
+        self.headers = {
+            'X-AUTH-TOKEN': token,
+            'Content-Type': 'application/json'
+        }
+        self.partition_id = partition_id
+
+    def search_numbers(self, npa, quantity=10):
+        """Search for available numbers"""
+        response = requests.get(
+            f'{self.base_url}/v2/partition/{self.partition_id}/telephone-number/search',
+            params={'npa': npa, 'quantity': quantity},
+            headers=self.headers
+        )
+        return response.json()['telephoneNumbers']
+
+    def order_number(self, telephone_number, account_id):
+        """Order a telephone number"""
+        response = requests.post(
+            f'{self.base_url}/v2/partition/{self.partition_id}/telephone-number/order',
+            json={
+                'telephoneNumbers': [telephone_number],
+                'accountId': account_id
+            },
+            headers=self.headers
+        )
+        response.raise_for_status()
+        return response.json()
+
+    def assign_to_user(self, account_id, user_id, telephone_number, e911_address):
+        """Assign number to user with E911"""
+        response = requests.put(
+            f'{self.base_url}/v2/partition/{self.partition_id}/account/{account_id}/user/{user_id}/telephone-number',
+            json={
+                'telephoneNumber': telephone_number,
+                'primary': True,
+                'e911Address': e911_address
+            },
+            headers=self.headers
+        )
+        response.raise_for_status()
+        return response.json()
+
+    def port_number(self, port_request):
+        """Submit number port request"""
+        response = requests.post(
+            f'{self.base_url}/v2/partition/{self.partition_id}/telephone-number/port',
+            json=port_request,
+            headers=self.headers
+        )
+        response.raise_for_status()
+        return response.json()
+
+    def check_port_status(self, port_request_id):
+        """Check port request status"""
+        response = requests.get(
+            f'{self.base_url}/v2/partition/{self.partition_id}/telephone-number/port/{port_request_id}',
+            headers=self.headers
+        )
+        return response.json()
+
+    def wait_for_port(self, port_request_id, timeout=1800):
+        """Wait for port to complete (30 min max for API check)"""
+        start_time = time.time()
+        while time.time() - start_time < timeout:
+            status = self.check_port_status(port_request_id)
+            if status['status'] in ['COMPLETED', 'REJECTED', 'CANCELLED']:
+                return status
+            time.sleep(30)  # Check every 30 seconds
+        raise TimeoutError("Port request timeout")
+
+# Usage
+manager = AlianzaNumberManager(
+    'https://api.alianza.com',
+    'your-token',
+    'your-partition-id'
+)
+
+# Search and order
+numbers = manager.search_numbers('607', quantity=5)
+print(f"Found {len(numbers)} numbers")
+
+# Order first number
+order = manager.order_number(numbers[0]['telephoneNumber'], 'acc_123')
+print(f"Ordered: {order}")
+
+# Assign with E911
+assignment = manager.assign_to_user(
+    'acc_123',
+    'user_xyz',
+    numbers[0]['telephoneNumber'],
+    {
+        'street': '135 Front St',
+        'city': 'Binghamton',
+        'state': 'NY',
+        'zipCode': '13905'
+    }
+)
+print(f"Assigned to user: {assignment}")</code></pre>
+                </div>
+            </section>
+
+            <section class="next-steps">
+                <h2>Next Steps</h2>
+                <div class="card-grid">
+                    <a href="device-management.html" class="card">
+                        <h3>Device Management</h3>
+                        <p>Configure phones to use your telephone numbers</p>
+                    </a>
+                    <a href="call-routing.html" class="card">
+                        <h3>Call Routing</h3>
+                        <p>Set up advanced call routing and IVR systems</p>
+                    </a>
+                    <a href="account-management.html" class="card">
+                        <h3>Account Management</h3>
+                        <p>Manage accounts that own telephone numbers</p>
+                    </a>
+                    <a href="../code-examples/python.html" class="card">
+                        <h3>Code Examples</h3>
+                        <p>More implementation examples in Python, Node.js, and other languages</p>
+                    </a>
+                </div>
+            </section>
+        </div>
     </main>
-  </div>
 
-  <script src="../js/main.js"></script>
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2025 Alianza Inc. All rights reserved.</p>
+            <p>API Documentation | <a href="https://api.alianza.com">api.alianza.com</a></p>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
 </body>
 </html>
