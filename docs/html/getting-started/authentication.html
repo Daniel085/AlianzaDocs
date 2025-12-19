@@ -3,24 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Complete authentication guide for the Alianza API">
   <title>Authentication Guide - Alianza API</title>
   <link rel="stylesheet" href="../css/main.css">
   <style>
-    .markdown-note {
-      background: var(--accent-tertiary);
-      border-left: 4px solid var(--accent-primary);
-      padding: 1rem;
+    .auth-flow {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 1.5rem;
       margin: 2rem 0;
-      border-radius: var(--radius-md);
+      overflow-x: auto;
     }
-    .view-markdown-btn {
-      display: inline-block;
-      margin-top: 1rem;
-      padding: 0.5rem 1rem;
-      background: var(--accent-primary);
-      color: white;
-      text-decoration: none;
-      border-radius: var(--radius-md);
+    .auth-flow pre {
+      margin: 0;
+      font-family: 'Courier New', monospace;
+      font-size: 0.85rem;
+      line-height: 1.4;
+      white-space: pre;
     }
   </style>
 </head>
@@ -31,6 +31,9 @@
     </a>
     <nav class="docs-nav">
       <a href="../../../index.html">Home</a>
+      <a href="../architecture/diagrams.html">Architecture</a>
+      <a href="../guides/account-management.html">Guides</a>
+      <a href="../../../openapi.yaml">API Reference</a>
       <button id="theme-toggle" class="theme-toggle">🌙 Dark</button>
     </nav>
   </header>
@@ -40,24 +43,38 @@
       <div class="sidebar-section">
         <div class="sidebar-title">Getting Started</div>
         <ul class="sidebar-links">
-          <li><a href="../getting-started/quick-start.html">Quick Start</a></li>
-          <li><a href="../getting-started/authentication.html">Authentication</a></li>
+          <li><a href="quick-start.html">Quick Start</a></li>
+          <li><a href="authentication.html" class="active">Authentication</a></li>
         </ul>
       </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-title">Architecture</div>
+        <ul class="sidebar-links">
+          <li><a href="../architecture/diagrams.html">Architecture Diagrams</a></li>
+        </ul>
+      </div>
+
       <div class="sidebar-section">
         <div class="sidebar-title">Guides</div>
         <ul class="sidebar-links">
           <li><a href="../guides/account-management.html">Account Management</a></li>
           <li><a href="../guides/phone-numbers.html">Phone Numbers</a></li>
+          <li><a href="../guides/device-management.html">Device Management</a></li>
+          <li><a href="../guides/call-routing.html">Call Routing</a></li>
         </ul>
       </div>
+
       <div class="sidebar-section">
         <div class="sidebar-title">Code Examples</div>
         <ul class="sidebar-links">
           <li><a href="../code-examples/python-examples.html">Python</a></li>
           <li><a href="../code-examples/nodejs-examples.html">Node.js</a></li>
+          <li><a href="../code-examples/php-examples.html">PHP</a></li>
+          <li><a href="../code-examples/java-examples.html">Java</a></li>
         </ul>
       </div>
+
       <div class="sidebar-section">
         <div class="sidebar-title">Advanced</div>
         <ul class="sidebar-links">
@@ -69,14 +86,576 @@
 
     <main class="docs-main">
       <h1>Authentication Guide</h1>
+      <p style="font-size: 1.2rem;">Complete guide to authenticating with the Alianza API, managing tokens, and implementing security best practices.</p>
 
-      <div class="markdown-note">
-        <strong>📝 Note:</strong> This page is being converted from markdown to interactive HTML.
-        <br>
-        <a href="../../../docs/getting-started/authentication.md" class="view-markdown-btn">View Markdown Version →</a>
+      <h2 id="overview">Authentication Overview</h2>
+      <p>The Alianza API uses <strong>token-based authentication</strong> via the <code>X-AUTH-TOKEN</code> header. All API endpoints (except the authentication endpoints themselves) require a valid token.</p>
+
+      <div class="alert alert-info">
+        <strong>💡 Key Concept</strong>: You authenticate once with credentials, receive a token, then use that token for all subsequent API calls.
       </div>
 
-      <p>Interactive HTML version coming soon. For now, please refer to the markdown version above.</p>
+      <h3>Authentication Flow</h3>
+      <div class="auth-flow">
+        <pre>┌─────────┐                    ┌──────────────┐
+│ Client  │                    │ Alianza API  │
+└────┬────┘                    └──────┬───────┘
+     │                                │
+     │ POST /v2/authorize             │
+     │ {username, password}           │
+     ├───────────────────────────────>│
+     │                                │
+     │ 200 OK                         │
+     │ {authToken: "xyz..."}          │
+     │<───────────────────────────────┤
+     │                                │
+     │ Store token securely           │
+     │                                │
+     │ GET /v2/partition/123/account  │
+     │ X-AUTH-TOKEN: xyz...           │
+     ├───────────────────────────────>│
+     │                                │
+     │ 200 OK                         │
+     │ {accounts: [...]}              │
+     │<───────────────────────────────┤</pre>
+      </div>
+
+      <h2 id="methods">Authentication Methods</h2>
+
+      <h3>1. Username/Password Authentication (Primary)</h3>
+      <p>The standard authentication method using credentials.</p>
+
+      <div class="card">
+        <div class="card-title">Endpoint</div>
+        <code>POST /v2/authorize</code>
+      </div>
+
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">Request</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>{
+  "userName": "your-username",
+  "password": "your-password"
+}</code></pre>
+      </div>
+
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">Response</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>{
+  "authToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "tokenType": "Bearer",
+  "expiresIn": 3600,
+  "userId": "user123",
+  "partitionId": "partition123",
+  "userType": "MANAGEMENT_USER",
+  "userName": "your-username",
+  "partitionName": "Your Company"
+}</code></pre>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Response Fields</div>
+        <ul>
+          <li><code>authToken</code>: The token to include in subsequent requests (required)</li>
+          <li><code>expiresIn</code>: Token lifetime in seconds (typically 3600 = 1 hour)</li>
+          <li><code>partitionId</code>: Your partition ID (needed for most API calls)</li>
+          <li><code>userId</code>: Your user ID</li>
+          <li><code>userType</code>: User role (MANAGEMENT_USER, END_USER, ACCOUNT_USER)</li>
+        </ul>
+      </div>
+
+      <h3>2. JWT Authentication (Advanced)</h3>
+      <p>For Single Sign-On (SSO) integrations.</p>
+
+      <div class="card">
+        <div class="card-title">Requirements</div>
+        <ul>
+          <li>Pre-configured JWT integration with Alianza</li>
+          <li>Alianza must have your public key</li>
+          <li>Contact your account manager to set up</li>
+        </ul>
+      </div>
+
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">Endpoint & Request</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>POST /v2/authorize/jwt
+
+{
+  "token": "your-signed-jwt-token"
+}</code></pre>
+      </div>
+
+      <h3>3. SSO Authentication</h3>
+      <p>OAuth 2.0 / OpenID Connect flow for Single Sign-On.</p>
+
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">Step 1: Get SSO Configuration</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>GET /v2/authorize/sso</code></pre>
+      </div>
+
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">Step 2: Exchange Code for Token</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>POST /v2/authorize/sso?code={auth_code}&redirect_uri={uri}</code></pre>
+      </div>
+
+      <h2 id="using-tokens">Using the Authentication Token</h2>
+      <p>All authenticated requests must include the token in the <code>X-AUTH-TOKEN</code> header:</p>
+
+      <div class="language-tabs">
+        <div class="tab-buttons">
+          <button class="tab-button active" data-lang="curl">cURL</button>
+          <button class="tab-button" data-lang="python">Python</button>
+          <button class="tab-button" data-lang="javascript">Node.js</button>
+        </div>
+
+        <div class="tab-content active" data-lang="curl">
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-language">Bash</span>
+              <button class="copy-button">Copy</button>
+            </div>
+            <pre><code>curl -X GET https://api.alianza.com/v2/partition/123/account \
+  -H "X-AUTH-TOKEN: your-auth-token-here" \
+  -H "Content-Type: application/json"</code></pre>
+          </div>
+        </div>
+
+        <div class="tab-content" data-lang="python">
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-language">Python</span>
+              <button class="copy-button">Copy</button>
+            </div>
+            <pre><code>import requests
+
+headers = {
+    'X-AUTH-TOKEN': 'your-auth-token-here',
+    'Content-Type': 'application/json'
+}
+
+response = requests.get(
+    'https://api.alianza.com/v2/partition/123/account',
+    headers=headers
+)</code></pre>
+          </div>
+        </div>
+
+        <div class="tab-content" data-lang="javascript">
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-language">JavaScript</span>
+              <button class="copy-button">Copy</button>
+            </div>
+            <pre><code>const axios = require('axios');
+
+const config = {
+  headers: {
+    'X-AUTH-TOKEN': 'your-auth-token-here',
+    'Content-Type': 'application/json'
+  }
+};
+
+const response = await axios.get(
+  'https://api.alianza.com/v2/partition/123/account',
+  config
+);</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <h2 id="token-management">Token Management</h2>
+
+      <h3>Token Expiration</h3>
+      <ul>
+        <li><strong>Default Lifetime</strong>: 1 hour (3600 seconds)</li>
+        <li><strong>Expiration Handling</strong>: When a token expires, you'll receive a <code>401 Unauthorized</code> response</li>
+        <li><strong>Best Practice</strong>: Refresh token proactively before expiration</li>
+      </ul>
+
+      <h3>Refreshing Tokens</h3>
+      <p>Tokens cannot be refreshed - you must re-authenticate. Here's a complete example with automatic re-authentication:</p>
+
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">Python</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>import requests
+import time
+
+class AlianzaClient:
+    def __init__(self, username, password, base_url):
+        self.username = username
+        self.password = password
+        self.base_url = base_url
+        self.token = None
+        self.token_expiry = None
+
+    def authenticate(self):
+        """Obtain a new authentication token"""
+        response = requests.post(
+            f'{self.base_url}/v2/authorize',
+            json={'userName': self.username, 'password': self.password}
+        )
+        data = response.json()
+        self.token = data['authToken']
+        self.token_expiry = time.time() + data['expiresIn']
+        return self.token
+
+    def ensure_authenticated(self):
+        """Re-authenticate if token is expired or missing"""
+        if not self.token or time.time() >= self.token_expiry - 60:
+            self.authenticate()
+
+    def make_request(self, method, endpoint, **kwargs):
+        """Make an authenticated API request"""
+        self.ensure_authenticated()
+        headers = kwargs.pop('headers', {})
+        headers['X-AUTH-TOKEN'] = self.token
+
+        response = requests.request(
+            method,
+            f'{self.base_url}{endpoint}',
+            headers=headers,
+            **kwargs
+        )
+
+        # Handle token expiration
+        if response.status_code == 401:
+            self.authenticate()
+            headers['X-AUTH-TOKEN'] = self.token
+            response = requests.request(method, f'{self.base_url}{endpoint}',
+                                       headers=headers, **kwargs)
+
+        return response</code></pre>
+      </div>
+
+      <h3>Logging Out</h3>
+      <p>Explicitly invalidate a token when done:</p>
+
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">Bash</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>curl -X PUT https://api.alianza.com/v2/authorize/logout \
+  -H "X-AUTH-TOKEN: your-auth-token"
+
+# Response: 200 OK (no body)</code></pre>
+      </div>
+
+      <h2 id="security">Security Best Practices</h2>
+
+      <div class="card">
+        <div class="card-title">1. Store Credentials Securely</div>
+        <p><strong>Never hardcode credentials</strong>. Use environment variables or secure credential management:</p>
+
+        <div class="language-tabs">
+          <div class="tab-buttons">
+            <button class="tab-button active" data-lang="python">Python</button>
+            <button class="tab-button" data-lang="javascript">Node.js</button>
+          </div>
+
+          <div class="tab-content active" data-lang="python">
+            <div class="code-block">
+              <pre><code>import os
+
+username = os.environ.get('ALIANZA_USERNAME')
+password = os.environ.get('ALIANZA_PASSWORD')</code></pre>
+            </div>
+          </div>
+
+          <div class="tab-content" data-lang="javascript">
+            <div class="code-block">
+              <pre><code>// Node.js with dotenv
+require('dotenv').config();
+
+const username = process.env.ALIANZA_USERNAME;
+const password = process.env.ALIANZA_PASSWORD;</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">2. Protect Tokens in Transit</div>
+        <ul>
+          <li><strong>Always use HTTPS</strong>: Never send tokens over HTTP</li>
+          <li><strong>TLS 1.2+</strong>: Ensure your HTTP client uses modern TLS</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-title">3. Protect Tokens at Rest</div>
+        <ul>
+          <li><strong>Server-side</strong>: Store tokens in secure session storage or encrypted databases</li>
+          <li><strong>Client-side</strong>: Use secure storage mechanisms (not localStorage for sensitive apps)</li>
+          <li><strong>Never log tokens</strong>: Redact tokens from application logs</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-title">4. Implement Token Rotation</div>
+        <p>For long-running applications:</p>
+        <div class="code-block">
+          <pre><code>import threading
+import time
+
+class TokenRefresher:
+    def __init__(self, client, refresh_interval=3000):  # 50 minutes
+        self.client = client
+        self.refresh_interval = refresh_interval
+        self.running = False
+
+    def start(self):
+        """Start automatic token refresh"""
+        self.running = True
+        self.thread = threading.Thread(target=self._refresh_loop)
+        self.thread.daemon = True
+        self.thread.start()
+
+    def _refresh_loop(self):
+        while self.running:
+            time.sleep(self.refresh_interval)
+            try:
+                self.client.authenticate()
+            except Exception as e:
+                print(f"Token refresh failed: {e}")
+
+    def stop(self):
+        self.running = False</code></pre>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">5. Handle Authentication Errors Gracefully</div>
+        <div class="code-block">
+          <pre><code>def handle_auth_error(response):
+    if response.status_code == 401:
+        # Token expired or invalid
+        return {'error': 'Authentication required', 'action': 'refresh_token'}
+    elif response.status_code == 403:
+        # Authenticated but not authorized
+        return {'error': 'Insufficient permissions', 'action': 'check_roles'}
+    return None</code></pre>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">6. Use Different Credentials Per Environment</div>
+        <p>Maintain separate credentials for each environment:</p>
+        <div class="code-block">
+          <pre><code># Development
+ALIANZA_DEV_USERNAME=dev-user
+ALIANZA_DEV_PASSWORD=dev-pass
+ALIANZA_DEV_URL=https://api.d2.alianza.com
+
+# Production
+ALIANZA_PROD_USERNAME=prod-user
+ALIANZA_PROD_PASSWORD=prod-pass
+ALIANZA_PROD_URL=https://api.alianza.com</code></pre>
+        </div>
+      </div>
+
+      <h2 id="user-types">User Types and Permissions</h2>
+      <p>Different user types have different access levels:</p>
+
+      <div class="card">
+        <div class="card-title">Management User</div>
+        <ul>
+          <li><strong>Access</strong>: Full partition management</li>
+          <li><strong>Can</strong>: Create/modify accounts, users, devices, numbers</li>
+          <li><strong>Typical Use</strong>: Service provider administrators</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Account User</div>
+        <ul>
+          <li><strong>Access</strong>: Manage specific account(s)</li>
+          <li><strong>Can</strong>: Modify account settings, users within account</li>
+          <li><strong>Cannot</strong>: Create new accounts or access other accounts</li>
+          <li><strong>Typical Use</strong>: Business account administrators</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-title">End User</div>
+        <ul>
+          <li><strong>Access</strong>: Personal settings only</li>
+          <li><strong>Can</strong>: Modify own voicemail, call forwarding, etc.</li>
+          <li><strong>Cannot</strong>: Modify account or other users</li>
+          <li><strong>Typical Use</strong>: Individual phone users</li>
+        </ul>
+      </div>
+
+      <h2 id="password">Password Management</h2>
+
+      <h3>Update Password</h3>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">Bash</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>curl -X PUT https://api.alianza.com/v2/authorize \
+  -H "Content-Type: application/json" \
+  -d '{
+    "userName": "your-username",
+    "password": "current-password",
+    "newPassword": "new-secure-password"
+  }'</code></pre>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Password Requirements</div>
+        <ul>
+          <li>Minimum 8 characters</li>
+          <li>Contains uppercase and lowercase letters</li>
+          <li>Contains at least one number</li>
+          <li>Contains at least one special character</li>
+          <li>Cannot reuse recent passwords</li>
+        </ul>
+      </div>
+
+      <h2 id="errors">Common Authentication Errors</h2>
+
+      <table style="width: 100%; border-collapse: collapse; margin: 1.5rem 0;">
+        <thead>
+          <tr style="background: var(--bg-secondary); border-bottom: 2px solid var(--border-color);">
+            <th style="padding: 0.75rem; text-align: left;">Status Code</th>
+            <th style="padding: 0.75rem; text-align: left;">Error</th>
+            <th style="padding: 0.75rem; text-align: left;">Meaning</th>
+            <th style="padding: 0.75rem; text-align: left;">Solution</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom: 1px solid var(--border-color);">
+            <td style="padding: 0.75rem;"><code>401</code></td>
+            <td style="padding: 0.75rem;">Unauthorized</td>
+            <td style="padding: 0.75rem;">Invalid credentials or expired token</td>
+            <td style="padding: 0.75rem;">Re-authenticate</td>
+          </tr>
+          <tr style="border-bottom: 1px solid var(--border-color);">
+            <td style="padding: 0.75rem;"><code>400</code></td>
+            <td style="padding: 0.75rem;">Invalid Request</td>
+            <td style="padding: 0.75rem;">Malformed login request</td>
+            <td style="padding: 0.75rem;">Check request format</td>
+          </tr>
+          <tr style="border-bottom: 1px solid var(--border-color);">
+            <td style="padding: 0.75rem;"><code>404</code></td>
+            <td style="padding: 0.75rem;">Not Found</td>
+            <td style="padding: 0.75rem;">User not found</td>
+            <td style="padding: 0.75rem;">Verify username</td>
+          </tr>
+          <tr style="border-bottom: 1px solid var(--border-color);">
+            <td style="padding: 0.75rem;"><code>429</code></td>
+            <td style="padding: 0.75rem;">Too Many Requests</td>
+            <td style="padding: 0.75rem;">Rate limit exceeded</td>
+            <td style="padding: 0.75rem;">Implement backoff</td>
+          </tr>
+          <tr style="border-bottom: 1px solid var(--border-color);">
+            <td style="padding: 0.75rem;"><code>500</code></td>
+            <td style="padding: 0.75rem;">Internal Error</td>
+            <td style="padding: 0.75rem;">Server error</td>
+            <td style="padding: 0.75rem;">Retry with backoff</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Example Error Response</h3>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">JSON</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>{
+  "errorCode": "UNAUTHORIZED",
+  "message": "Invalid credentials",
+  "timestamp": "2025-12-18T15:30:00Z",
+  "path": "/v2/authorize"
+}</code></pre>
+      </div>
+
+      <h2 id="testing">Testing Authentication</h2>
+
+      <div class="alert alert-warning">
+        <strong>⚠️ Always Test in Development First</strong>
+        <p>Test authentication in the development environment before production:</p>
+      </div>
+
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">Development Environment</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>curl -X POST https://api.d2.alianza.com/v2/authorize \
+  -H "Content-Type: application/json" \
+  -d '{"userName": "dev-user", "password": "dev-pass"}'</code></pre>
+      </div>
+
+      <h3>Verify Token Validity</h3>
+      <p>Test your token with a simple GET request:</p>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">Bash</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>curl -X GET https://api.alianza.com/v2/authorize/userinfo \
+  -H "X-AUTH-TOKEN: your-token"
+
+# This returns information about the authenticated user</code></pre>
+      </div>
+
+      <div class="alert alert-success">
+        <strong>✅ You're Ready!</strong> You now understand how to authenticate with the Alianza API. Check out the guides below to start building.
+      </div>
+
+      <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border-color);">
+        <h2>Next Steps</h2>
+        <div class="nav-cards" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+          <a href="quick-start.html" class="card" style="text-decoration: none;">
+            <div class="card-title">Quick Start Guide</div>
+            <p>Get started with your first API call</p>
+          </a>
+          <a href="../code-examples/python-examples.html" class="card" style="text-decoration: none;">
+            <div class="card-title">Code Examples</div>
+            <p>See authentication in multiple languages</p>
+          </a>
+          <a href="../advanced/best-practices.html" class="card" style="text-decoration: none;">
+            <div class="card-title">Best Practices</div>
+            <p>Security and performance tips</p>
+          </a>
+          <a href="../advanced/error-handling.html" class="card" style="text-decoration: none;">
+            <div class="card-title">Error Handling</div>
+            <p>Handle errors gracefully</p>
+          </a>
+        </div>
+      </div>
+
+      <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border-color);">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <a href="quick-start.html" class="btn btn-secondary">← Quick Start</a>
+          </div>
+          <div>
+            <a href="../guides/account-management.html" class="btn btn-primary">Account Management →</a>
+          </div>
+        </div>
+      </div>
     </main>
   </div>
 
