@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Complete guide to webhooks in the Alianza API for real-time event notifications">
+  <title>Webhooks Guide - Alianza API</title>
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <header class="docs-header">
+    <a href="../../../index.html" class="docs-logo">
+      <span>📞</span> Alianza API
+    </a>
+    <nav class="docs-nav">
+      <a href="../../../index.html">Home</a>
+      <a href="../architecture/diagrams.html">Architecture</a>
+      <a href="../guides/account-management.html">Guides</a>
+      <a href="../../../openapi.yaml">API Reference</a>
+      <button id="theme-toggle" class="theme-toggle">🌙 Dark</button>
+    </nav>
+  </header>
+
+  <div class="docs-container">
+    <aside class="docs-sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-title">Getting Started</div>
+        <ul class="sidebar-links">
+          <li><a href="../getting-started/quick-start.html">Quick Start</a></li>
+          <li><a href="../getting-started/authentication.html">Authentication</a></li>
+        </ul>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-title">Architecture</div>
+        <ul class="sidebar-links">
+          <li><a href="../architecture/diagrams.html">Architecture Diagrams</a></li>
+        </ul>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-title">Guides</div>
+        <ul class="sidebar-links">
+          <li><a href="../guides/account-management.html">Account Management</a></li>
+          <li><a href="../guides/phone-numbers.html">Phone Numbers</a></li>
+          <li><a href="../guides/device-management.html">Device Management</a></li>
+          <li><a href="../guides/call-routing.html">Call Routing</a></li>
+          <li><a href="../guides/user-provisioning.html">User Provisioning</a></li>
+        </ul>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-title">Code Examples</div>
+        <ul class="sidebar-links">
+          <li><a href="../code-examples/python-examples.html">Python</a></li>
+          <li><a href="../code-examples/nodejs-examples.html">Node.js</a></li>
+          <li><a href="../code-examples/php-examples.html">PHP</a></li>
+          <li><a href="../code-examples/java-examples.html">Java</a></li>
+          <li><a href="../code-examples/csharp-examples.html">C#</a></li>
+          <li><a href="../code-examples/ruby-examples.html">Ruby</a></li>
+        </ul>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-title">Advanced</div>
+        <ul class="sidebar-links">
+          <li><a href="error-handling.html">Error Handling</a></li>
+          <li><a href="best-practices.html">Best Practices</a></li>
+          <li><a href="webhooks.html" class="active">Webhooks</a></li>
+        </ul>
+      </div>
+    </aside>
+
+    <main class="docs-main">
+      <h1><i class="fas fa-bolt"></i> Webhooks Guide</h1>
+      <p style="font-size: 1.2rem;">Configure real-time event notifications from the Alianza platform using webhooks. Receive instant updates about calls, users, accounts, and more.</p>
+
+      <div class="alert alert-info">
+        <strong><i class="fas fa-info-circle"></i> What are Webhooks?</strong>
+        <p>Webhooks are HTTP callbacks that allow Alianza to push real-time event notifications to your application. Instead of polling the API repeatedly, webhooks deliver data immediately when events occur.</p>
+      </div>
+
+      <h2 id="overview">Webhook Overview</h2>
+
+      <h3>How Webhooks Work</h3>
+      <ol>
+        <li><strong>Configure</strong>: Register your webhook URL with Alianza</li>
+        <li><strong>Event Occurs</strong>: An event happens (call completed, user created, etc.)</li>
+        <li><strong>HTTP POST</strong>: Alianza sends an HTTP POST to your webhook URL</li>
+        <li><strong>Process</strong>: Your application receives and processes the event data</li>
+        <li><strong>Respond</strong>: Return HTTP 200 to acknowledge receipt</li>
+      </ol>
+
+      <h3>Benefits</h3>
+      <ul>
+        <li><strong>Real-time Updates</strong>: Receive events instantly as they occur</li>
+        <li><strong>Reduced API Calls</strong>: No need to poll for changes</li>
+        <li><strong>Event-Driven Architecture</strong>: Build reactive applications</li>
+        <li><strong>Lower Latency</strong>: Immediate notification vs periodic polling</li>
+      </ul>
+
+      <h2 id="setup">Setting Up Webhooks</h2>
+
+      <h3>Register a Webhook</h3>
+      <p>Configure a webhook subscription for specific event types:</p>
+
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">Endpoint</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>POST /v2/partition/{partitionId}/webhook</code></pre>
+      </div>
+
+      <div class="language-tabs">
+        <div class="tab-buttons">
+          <button class="tab-button active" data-lang="python">Python</button>
+          <button class="tab-button" data-lang="nodejs">Node.js</button>
+          <button class="tab-button" data-lang="curl">cURL</button>
+        </div>
+
+        <div class="tab-content active" data-lang="python">
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-language">Python</span>
+              <button class="copy-button">Copy</button>
+            </div>
+            <pre><code>import requests
+
+def register_webhook(token, partition_id, webhook_config):
+    """Register a new webhook subscription"""
+    url = f"https://api.alianza.com/v2/partition/{partition_id}/webhook"
+
+    headers = {
+        'X-AUTH-TOKEN': token,
+        'Content-Type': 'application/json'
+    }
+
+    payload = {
+        'url': webhook_config['url'],
+        'events': webhook_config['events'],
+        'secret': webhook_config.get('secret'),
+        'enabled': webhook_config.get('enabled', True),
+        'description': webhook_config.get('description', '')
+    }
+
+    response = requests.post(url, json=payload, headers=headers)
+    response.raise_for_status()
+    return response.json()
+
+# Example: Register webhook for call events
+webhook_config = {
+    'url': 'https://myapp.example.com/webhooks/alianza',
+    'events': [
+        'call.completed',
+        'call.missed',
+        'voicemail.received'
+    ],
+    'secret': 'your-webhook-secret-key',
+    'enabled': True,
+    'description': 'Production call events webhook'
+}
+
+webhook = register_webhook(auth_token, '123', webhook_config)
+print(f"Webhook registered: {webhook['id']}")</code></pre>
+          </div>
+        </div>
+
+        <div class="tab-content" data-lang="nodejs">
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-language">JavaScript</span>
+              <button class="copy-button">Copy</button>
+            </div>
+            <pre><code>const axios = require('axios');
+
+async function registerWebhook(token, partitionId, webhookConfig) {
+  const url = `https://api.alianza.com/v2/partition/${partitionId}/webhook`;
+
+  const payload = {
+    url: webhookConfig.url,
+    events: webhookConfig.events,
+    secret: webhookConfig.secret,
+    enabled: webhookConfig.enabled !== undefined ? webhookConfig.enabled : true,
+    description: webhookConfig.description || ''
+  };
+
+  const config = {
+    headers: {
+      'X-AUTH-TOKEN': token,
+      'Content-Type': 'application/json'
+    }
+  };
+
+  const response = await axios.post(url, payload, config);
+  return response.data;
+}
+
+// Example: Register webhook for call events
+const webhookConfig = {
+  url: 'https://myapp.example.com/webhooks/alianza',
+  events: [
+    'call.completed',
+    'call.missed',
+    'voicemail.received'
+  ],
+  secret: 'your-webhook-secret-key',
+  enabled: true,
+  description: 'Production call events webhook'
+};
+
+const webhook = await registerWebhook(authToken, '123', webhookConfig);
+console.log(`Webhook registered: ${webhook.id}`);</code></pre>
+          </div>
+        </div>
+
+        <div class="tab-content" data-lang="curl">
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-language">Bash</span>
+              <button class="copy-button">Copy</button>
+            </div>
+            <pre><code>curl -X POST https://api.alianza.com/v2/partition/123/webhook \
+  -H "X-AUTH-TOKEN: your-auth-token" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "url": "https://myapp.example.com/webhooks/alianza",
+    "events": [
+      "call.completed",
+      "call.missed",
+      "voicemail.received"
+    ],
+    "secret": "your-webhook-secret-key",
+    "enabled": true,
+    "description": "Production call events webhook"
+  }'</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="alert alert-warning">
+        <strong><i class="fas fa-exclamation-triangle"></i> Important</strong>: Store your webhook secret securely. It's used to verify webhook authenticity and cannot be retrieved later.
+      </div>
+
+      <h2 id="event-types">Event Types</h2>
+
+      <h3>Call Events</h3>
+      <table style="width: 100%; border-collapse: collapse; margin: 1.5rem 0;">
+        <thead>
+          <tr style="background: var(--bg-secondary); border-bottom: 2px solid var(--border-color);">
+            <th style="padding: 0.75rem; text-align: left;">Event</th>
+            <th style="padding: 0.75rem; text-align: left;">Description</th>
+            <th style="padding: 0.75rem; text-align: left;">When Triggered</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom: 1px solid var(--border-color);">
+            <td style="padding: 0.75rem;"><code>call.initiated</code></td>
+            <td style="padding: 0.75rem;">Call started</td>
+            <td style="padding: 0.75rem;">When call begins dialing</td>
+          </tr>
+          <tr style="border-bottom: 1px solid var(--border-color);">
+            <td style="padding: 0.75rem;"><code>call.answered</code></td>
+            <td style="padding: 0.75rem;">Call was answered</td>
+            <td style="padding: 0.75rem;">When recipient picks up</td>
+          </tr>
+          <tr style="border-bottom: 1px solid var(--border-color);">
+            <td style="padding: 0.75rem;"><code>call.completed</code></td>
+            <td style="padding: 0.75rem;">Call ended normally</td>
+            <td style="padding: 0.75rem;">When call disconnects</td>
+          </tr>
+          <tr style="border-bottom: 1px solid var(--border-color);">
+            <td style="padding: 0.75rem;"><code>call.missed</code></td>
+            <td style="padding: 0.75rem;">Call not answered</td>
+            <td style="padding: 0.75rem;">When call times out</td>
+          </tr>
+          <tr style="border-bottom: 1px solid var(--border-color);">
+            <td style="padding: 0.75rem;"><code>call.forwarded</code></td>
+            <td style="padding: 0.75rem;">Call was forwarded</td>
+            <td style="padding: 0.75rem;">When forwarding rule applies</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>User Events</h3>
+      <table style="width: 100%; border-collapse: collapse; margin: 1.5rem 0;">
+        <thead>
+          <tr style="background: var(--bg-secondary); border-bottom: 2px solid var(--border-color);">
+            <th style="padding: 0.75rem; text-align: left;">Event</th>
+            <th style="padding: 0.75rem; text-align: left;">Description</th>
+            <th style="padding: 0.75rem; text-align: left;">When Triggered</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom: 1px solid var(--border-color);">
+            <td style="padding: 0.75rem;"><code>user.created</code></td>
+            <td style="padding: 0.75rem;">New user provisioned</td>
+            <td style="padding: 0.75rem;">After user creation</td>
+          </tr>
+          <tr style="border-bottom: 1px solid var(--border-color);">
+            <td style="padding: 0.75rem;"><code>user.updated</code></td>
+            <td style="padding: 0.75rem;">User info changed</td>
+            <td style="padding: 0.75rem;">After user update</td>
+          </tr>
+          <tr style="border-bottom: 1px solid var(--border-color);">
+            <td style="padding: 0.75rem;"><code>user.deleted</code></td>
+            <td style="padding: 0.75rem;">User removed</td>
+            <td style="padding: 0.75rem;">After user deletion</td>
+          </tr>
+          <tr style="border-bottom: 1px solid var(--border-color);">
+            <td style="padding: 0.75rem;"><code>voicemail.received</code></td>
+            <td style="padding: 0.75rem;">New voicemail</td>
+            <td style="padding: 0.75rem;">When voicemail left</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Account Events</h3>
+      <table style="width: 100%; border-collapse: collapse; margin: 1.5rem 0;">
+        <thead>
+          <tr style="background: var(--bg-secondary); border-bottom: 2px solid var(--border-color);">
+            <th style="padding: 0.75rem; text-align: left;">Event</th>
+            <th style="padding: 0.75rem; text-align: left;">Description</th>
+            <th style="padding: 0.75rem; text-align: left;">When Triggered</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom: 1px solid var(--border-color);">
+            <td style="padding: 0.75rem;"><code>account.created</code></td>
+            <td style="padding: 0.75rem;">New account provisioned</td>
+            <td style="padding: 0.75rem;">After account creation</td>
+          </tr>
+          <tr style="border-bottom: 1px solid var(--border-color);">
+            <td style="padding: 0.75rem;"><code>account.suspended</code></td>
+            <td style="padding: 0.75rem;">Account suspended</td>
+            <td style="padding: 0.75rem;">When account disabled</td>
+          </tr>
+          <tr style="border-bottom: 1px solid var(--border-color);">
+            <td style="padding: 0.75rem;"><code>account.reactivated</code></td>
+            <td style="padding: 0.75rem;">Account reactivated</td>
+            <td style="padding: 0.75rem;">When account re-enabled</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Phone Number Events</h3>
+      <table style="width: 100%; border-collapse: collapse; margin: 1.5rem 0;">
+        <thead>
+          <tr style="background: var(--bg-secondary); border-bottom: 2px solid var(--border-color);">
+            <th style="padding: 0.75rem; text-align: left;">Event</th>
+            <th style="padding: 0.75rem; text-align: left;">Description</th>
+            <th style="padding: 0.75rem; text-align: left;">When Triggered</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom: 1px solid var(--border-color);">
+            <td style="padding: 0.75rem;"><code>number.ported</code></td>
+            <td style="padding: 0.75rem;">Number port completed</td>
+            <td style="padding: 0.75rem;">When port-in finishes</td>
+          </tr>
+          <tr style="border-bottom: 1px solid var(--border-color);">
+            <td style="padding: 0.75rem;"><code>number.assigned</code></td>
+            <td style="padding: 0.75rem;">Number assigned to user</td>
+            <td style="padding: 0.75rem;">After number assignment</td>
+          </tr>
+          <tr style="border-bottom: 1px solid var(--border-color);">
+            <td style="padding: 0.75rem;"><code>number.released</code></td>
+            <td style="padding: 0.75rem;">Number released</td>
+            <td style="padding: 0.75rem;">When number returned</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2 id="payload-structure">Webhook Payload Structure</h2>
+
+      <h3>Common Headers</h3>
+      <p>Every webhook request includes these headers:</p>
+
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">HTTP Headers</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>Content-Type: application/json
+X-Alianza-Signature: sha256=abc123...
+X-Alianza-Event: call.completed
+X-Alianza-Delivery-ID: delivery-uuid-123
+X-Alianza-Timestamp: 2025-12-19T10:30:00Z</code></pre>
+      </div>
+
+      <h3>Payload Structure</h3>
+      <p>All webhook payloads follow this structure:</p>
+
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">JSON Payload</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>{
+  "id": "event-uuid-123",
+  "event": "call.completed",
+  "timestamp": "2025-12-19T10:30:00Z",
+  "partitionId": "partition-123",
+  "data": {
+    // Event-specific data
+  }
+}</code></pre>
+      </div>
+
+      <h3>Example: Call Completed Event</h3>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">JSON</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>{
+  "id": "evt_call_7x9k2m",
+  "event": "call.completed",
+  "timestamp": "2025-12-19T10:30:45Z",
+  "partitionId": "partition-123",
+  "data": {
+    "callId": "call-abc-123",
+    "direction": "inbound",
+    "from": "+15551234567",
+    "to": "+15559876543",
+    "duration": 183,
+    "status": "completed",
+    "answeredAt": "2025-12-19T10:28:05Z",
+    "endedAt": "2025-12-19T10:30:45Z",
+    "accountId": "acct-456",
+    "userId": "user-789",
+    "recordingUrl": "https://api.alianza.com/v2/recordings/rec-xyz"
+  }
+}</code></pre>
+      </div>
+
+      <h3>Example: User Created Event</h3>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">JSON</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>{
+  "id": "evt_user_3n8p1q",
+  "event": "user.created",
+  "timestamp": "2025-12-19T09:15:00Z",
+  "partitionId": "partition-123",
+  "data": {
+    "userId": "user-new-123",
+    "accountId": "acct-456",
+    "userName": "jdoe",
+    "firstName": "John",
+    "lastName": "Doe",
+    "emailAddress": "john.doe@example.com",
+    "extension": "1001",
+    "userType": "END_USER",
+    "createdBy": "admin-user-001"
+  }
+}</code></pre>
+      </div>
+
+      <h2 id="receiving-webhooks">Receiving Webhooks</h2>
+
+      <h3>Python Webhook Server (Flask)</h3>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">Python</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>from flask import Flask, request, jsonify
+import hmac
+import hashlib
+
+app = Flask(__name__)
+WEBHOOK_SECRET = 'your-webhook-secret-key'
+
+def verify_signature(payload, signature):
+    """Verify webhook signature"""
+    expected = 'sha256=' + hmac.new(
+        WEBHOOK_SECRET.encode(),
+        payload,
+        hashlib.sha256
+    ).hexdigest()
+    return hmac.compare_digest(expected, signature)
+
+@app.route('/webhooks/alianza', methods=['POST'])
+def webhook_handler():
+    # Verify signature
+    signature = request.headers.get('X-Alianza-Signature')
+    if not verify_signature(request.data, signature):
+        return jsonify({'error': 'Invalid signature'}), 401
+
+    # Parse event
+    event = request.json
+    event_type = event.get('event')
+
+    # Handle different event types
+    if event_type == 'call.completed':
+        handle_call_completed(event['data'])
+    elif event_type == 'user.created':
+        handle_user_created(event['data'])
+    elif event_type == 'voicemail.received':
+        handle_voicemail_received(event['data'])
+
+    # Always return 200 to acknowledge receipt
+    return jsonify({'received': True}), 200
+
+def handle_call_completed(data):
+    """Process completed call event"""
+    print(f"Call completed: {data['callId']}")
+    print(f"Duration: {data['duration']} seconds")
+    # Store in database, send notification, etc.
+
+def handle_user_created(data):
+    """Process user created event"""
+    print(f"New user: {data['userName']}")
+    # Send welcome email, provision in other systems, etc.
+
+def handle_voicemail_received(data):
+    """Process voicemail event"""
+    print(f"New voicemail for user: {data['userId']}")
+    # Send email notification, SMS alert, etc.
+
+if __name__ == '__main__':
+    app.run(port=8080)</code></pre>
+      </div>
+
+      <h3>Node.js Webhook Server (Express)</h3>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">JavaScript</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>const express = require('express');
+const crypto = require('crypto');
+
+const app = express();
+const WEBHOOK_SECRET = 'your-webhook-secret-key';
+
+// Parse raw body for signature verification
+app.use(express.json({
+  verify: (req, res, buf) => {
+    req.rawBody = buf.toString();
+  }
+}));
+
+function verifySignature(payload, signature) {
+  const expected = 'sha256=' + crypto
+    .createHmac('sha256', WEBHOOK_SECRET)
+    .update(payload)
+    .digest('hex');
+  return crypto.timingSafeEqual(
+    Buffer.from(expected),
+    Buffer.from(signature)
+  );
+}
+
+app.post('/webhooks/alianza', (req, res) => {
+  // Verify signature
+  const signature = req.headers['x-alianza-signature'];
+  if (!verifySignature(req.rawBody, signature)) {
+    return res.status(401).json({ error: 'Invalid signature' });
+  }
+
+  // Parse event
+  const event = req.body;
+  const eventType = event.event;
+
+  // Handle different event types
+  switch (eventType) {
+    case 'call.completed':
+      handleCallCompleted(event.data);
+      break;
+    case 'user.created':
+      handleUserCreated(event.data);
+      break;
+    case 'voicemail.received':
+      handleVoicemailReceived(event.data);
+      break;
+  }
+
+  // Always return 200 to acknowledge receipt
+  res.json({ received: true });
+});
+
+function handleCallCompleted(data) {
+  console.log(`Call completed: ${data.callId}`);
+  console.log(`Duration: ${data.duration} seconds`);
+  // Store in database, send notification, etc.
+}
+
+function handleUserCreated(data) {
+  console.log(`New user: ${data.userName}`);
+  // Send welcome email, provision in other systems, etc.
+}
+
+function handleVoicemailReceived(data) {
+  console.log(`New voicemail for user: ${data.userId}`);
+  // Send email notification, SMS alert, etc.
+}
+
+app.listen(8080, () => {
+  console.log('Webhook server running on port 8080');
+});</code></pre>
+      </div>
+
+      <h3>PHP Webhook Handler</h3>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">PHP</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code><?php
+
+define('WEBHOOK_SECRET', 'your-webhook-secret-key');
+
+function verifySignature($payload, $signature) {
+    $expected = 'sha256=' . hash_hmac('sha256', $payload, WEBHOOK_SECRET);
+    return hash_equals($expected, $signature);
+}
+
+function handleCallCompleted($data) {
+    error_log("Call completed: " . $data['callId']);
+    error_log("Duration: " . $data['duration'] . " seconds");
+    // Store in database, send notification, etc.
+}
+
+function handleUserCreated($data) {
+    error_log("New user: " . $data['userName']);
+    // Send welcome email, provision in other systems, etc.
+}
+
+function handleVoicemailReceived($data) {
+    error_log("New voicemail for user: " . $data['userId']);
+    // Send email notification, SMS alert, etc.
+}
+
+// Get raw POST body
+$payload = file_get_contents('php://input');
+$signature = $_SERVER['HTTP_X_ALIANZA_SIGNATURE'] ?? '';
+
+// Verify signature
+if (!verifySignature($payload, $signature)) {
+    http_response_code(401);
+    echo json_encode(['error' => 'Invalid signature']);
+    exit;
+}
+
+// Parse event
+$event = json_decode($payload, true);
+$eventType = $event['event'];
+
+// Handle different event types
+switch ($eventType) {
+    case 'call.completed':
+        handleCallCompleted($event['data']);
+        break;
+    case 'user.created':
+        handleUserCreated($event['data']);
+        break;
+    case 'voicemail.received':
+        handleVoicemailReceived($event['data']);
+        break;
+}
+
+// Always return 200 to acknowledge receipt
+http_response_code(200);
+echo json_encode(['received' => true]);
+
+?></code></pre>
+      </div>
+
+      <h2 id="security">Security Best Practices</h2>
+
+      <div class="card">
+        <div class="card-title"><i class="fas fa-shield-alt"></i> 1. Verify Signatures</div>
+        <p>Always verify the <code>X-Alianza-Signature</code> header to ensure webhooks are from Alianza:</p>
+        <div class="code-block">
+          <pre><code># The signature is computed as:
+signature = sha256(webhook_secret + request_body)
+
+# Always use constant-time comparison to prevent timing attacks
+hmac.compare_digest(expected, received)</code></pre>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><i class="fas fa-lock"></i> 2. Use HTTPS</div>
+        <ul>
+          <li>Webhook URLs must use HTTPS (not HTTP)</li>
+          <li>Ensure valid SSL/TLS certificates</li>
+          <li>Use TLS 1.2 or higher</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><i class="fas fa-key"></i> 3. Protect Secrets</div>
+        <ul>
+          <li>Store webhook secrets in environment variables</li>
+          <li>Never commit secrets to version control</li>
+          <li>Rotate secrets periodically</li>
+          <li>Use different secrets for dev/staging/production</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><i class="fas fa-clock"></i> 4. Check Timestamps</div>
+        <p>Prevent replay attacks by validating the <code>X-Alianza-Timestamp</code> header:</p>
+        <div class="code-block">
+          <pre><code>from datetime import datetime, timedelta
+
+def is_recent_webhook(timestamp_header, max_age=300):
+    """Ensure webhook is recent (within 5 minutes)"""
+    webhook_time = datetime.fromisoformat(timestamp_header.replace('Z', '+00:00'))
+    age = (datetime.now(timezone.utc) - webhook_time).total_seconds()
+    return age < max_age</code></pre>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><i class="fas fa-database"></i> 5. Idempotency</div>
+        <p>Handle duplicate webhook deliveries gracefully:</p>
+        <ul>
+          <li>Use the <code>X-Alianza-Delivery-ID</code> header to detect duplicates</li>
+          <li>Store processed delivery IDs to prevent reprocessing</li>
+          <li>Design handlers to be idempotent</li>
+        </ul>
+        <div class="code-block">
+          <pre><code>processed_deliveries = set()
+
+def handle_webhook(event):
+    delivery_id = request.headers.get('X-Alianza-Delivery-ID')
+
+    if delivery_id in processed_deliveries:
+        return {'status': 'already_processed'}
+
+    # Process event
+    process_event(event)
+
+    # Mark as processed
+    processed_deliveries.add(delivery_id)
+    return {'status': 'processed'}</code></pre>
+        </div>
+      </div>
+
+      <h2 id="management">Managing Webhooks</h2>
+
+      <h3>List All Webhooks</h3>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">Python</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>def list_webhooks(token, partition_id):
+    """List all webhook subscriptions"""
+    url = f"https://api.alianza.com/v2/partition/{partition_id}/webhook"
+
+    headers = {
+        'X-AUTH-TOKEN': token
+    }
+
+    response = requests.get(url, headers=headers)
+    response.raise_for_status()
+    return response.json()
+
+webhooks = list_webhooks(auth_token, '123')
+for webhook in webhooks['items']:
+    print(f"ID: {webhook['id']}")
+    print(f"URL: {webhook['url']}")
+    print(f"Events: {', '.join(webhook['events'])}")
+    print(f"Enabled: {webhook['enabled']}")
+    print("---")</code></pre>
+      </div>
+
+      <h3>Update Webhook</h3>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">Python</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>def update_webhook(token, partition_id, webhook_id, updates):
+    """Update webhook configuration"""
+    url = f"https://api.alianza.com/v2/partition/{partition_id}/webhook/{webhook_id}"
+
+    headers = {
+        'X-AUTH-TOKEN': token,
+        'Content-Type': 'application/json'
+    }
+
+    response = requests.put(url, json=updates, headers=headers)
+    response.raise_for_status()
+    return response.json()
+
+# Add more events to existing webhook
+updates = {
+    'events': [
+        'call.completed',
+        'call.missed',
+        'voicemail.received',
+        'user.created',
+        'user.updated'
+    ]
+}
+
+update_webhook(auth_token, '123', 'webhook-456', updates)</code></pre>
+      </div>
+
+      <h3>Delete Webhook</h3>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">Python</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>def delete_webhook(token, partition_id, webhook_id):
+    """Delete a webhook subscription"""
+    url = f"https://api.alianza.com/v2/partition/{partition_id}/webhook/{webhook_id}"
+
+    headers = {
+        'X-AUTH-TOKEN': token
+    }
+
+    response = requests.delete(url, headers=headers)
+    response.raise_for_status()
+    return True
+
+delete_webhook(auth_token, '123', 'webhook-456')
+print("Webhook deleted")</code></pre>
+      </div>
+
+      <h2 id="retry-logic">Retry and Delivery</h2>
+
+      <h3>Delivery Behavior</h3>
+      <ul>
+        <li><strong>Timeout</strong>: Webhook must respond within 5 seconds</li>
+        <li><strong>Success</strong>: HTTP status 200-299 considered successful</li>
+        <li><strong>Failure</strong>: Any other status or timeout triggers retry</li>
+      </ul>
+
+      <h3>Retry Schedule</h3>
+      <p>Failed webhooks are retried with exponential backoff:</p>
+      <ol>
+        <li>Immediate retry</li>
+        <li>Retry after 1 minute</li>
+        <li>Retry after 5 minutes</li>
+        <li>Retry after 15 minutes</li>
+        <li>Retry after 1 hour</li>
+        <li>Give up after 6 hours</li>
+      </ol>
+
+      <div class="alert alert-info">
+        <strong><i class="fas fa-info-circle"></i> Pro Tip</strong>: Return HTTP 200 quickly, then process the event asynchronously using a queue to avoid timeouts.
+      </div>
+
+      <h3>Recommended Pattern: Queue-Based Processing</h3>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">Python with Redis Queue</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>from flask import Flask, request, jsonify
+from rq import Queue
+from redis import Redis
+
+app = Flask(__name__)
+redis_conn = Redis()
+queue = Queue(connection=redis_conn)
+
+@app.route('/webhooks/alianza', methods=['POST'])
+def webhook_handler():
+    # Verify signature (omitted for brevity)
+
+    # Queue event for async processing
+    event = request.json
+    queue.enqueue(process_webhook_event, event)
+
+    # Return 200 immediately
+    return jsonify({'received': True}), 200
+
+def process_webhook_event(event):
+    """Process event asynchronously"""
+    event_type = event.get('event')
+
+    if event_type == 'call.completed':
+        # Heavy processing: database writes, API calls, etc.
+        save_call_to_database(event['data'])
+        send_analytics_event(event['data'])
+        update_crm_system(event['data'])</code></pre>
+      </div>
+
+      <h2 id="testing">Testing Webhooks</h2>
+
+      <h3>Local Testing with ngrok</h3>
+      <p>Test webhooks locally using ngrok to create a public URL:</p>
+
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">Bash</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code># Install ngrok: https://ngrok.com
+
+# Start your local webhook server
+python webhook_server.py
+
+# In another terminal, create tunnel
+ngrok http 8080
+
+# Use the ngrok URL (e.g., https://abc123.ngrok.io/webhooks/alianza)
+# to register webhook with Alianza</code></pre>
+      </div>
+
+      <h3>Manual Webhook Testing</h3>
+      <p>Test your webhook handler with curl:</p>
+
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">Bash</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>curl -X POST http://localhost:8080/webhooks/alianza \
+  -H "Content-Type: application/json" \
+  -H "X-Alianza-Signature: sha256=test" \
+  -H "X-Alianza-Event: call.completed" \
+  -H "X-Alianza-Delivery-ID: test-123" \
+  -H "X-Alianza-Timestamp: 2025-12-19T10:00:00Z" \
+  -d '{
+    "id": "evt_test_123",
+    "event": "call.completed",
+    "timestamp": "2025-12-19T10:00:00Z",
+    "partitionId": "partition-123",
+    "data": {
+      "callId": "call-test",
+      "duration": 60
+    }
+  }'</code></pre>
+      </div>
+
+      <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border-color);">
+        <h2>Next Steps</h2>
+        <div class="nav-cards" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+          <a href="../guides/user-provisioning.html" class="card" style="text-decoration: none;">
+            <div class="card-title"><i class="fas fa-users"></i> User Provisioning</div>
+            <p>Create and manage users</p>
+          </a>
+          <a href="best-practices.html" class="card" style="text-decoration: none;">
+            <div class="card-title"><i class="fas fa-check-circle"></i> Best Practices</div>
+            <p>API best practices and patterns</p>
+          </a>
+          <a href="../code-examples/python-examples.html" class="card" style="text-decoration: none;">
+            <div class="card-title"><i class="fas fa-code"></i> Code Examples</div>
+            <p>Complete implementation examples</p>
+          </a>
+          <a href="error-handling.html" class="card" style="text-decoration: none;">
+            <div class="card-title"><i class="fas fa-exclamation-triangle"></i> Error Handling</div>
+            <p>Handle errors gracefully</p>
+          </a>
+        </div>
+      </div>
+
+      <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border-color);">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <a href="best-practices.html" class="btn btn-secondary">← Best Practices</a>
+          </div>
+          <div>
+            <a href="../code-examples/python-examples.html" class="btn btn-primary">Code Examples →</a>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="../js/main.js"></script>
+</body>
+</html>

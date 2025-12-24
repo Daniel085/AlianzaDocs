@@ -1,0 +1,1248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Complete guide to provisioning and managing end users in the Alianza API">
+  <title>User Provisioning Guide - Alianza API</title>
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <header class="docs-header">
+    <a href="../../../index.html" class="docs-logo">
+      <span>📞</span> Alianza API
+    </a>
+    <nav class="docs-nav">
+      <a href="../../../index.html">Home</a>
+      <a href="../architecture/diagrams.html">Architecture</a>
+      <a href="account-management.html">Guides</a>
+      <a href="../../../openapi.yaml">API Reference</a>
+      <button id="theme-toggle" class="theme-toggle">🌙 Dark</button>
+    </nav>
+  </header>
+
+  <div class="docs-container">
+    <aside class="docs-sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-title">Getting Started</div>
+        <ul class="sidebar-links">
+          <li><a href="../getting-started/quick-start.html">Quick Start</a></li>
+          <li><a href="../getting-started/authentication.html">Authentication</a></li>
+        </ul>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-title">Architecture</div>
+        <ul class="sidebar-links">
+          <li><a href="../architecture/diagrams.html">Architecture Diagrams</a></li>
+        </ul>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-title">Guides</div>
+        <ul class="sidebar-links">
+          <li><a href="account-management.html">Account Management</a></li>
+          <li><a href="phone-numbers.html">Phone Numbers</a></li>
+          <li><a href="device-management.html">Device Management</a></li>
+          <li><a href="call-routing.html">Call Routing</a></li>
+          <li><a href="user-provisioning.html" class="active">User Provisioning</a></li>
+        </ul>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-title">Code Examples</div>
+        <ul class="sidebar-links">
+          <li><a href="../code-examples/python-examples.html">Python</a></li>
+          <li><a href="../code-examples/nodejs-examples.html">Node.js</a></li>
+          <li><a href="../code-examples/php-examples.html">PHP</a></li>
+          <li><a href="../code-examples/java-examples.html">Java</a></li>
+          <li><a href="../code-examples/csharp-examples.html">C#</a></li>
+          <li><a href="../code-examples/ruby-examples.html">Ruby</a></li>
+        </ul>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-title">Advanced</div>
+        <ul class="sidebar-links">
+          <li><a href="../advanced/error-handling.html">Error Handling</a></li>
+          <li><a href="../advanced/best-practices.html">Best Practices</a></li>
+          <li><a href="../advanced/webhooks.html">Webhooks</a></li>
+        </ul>
+      </div>
+    </aside>
+
+    <main class="docs-main">
+      <h1><i class="fas fa-users"></i> User Provisioning Guide</h1>
+      <p style="font-size: 1.2rem;">Complete guide to creating, configuring, and managing end users in the Alianza platform, including voicemail, call forwarding, and advanced features.</p>
+
+      <div class="alert alert-info">
+        <strong><i class="fas fa-info-circle"></i> Prerequisites</strong>: Before provisioning users, ensure you have an active account and devices configured. See the <a href="account-management.html">Account Management</a> and <a href="device-management.html">Device Management</a> guides.
+      </div>
+
+      <h2 id="overview">User Provisioning Overview</h2>
+      <p>End users are individual people who use phone services within an account. Each end user can have:</p>
+      <ul>
+        <li><strong>Multiple Devices</strong>: Desk phones, softphones, mobile apps</li>
+        <li><strong>Phone Numbers</strong>: Direct dial numbers (DIDs)</li>
+        <li><strong>Voicemail</strong>: Personal voicemail box with custom greetings</li>
+        <li><strong>Call Features</strong>: Forwarding, screening, do not disturb, etc.</li>
+        <li><strong>User Portal Access</strong>: Self-service configuration portal</li>
+      </ul>
+
+      <h2 id="user-types">User Types</h2>
+
+      <div class="card">
+        <div class="card-title"><i class="fas fa-user"></i> End User</div>
+        <p>Standard phone user with assigned devices and numbers. Can manage personal settings like voicemail and call forwarding.</p>
+        <ul>
+          <li><strong>Has</strong>: Devices, phone numbers, voicemail</li>
+          <li><strong>Can Access</strong>: User portal for personal settings</li>
+          <li><strong>Typical Use</strong>: Employees, individual subscribers</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><i class="fas fa-user-shield"></i> Account User</div>
+        <p>Account administrator without physical devices. Can manage account settings and other users.</p>
+        <ul>
+          <li><strong>Has</strong>: Admin credentials, no devices</li>
+          <li><strong>Can Access</strong>: Account management portal</li>
+          <li><strong>Typical Use</strong>: Office managers, IT administrators</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><i class="fas fa-user-cog"></i> Management User</div>
+        <p>Service provider administrator with partition-wide access.</p>
+        <ul>
+          <li><strong>Has</strong>: Full API access</li>
+          <li><strong>Can Access</strong>: All accounts in partition</li>
+          <li><strong>Typical Use</strong>: Service provider staff</li>
+        </ul>
+      </div>
+
+      <h2 id="creating-users">Creating End Users</h2>
+
+      <h3>Basic User Creation</h3>
+      <p>Creating a user requires account ID and basic user information:</p>
+
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">Endpoint</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>POST /v2/partition/{partitionId}/account/{accountId}/enduser</code></pre>
+      </div>
+
+      <div class="language-tabs">
+        <div class="tab-buttons">
+          <button class="tab-button active" data-lang="python">Python</button>
+          <button class="tab-button" data-lang="nodejs">Node.js</button>
+          <button class="tab-button" data-lang="php">PHP</button>
+        </div>
+
+        <div class="tab-content active" data-lang="python">
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-language">Python</span>
+              <button class="copy-button">Copy</button>
+            </div>
+            <pre><code>import requests
+
+def create_end_user(token, partition_id, account_id, user_data):
+    """Create a new end user"""
+    url = f"https://api.alianza.com/v2/partition/{partition_id}/account/{account_id}/enduser"
+
+    headers = {
+        'X-AUTH-TOKEN': token,
+        'Content-Type': 'application/json'
+    }
+
+    payload = {
+        'firstName': user_data['first_name'],
+        'lastName': user_data['last_name'],
+        'emailAddress': user_data['email'],
+        'userName': user_data['username'],
+        'password': user_data['password'],
+        'extension': user_data['extension'],
+        'timeZone': user_data.get('timezone', 'America/Los_Angeles'),
+        'language': user_data.get('language', 'en_US')
+    }
+
+    response = requests.post(url, json=payload, headers=headers)
+    response.raise_for_status()
+    return response.json()
+
+# Example usage
+user_data = {
+    'first_name': 'John',
+    'last_name': 'Doe',
+    'email': 'john.doe@example.com',
+    'username': 'jdoe',
+    'password': 'SecureP@ssw0rd123',
+    'extension': '1001',
+    'timezone': 'America/New_York',
+    'language': 'en_US'
+}
+
+new_user = create_end_user(auth_token, '123', 'acct-456', user_data)
+print(f"Created user: {new_user['id']}")</code></pre>
+          </div>
+        </div>
+
+        <div class="tab-content" data-lang="nodejs">
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-language">JavaScript</span>
+              <button class="copy-button">Copy</button>
+            </div>
+            <pre><code>const axios = require('axios');
+
+async function createEndUser(token, partitionId, accountId, userData) {
+  const url = `https://api.alianza.com/v2/partition/${partitionId}/account/${accountId}/enduser`;
+
+  const payload = {
+    firstName: userData.firstName,
+    lastName: userData.lastName,
+    emailAddress: userData.email,
+    userName: userData.username,
+    password: userData.password,
+    extension: userData.extension,
+    timeZone: userData.timezone || 'America/Los_Angeles',
+    language: userData.language || 'en_US'
+  };
+
+  const config = {
+    headers: {
+      'X-AUTH-TOKEN': token,
+      'Content-Type': 'application/json'
+    }
+  };
+
+  const response = await axios.post(url, payload, config);
+  return response.data;
+}
+
+// Example usage
+const userData = {
+  firstName: 'John',
+  lastName: 'Doe',
+  email: 'john.doe@example.com',
+  username: 'jdoe',
+  password: 'SecureP@ssw0rd123',
+  extension: '1001',
+  timezone: 'America/New_York',
+  language: 'en_US'
+};
+
+const newUser = await createEndUser(authToken, '123', 'acct-456', userData);
+console.log(`Created user: ${newUser.id}`);</code></pre>
+          </div>
+        </div>
+
+        <div class="tab-content" data-lang="php">
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-language">PHP</span>
+              <button class="copy-button">Copy</button>
+            </div>
+            <pre><code><?php
+
+function createEndUser($token, $partitionId, $accountId, $userData) {
+    $url = "https://api.alianza.com/v2/partition/{$partitionId}/account/{$accountId}/enduser";
+
+    $payload = [
+        'firstName' => $userData['firstName'],
+        'lastName' => $userData['lastName'],
+        'emailAddress' => $userData['email'],
+        'userName' => $userData['username'],
+        'password' => $userData['password'],
+        'extension' => $userData['extension'],
+        'timeZone' => $userData['timezone'] ?? 'America/Los_Angeles',
+        'language' => $userData['language'] ?? 'en_US'
+    ];
+
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'X-AUTH-TOKEN: ' . $token,
+        'Content-Type: application/json'
+    ]);
+
+    $response = curl_exec($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+
+    if ($httpCode >= 400) {
+        throw new Exception("API error: " . $response);
+    }
+
+    return json_decode($response, true);
+}
+
+// Example usage
+$userData = [
+    'firstName' => 'John',
+    'lastName' => 'Doe',
+    'email' => 'john.doe@example.com',
+    'username' => 'jdoe',
+    'password' => 'SecureP@ssw0rd123',
+    'extension' => '1001',
+    'timezone' => 'America/New_York',
+    'language' => 'en_US'
+];
+
+$newUser = createEndUser($authToken, '123', 'acct-456', $userData);
+echo "Created user: " . $newUser['id'] . "\n";
+
+?></code></pre>
+          </div>
+        </div>
+      </div>
+
+      <h3>Response Example</h3>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">JSON Response</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>{
+  "id": "user-789",
+  "accountId": "acct-456",
+  "firstName": "John",
+  "lastName": "Doe",
+  "emailAddress": "john.doe@example.com",
+  "userName": "jdoe",
+  "extension": "1001",
+  "timeZone": "America/New_York",
+  "language": "en_US",
+  "userType": "END_USER",
+  "created": "2025-12-19T10:00:00Z",
+  "voicemailEnabled": true,
+  "voicemailBoxId": "vm-123"
+}</code></pre>
+      </div>
+
+      <h2 id="voicemail">Voicemail Configuration</h2>
+
+      <h3>Enable Voicemail</h3>
+      <p>Voicemail is typically enabled by default when creating users. To configure voicemail settings:</p>
+
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">Endpoint</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>PUT /v2/partition/{partitionId}/account/{accountId}/enduser/{userId}/voicemail</code></pre>
+      </div>
+
+      <div class="language-tabs">
+        <div class="tab-buttons">
+          <button class="tab-button active" data-lang="python">Python</button>
+          <button class="tab-button" data-lang="nodejs">Node.js</button>
+          <button class="tab-button" data-lang="php">PHP</button>
+        </div>
+
+        <div class="tab-content active" data-lang="python">
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-language">Python</span>
+              <button class="copy-button">Copy</button>
+            </div>
+            <pre><code>def configure_voicemail(token, partition_id, account_id, user_id, settings):
+    """Configure voicemail settings for a user"""
+    url = f"https://api.alianza.com/v2/partition/{partition_id}/account/{account_id}/enduser/{user_id}/voicemail"
+
+    headers = {
+        'X-AUTH-TOKEN': token,
+        'Content-Type': 'application/json'
+    }
+
+    payload = {
+        'enabled': settings.get('enabled', True),
+        'pin': settings.get('pin', '1234'),
+        'emailNotification': settings.get('email_notification', True),
+        'emailAddress': settings.get('email_address'),
+        'attachAudioToEmail': settings.get('attach_audio', True),
+        'deleteAfterEmailSent': settings.get('delete_after_email', False),
+        'transcriptionEnabled': settings.get('transcription', True),
+        'ringTimeBeforeVoicemail': settings.get('ring_time', 20)
+    }
+
+    response = requests.put(url, json=payload, headers=headers)
+    response.raise_for_status()
+    return response.json()
+
+# Example usage
+vm_settings = {
+    'enabled': True,
+    'pin': '6789',
+    'email_notification': True,
+    'email_address': 'john.doe@example.com',
+    'attach_audio': True,
+    'delete_after_email': False,
+    'transcription': True,
+    'ring_time': 25
+}
+
+result = configure_voicemail(auth_token, '123', 'acct-456', 'user-789', vm_settings)
+print("Voicemail configured successfully")</code></pre>
+          </div>
+        </div>
+
+        <div class="tab-content" data-lang="nodejs">
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-language">JavaScript</span>
+              <button class="copy-button">Copy</button>
+            </div>
+            <pre><code>async function configureVoicemail(token, partitionId, accountId, userId, settings) {
+  const url = `https://api.alianza.com/v2/partition/${partitionId}/account/${accountId}/enduser/${userId}/voicemail`;
+
+  const payload = {
+    enabled: settings.enabled !== undefined ? settings.enabled : true,
+    pin: settings.pin || '1234',
+    emailNotification: settings.emailNotification !== undefined ? settings.emailNotification : true,
+    emailAddress: settings.emailAddress,
+    attachAudioToEmail: settings.attachAudio !== undefined ? settings.attachAudio : true,
+    deleteAfterEmailSent: settings.deleteAfterEmail || false,
+    transcriptionEnabled: settings.transcription !== undefined ? settings.transcription : true,
+    ringTimeBeforeVoicemail: settings.ringTime || 20
+  };
+
+  const config = {
+    headers: {
+      'X-AUTH-TOKEN': token,
+      'Content-Type': 'application/json'
+    }
+  };
+
+  const response = await axios.put(url, payload, config);
+  return response.data;
+}
+
+// Example usage
+const vmSettings = {
+  enabled: true,
+  pin: '6789',
+  emailNotification: true,
+  emailAddress: 'john.doe@example.com',
+  attachAudio: true,
+  deleteAfterEmail: false,
+  transcription: true,
+  ringTime: 25
+};
+
+await configureVoicemail(authToken, '123', 'acct-456', 'user-789', vmSettings);
+console.log('Voicemail configured successfully');</code></pre>
+          </div>
+        </div>
+
+        <div class="tab-content" data-lang="php">
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-language">PHP</span>
+              <button class="copy-button">Copy</button>
+            </div>
+            <pre><code><?php
+
+function configureVoicemail($token, $partitionId, $accountId, $userId, $settings) {
+    $url = "https://api.alianza.com/v2/partition/{$partitionId}/account/{$accountId}/enduser/{$userId}/voicemail";
+
+    $payload = [
+        'enabled' => $settings['enabled'] ?? true,
+        'pin' => $settings['pin'] ?? '1234',
+        'emailNotification' => $settings['emailNotification'] ?? true,
+        'emailAddress' => $settings['emailAddress'],
+        'attachAudioToEmail' => $settings['attachAudio'] ?? true,
+        'deleteAfterEmailSent' => $settings['deleteAfterEmail'] ?? false,
+        'transcriptionEnabled' => $settings['transcription'] ?? true,
+        'ringTimeBeforeVoicemail' => $settings['ringTime'] ?? 20
+    ];
+
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'X-AUTH-TOKEN: ' . $token,
+        'Content-Type: application/json'
+    ]);
+
+    $response = curl_exec($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+
+    if ($httpCode >= 400) {
+        throw new Exception("API error: " . $response);
+    }
+
+    return json_decode($response, true);
+}
+
+// Example usage
+$vmSettings = [
+    'enabled' => true,
+    'pin' => '6789',
+    'emailNotification' => true,
+    'emailAddress' => 'john.doe@example.com',
+    'attachAudio' => true,
+    'deleteAfterEmail' => false,
+    'transcription' => true,
+    'ringTime' => 25
+];
+
+configureVoicemail($authToken, '123', 'acct-456', 'user-789', $vmSettings);
+echo "Voicemail configured successfully\n";
+
+?></code></pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="alert alert-info">
+        <strong><i class="fas fa-lightbulb"></i> Pro Tip</strong>: Enable transcription for voicemails to improve accessibility and allow users to read messages without listening to audio.
+      </div>
+
+      <h3>Upload Custom Greeting</h3>
+      <p>Users can record or upload custom voicemail greetings:</p>
+
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">Python - Upload Audio Greeting</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>def upload_voicemail_greeting(token, partition_id, account_id, user_id, audio_file_path):
+    """Upload custom voicemail greeting"""
+    url = f"https://api.alianza.com/v2/partition/{partition_id}/account/{account_id}/enduser/{user_id}/voicemail/greeting"
+
+    headers = {
+        'X-AUTH-TOKEN': token
+    }
+
+    with open(audio_file_path, 'rb') as audio_file:
+        files = {
+            'file': ('greeting.wav', audio_file, 'audio/wav')
+        }
+        data = {
+            'greetingType': 'UNAVAILABLE',  # or 'BUSY'
+            'description': 'Custom unavailable greeting'
+        }
+
+        response = requests.post(url, headers=headers, files=files, data=data)
+        response.raise_for_status()
+        return response.json()
+
+# Example usage
+result = upload_voicemail_greeting(
+    auth_token,
+    '123',
+    'acct-456',
+    'user-789',
+    '/path/to/greeting.wav'
+)
+print(f"Greeting uploaded: {result['greetingId']}")</code></pre>
+      </div>
+
+      <h2 id="call-forwarding">Call Forwarding</h2>
+
+      <h3>Configure Call Forwarding Rules</h3>
+      <p>Set up call forwarding for various scenarios (always, busy, no answer):</p>
+
+      <div class="language-tabs">
+        <div class="tab-buttons">
+          <button class="tab-button active" data-lang="python">Python</button>
+          <button class="tab-button" data-lang="nodejs">Node.js</button>
+          <button class="tab-button" data-lang="php">PHP</button>
+        </div>
+
+        <div class="tab-content active" data-lang="python">
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-language">Python</span>
+              <button class="copy-button">Copy</button>
+            </div>
+            <pre><code>def configure_call_forwarding(token, partition_id, account_id, user_id, forwarding_rules):
+    """Configure call forwarding for a user"""
+    url = f"https://api.alianza.com/v2/partition/{partition_id}/account/{account_id}/enduser/{user_id}/callforwarding"
+
+    headers = {
+        'X-AUTH-TOKEN': token,
+        'Content-Type': 'application/json'
+    }
+
+    payload = {
+        'alwaysEnabled': forwarding_rules.get('always_enabled', False),
+        'alwaysForwardTo': forwarding_rules.get('always_forward_to'),
+        'busyEnabled': forwarding_rules.get('busy_enabled', False),
+        'busyForwardTo': forwarding_rules.get('busy_forward_to'),
+        'noAnswerEnabled': forwarding_rules.get('no_answer_enabled', True),
+        'noAnswerForwardTo': forwarding_rules.get('no_answer_forward_to'),
+        'noAnswerRingTime': forwarding_rules.get('no_answer_ring_time', 20)
+    }
+
+    response = requests.put(url, json=payload, headers=headers)
+    response.raise_for_status()
+    return response.json()
+
+# Example 1: Forward to mobile when not answered
+mobile_forwarding = {
+    'always_enabled': False,
+    'no_answer_enabled': True,
+    'no_answer_forward_to': '+15551234567',
+    'no_answer_ring_time': 20
+}
+
+configure_call_forwarding(auth_token, '123', 'acct-456', 'user-789', mobile_forwarding)
+
+# Example 2: Always forward to assistant
+always_forward = {
+    'always_enabled': True,
+    'always_forward_to': '1002'  # Extension of assistant
+}
+
+configure_call_forwarding(auth_token, '123', 'acct-456', 'user-789', always_forward)</code></pre>
+          </div>
+        </div>
+
+        <div class="tab-content" data-lang="nodejs">
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-language">JavaScript</span>
+              <button class="copy-button">Copy</button>
+            </div>
+            <pre><code>async function configureCallForwarding(token, partitionId, accountId, userId, rules) {
+  const url = `https://api.alianza.com/v2/partition/${partitionId}/account/${accountId}/enduser/${userId}/callforwarding`;
+
+  const payload = {
+    alwaysEnabled: rules.alwaysEnabled || false,
+    alwaysForwardTo: rules.alwaysForwardTo,
+    busyEnabled: rules.busyEnabled || false,
+    busyForwardTo: rules.busyForwardTo,
+    noAnswerEnabled: rules.noAnswerEnabled !== undefined ? rules.noAnswerEnabled : true,
+    noAnswerForwardTo: rules.noAnswerForwardTo,
+    noAnswerRingTime: rules.noAnswerRingTime || 20
+  };
+
+  const config = {
+    headers: {
+      'X-AUTH-TOKEN': token,
+      'Content-Type': 'application/json'
+    }
+  };
+
+  const response = await axios.put(url, payload, config);
+  return response.data;
+}
+
+// Example 1: Forward to mobile when not answered
+const mobileForwarding = {
+  alwaysEnabled: false,
+  noAnswerEnabled: true,
+  noAnswerForwardTo: '+15551234567',
+  noAnswerRingTime: 20
+};
+
+await configureCallForwarding(authToken, '123', 'acct-456', 'user-789', mobileForwarding);
+
+// Example 2: Always forward to assistant
+const alwaysForward = {
+  alwaysEnabled: true,
+  alwaysForwardTo: '1002'  // Extension of assistant
+};
+
+await configureCallForwarding(authToken, '123', 'acct-456', 'user-789', alwaysForward);</code></pre>
+          </div>
+        </div>
+
+        <div class="tab-content" data-lang="php">
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-language">PHP</span>
+              <button class="copy-button">Copy</button>
+            </div>
+            <pre><code><?php
+
+function configureCallForwarding($token, $partitionId, $accountId, $userId, $rules) {
+    $url = "https://api.alianza.com/v2/partition/{$partitionId}/account/{$accountId}/enduser/{$userId}/callforwarding";
+
+    $payload = [
+        'alwaysEnabled' => $rules['alwaysEnabled'] ?? false,
+        'alwaysForwardTo' => $rules['alwaysForwardTo'] ?? null,
+        'busyEnabled' => $rules['busyEnabled'] ?? false,
+        'busyForwardTo' => $rules['busyForwardTo'] ?? null,
+        'noAnswerEnabled' => $rules['noAnswerEnabled'] ?? true,
+        'noAnswerForwardTo' => $rules['noAnswerForwardTo'] ?? null,
+        'noAnswerRingTime' => $rules['noAnswerRingTime'] ?? 20
+    ];
+
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'X-AUTH-TOKEN: ' . $token,
+        'Content-Type: application/json'
+    ]);
+
+    $response = curl_exec($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+
+    if ($httpCode >= 400) {
+        throw new Exception("API error: " . $response);
+    }
+
+    return json_decode($response, true);
+}
+
+// Example 1: Forward to mobile when not answered
+$mobileForwarding = [
+    'alwaysEnabled' => false,
+    'noAnswerEnabled' => true,
+    'noAnswerForwardTo' => '+15551234567',
+    'noAnswerRingTime' => 20
+];
+
+configureCallForwarding($authToken, '123', 'acct-456', 'user-789', $mobileForwarding);
+
+// Example 2: Always forward to assistant
+$alwaysForward = [
+    'alwaysEnabled' => true,
+    'alwaysForwardTo' => '1002'  // Extension of assistant
+];
+
+configureCallForwarding($authToken, '123', 'acct-456', 'user-789', $alwaysForward);
+
+?></code></pre>
+          </div>
+        </div>
+      </div>
+
+      <h2 id="call-screening">Call Screening</h2>
+
+      <h3>Anonymous Call Rejection</h3>
+      <p>Block calls from numbers that don't present caller ID:</p>
+
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">Python</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>def configure_anonymous_rejection(token, partition_id, account_id, user_id, enabled):
+    """Enable or disable anonymous call rejection"""
+    url = f"https://api.alianza.com/v2/partition/{partition_id}/account/{account_id}/enduser/{user_id}/features/anonymouscallrejection"
+
+    headers = {
+        'X-AUTH-TOKEN': token,
+        'Content-Type': 'application/json'
+    }
+
+    payload = {
+        'enabled': enabled
+    }
+
+    response = requests.put(url, json=payload, headers=headers)
+    response.raise_for_status()
+    return response.json()
+
+# Enable anonymous call rejection
+configure_anonymous_rejection(auth_token, '123', 'acct-456', 'user-789', True)</code></pre>
+      </div>
+
+      <h3>Selective Call Acceptance/Rejection</h3>
+      <p>Configure whitelists and blacklists for call screening:</p>
+
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">Python</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>def configure_call_screening(token, partition_id, account_id, user_id, screening_config):
+    """Configure selective call acceptance and rejection"""
+    url = f"https://api.alianza.com/v2/partition/{partition_id}/account/{account_id}/enduser/{user_id}/callscreening"
+
+    headers = {
+        'X-AUTH-TOKEN': token,
+        'Content-Type': 'application/json'
+    }
+
+    payload = {
+        'acceptEnabled': screening_config.get('accept_enabled', False),
+        'acceptList': screening_config.get('accept_list', []),
+        'rejectEnabled': screening_config.get('reject_enabled', False),
+        'rejectList': screening_config.get('reject_list', [])
+    }
+
+    response = requests.put(url, json=payload, headers=headers)
+    response.raise_for_status()
+    return response.json()
+
+# Block specific numbers (blacklist)
+blocking_config = {
+    'reject_enabled': True,
+    'reject_list': [
+        '+15551111111',  # Spam caller
+        '+15552222222'   # Unwanted caller
+    ]
+}
+
+configure_call_screening(auth_token, '123', 'acct-456', 'user-789', blocking_config)
+
+# Only accept from specific numbers (whitelist)
+whitelist_config = {
+    'accept_enabled': True,
+    'accept_list': [
+        '+15553333333',  # Important client
+        '+15554444444'   # Family member
+    ]
+}
+
+configure_call_screening(auth_token, '123', 'acct-456', 'user-789', whitelist_config)</code></pre>
+      </div>
+
+      <h2 id="do-not-disturb">Do Not Disturb</h2>
+
+      <p>Enable Do Not Disturb to send all calls directly to voicemail:</p>
+
+      <div class="language-tabs">
+        <div class="tab-buttons">
+          <button class="tab-button active" data-lang="python">Python</button>
+          <button class="tab-button" data-lang="nodejs">Node.js</button>
+          <button class="tab-button" data-lang="php">PHP</button>
+        </div>
+
+        <div class="tab-content active" data-lang="python">
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-language">Python</span>
+              <button class="copy-button">Copy</button>
+            </div>
+            <pre><code>def set_do_not_disturb(token, partition_id, account_id, user_id, enabled):
+    """Enable or disable Do Not Disturb"""
+    url = f"https://api.alianza.com/v2/partition/{partition_id}/account/{account_id}/enduser/{user_id}/features/donotdisturb"
+
+    headers = {
+        'X-AUTH-TOKEN': token,
+        'Content-Type': 'application/json'
+    }
+
+    payload = {
+        'enabled': enabled
+    }
+
+    response = requests.put(url, json=payload, headers=headers)
+    response.raise_for_status()
+    return response.json()
+
+# Enable DND
+set_do_not_disturb(auth_token, '123', 'acct-456', 'user-789', True)
+print("Do Not Disturb enabled")
+
+# Disable DND
+set_do_not_disturb(auth_token, '123', 'acct-456', 'user-789', False)
+print("Do Not Disturb disabled")</code></pre>
+          </div>
+        </div>
+
+        <div class="tab-content" data-lang="nodejs">
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-language">JavaScript</span>
+              <button class="copy-button">Copy</button>
+            </div>
+            <pre><code>async function setDoNotDisturb(token, partitionId, accountId, userId, enabled) {
+  const url = `https://api.alianza.com/v2/partition/${partitionId}/account/${accountId}/enduser/${userId}/features/donotdisturb`;
+
+  const payload = {
+    enabled: enabled
+  };
+
+  const config = {
+    headers: {
+      'X-AUTH-TOKEN': token,
+      'Content-Type': 'application/json'
+    }
+  };
+
+  const response = await axios.put(url, payload, config);
+  return response.data;
+}
+
+// Enable DND
+await setDoNotDisturb(authToken, '123', 'acct-456', 'user-789', true);
+console.log('Do Not Disturb enabled');
+
+// Disable DND
+await setDoNotDisturb(authToken, '123', 'acct-456', 'user-789', false);
+console.log('Do Not Disturb disabled');</code></pre>
+          </div>
+        </div>
+
+        <div class="tab-content" data-lang="php">
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-language">PHP</span>
+              <button class="copy-button">Copy</button>
+            </div>
+            <pre><code><?php
+
+function setDoNotDisturb($token, $partitionId, $accountId, $userId, $enabled) {
+    $url = "https://api.alianza.com/v2/partition/{$partitionId}/account/{$accountId}/enduser/{$userId}/features/donotdisturb";
+
+    $payload = [
+        'enabled' => $enabled
+    ];
+
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'X-AUTH-TOKEN: ' . $token,
+        'Content-Type: application/json'
+    ]);
+
+    $response = curl_exec($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+
+    if ($httpCode >= 400) {
+        throw new Exception("API error: " . $response);
+    }
+
+    return json_decode($response, true);
+}
+
+// Enable DND
+setDoNotDisturb($authToken, '123', 'acct-456', 'user-789', true);
+echo "Do Not Disturb enabled\n";
+
+// Disable DND
+setDoNotDisturb($authToken, '123', 'acct-456', 'user-789', false);
+echo "Do Not Disturb disabled\n";
+
+?></code></pre>
+          </div>
+        </div>
+      </div>
+
+      <h2 id="assign-devices">Assigning Devices and Numbers</h2>
+
+      <h3>Assign Device to User</h3>
+      <p>Link a physical or virtual device to an end user:</p>
+
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">Python</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>def assign_device_to_user(token, partition_id, account_id, user_id, device_id):
+    """Assign a device to an end user"""
+    url = f"https://api.alianza.com/v2/partition/{partition_id}/account/{account_id}/enduser/{user_id}/device"
+
+    headers = {
+        'X-AUTH-TOKEN': token,
+        'Content-Type': 'application/json'
+    }
+
+    payload = {
+        'deviceId': device_id,
+        'primary': True  # Set as primary device
+    }
+
+    response = requests.post(url, json=payload, headers=headers)
+    response.raise_for_status()
+    return response.json()
+
+# Assign device to user
+assign_device_to_user(auth_token, '123', 'acct-456', 'user-789', 'device-101')
+print("Device assigned to user")</code></pre>
+      </div>
+
+      <h3>Assign Phone Number to User</h3>
+      <p>Assign a DID (Direct Inward Dial) number to a user:</p>
+
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">Python</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>def assign_number_to_user(token, partition_id, account_id, user_id, phone_number):
+    """Assign a phone number to an end user"""
+    url = f"https://api.alianza.com/v2/partition/{partition_id}/account/{account_id}/enduser/{user_id}/phonenumber"
+
+    headers = {
+        'X-AUTH-TOKEN': token,
+        'Content-Type': 'application/json'
+    }
+
+    payload = {
+        'phoneNumber': phone_number,
+        'primary': True  # Set as primary number
+    }
+
+    response = requests.post(url, json=payload, headers=headers)
+    response.raise_for_status()
+    return response.json()
+
+# Assign phone number
+assign_number_to_user(auth_token, '123', 'acct-456', 'user-789', '+15551234567')
+print("Phone number assigned to user")</code></pre>
+      </div>
+
+      <h2 id="bulk-provisioning">Bulk User Provisioning</h2>
+
+      <p>Provision multiple users efficiently using batch operations:</p>
+
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">Python - Bulk User Creation</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>import concurrent.futures
+import time
+
+def bulk_create_users(token, partition_id, account_id, users_data):
+    """Create multiple users in parallel"""
+
+    def create_single_user(user_data):
+        try:
+            result = create_end_user(token, partition_id, account_id, user_data)
+            return {'success': True, 'user': result}
+        except Exception as e:
+            return {'success': False, 'error': str(e), 'user_data': user_data}
+
+    # Use thread pool for parallel creation
+    with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
+        results = list(executor.map(create_single_user, users_data))
+
+    # Separate successes and failures
+    successes = [r for r in results if r['success']]
+    failures = [r for r in results if not r['success']]
+
+    return {
+        'total': len(users_data),
+        'successful': len(successes),
+        'failed': len(failures),
+        'successes': successes,
+        'failures': failures
+    }
+
+# Example: Create 10 users
+users_to_create = [
+    {
+        'first_name': f'User{i}',
+        'last_name': 'Test',
+        'email': f'user{i}@example.com',
+        'username': f'user{i}',
+        'password': f'SecureP@ss{i}',
+        'extension': f'10{i:02d}'
+    }
+    for i in range(1, 11)
+]
+
+results = bulk_create_users(auth_token, '123', 'acct-456', users_to_create)
+print(f"Created {results['successful']}/{results['total']} users")
+print(f"Failed: {results['failed']}")
+
+# Log failures for retry
+for failure in results['failures']:
+    print(f"Failed to create {failure['user_data']['username']}: {failure['error']}")</code></pre>
+      </div>
+
+      <h2 id="user-management">User Management Operations</h2>
+
+      <h3>Get User Details</h3>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">Python</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>def get_user_details(token, partition_id, account_id, user_id):
+    """Retrieve complete user details"""
+    url = f"https://api.alianza.com/v2/partition/{partition_id}/account/{account_id}/enduser/{user_id}"
+
+    headers = {
+        'X-AUTH-TOKEN': token
+    }
+
+    response = requests.get(url, headers=headers)
+    response.raise_for_status()
+    return response.json()
+
+user = get_user_details(auth_token, '123', 'acct-456', 'user-789')
+print(f"User: {user['firstName']} {user['lastName']}")
+print(f"Extension: {user['extension']}")
+print(f"Email: {user['emailAddress']}")</code></pre>
+      </div>
+
+      <h3>Update User Information</h3>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">Python</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>def update_user(token, partition_id, account_id, user_id, updates):
+    """Update user information"""
+    url = f"https://api.alianza.com/v2/partition/{partition_id}/account/{account_id}/enduser/{user_id}"
+
+    headers = {
+        'X-AUTH-TOKEN': token,
+        'Content-Type': 'application/json'
+    }
+
+    response = requests.put(url, json=updates, headers=headers)
+    response.raise_for_status()
+    return response.json()
+
+# Update user details
+updates = {
+    'emailAddress': 'newemail@example.com',
+    'firstName': 'John',
+    'lastName': 'Smith',
+    'timeZone': 'America/Chicago'
+}
+
+updated_user = update_user(auth_token, '123', 'acct-456', 'user-789', updates)
+print(f"User updated: {updated_user['emailAddress']}")</code></pre>
+      </div>
+
+      <h3>Delete User</h3>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-language">Python</span>
+          <button class="copy-button">Copy</button>
+        </div>
+        <pre><code>def delete_user(token, partition_id, account_id, user_id):
+    """Delete an end user"""
+    url = f"https://api.alianza.com/v2/partition/{partition_id}/account/{account_id}/enduser/{user_id}"
+
+    headers = {
+        'X-AUTH-TOKEN': token
+    }
+
+    response = requests.delete(url, headers=headers)
+    response.raise_for_status()
+    return True
+
+delete_user(auth_token, '123', 'acct-456', 'user-789')
+print("User deleted successfully")</code></pre>
+      </div>
+
+      <div class="alert alert-warning">
+        <strong><i class="fas fa-exclamation-triangle"></i> Warning</strong>: Deleting a user removes all associated data including voicemails, call history, and settings. This action cannot be undone.
+      </div>
+
+      <h2 id="best-practices">Best Practices</h2>
+
+      <div class="card">
+        <div class="card-title"><i class="fas fa-shield-alt"></i> Security</div>
+        <ul>
+          <li><strong>Strong Passwords</strong>: Enforce password complexity requirements</li>
+          <li><strong>Unique Usernames</strong>: Use email addresses or unique identifiers</li>
+          <li><strong>PIN Protection</strong>: Set non-default voicemail PINs</li>
+          <li><strong>Regular Audits</strong>: Review user access and permissions periodically</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><i class="fas fa-cogs"></i> Configuration</div>
+        <ul>
+          <li><strong>Default Settings</strong>: Configure sensible defaults for voicemail, forwarding</li>
+          <li><strong>Email Notifications</strong>: Enable voicemail-to-email for better responsiveness</li>
+          <li><strong>Transcription</strong>: Enable voicemail transcription for accessibility</li>
+          <li><strong>DND Hours</strong>: Configure automatic DND schedules for work-life balance</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><i class="fas fa-rocket"></i> Performance</div>
+        <ul>
+          <li><strong>Batch Operations</strong>: Use parallel processing for bulk user creation</li>
+          <li><strong>Error Handling</strong>: Implement retry logic for failed operations</li>
+          <li><strong>Rate Limiting</strong>: Respect API rate limits during bulk operations</li>
+          <li><strong>Caching</strong>: Cache user data locally to reduce API calls</li>
+        </ul>
+      </div>
+
+      <h2 id="troubleshooting">Common Issues</h2>
+
+      <table style="width: 100%; border-collapse: collapse; margin: 1.5rem 0;">
+        <thead>
+          <tr style="background: var(--bg-secondary); border-bottom: 2px solid var(--border-color);">
+            <th style="padding: 0.75rem; text-align: left;">Issue</th>
+            <th style="padding: 0.75rem; text-align: left;">Cause</th>
+            <th style="padding: 0.75rem; text-align: left;">Solution</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom: 1px solid var(--border-color);">
+            <td style="padding: 0.75rem;">User creation fails</td>
+            <td style="padding: 0.75rem;">Username already exists</td>
+            <td style="padding: 0.75rem;">Use unique usernames (email addresses work well)</td>
+          </tr>
+          <tr style="border-bottom: 1px solid var(--border-color);">
+            <td style="padding: 0.75rem;">Voicemail not working</td>
+            <td style="padding: 0.75rem;">Voicemail not enabled or PIN not set</td>
+            <td style="padding: 0.75rem;">Verify voicemail configuration and PIN</td>
+          </tr>
+          <tr style="border-bottom: 1px solid var(--border-color);">
+            <td style="padding: 0.75rem;">Call forwarding not working</td>
+            <td style="padding: 0.75rem;">Invalid destination number format</td>
+            <td style="padding: 0.75rem;">Use E.164 format for external numbers (+15551234567)</td>
+          </tr>
+          <tr style="border-bottom: 1px solid var(--border-color);">
+            <td style="padding: 0.75rem;">Extension conflict</td>
+            <td style="padding: 0.75rem;">Extension already assigned in account</td>
+            <td style="padding: 0.75rem;">Choose unique extension numbers within account</td>
+          </tr>
+          <tr style="border-bottom: 1px solid var(--border-color);">
+            <td style="padding: 0.75rem;">Cannot assign device</td>
+            <td style="padding: 0.75rem;">Device already assigned to another user</td>
+            <td style="padding: 0.75rem;">Unassign device from current user first</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border-color);">
+        <h2>Next Steps</h2>
+        <div class="nav-cards" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+          <a href="device-management.html" class="card" style="text-decoration: none;">
+            <div class="card-title"><i class="fas fa-phone"></i> Device Management</div>
+            <p>Configure and manage user devices</p>
+          </a>
+          <a href="call-routing.html" class="card" style="text-decoration: none;">
+            <div class="card-title"><i class="fas fa-route"></i> Call Routing</div>
+            <p>Set up call routing rules</p>
+          </a>
+          <a href="../advanced/webhooks.html" class="card" style="text-decoration: none;">
+            <div class="card-title"><i class="fas fa-webhook"></i> Webhooks</div>
+            <p>Monitor user events in real-time</p>
+          </a>
+          <a href="../code-examples/python-examples.html" class="card" style="text-decoration: none;">
+            <div class="card-title"><i class="fas fa-code"></i> Code Examples</div>
+            <p>See complete implementation examples</p>
+          </a>
+        </div>
+      </div>
+
+      <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border-color);">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <a href="call-routing.html" class="btn btn-secondary">← Call Routing</a>
+          </div>
+          <div>
+            <a href="../advanced/webhooks.html" class="btn btn-primary">Webhooks →</a>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="../js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alianza API Documentation</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .hero-section {
+            background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+            margin: -2rem -2rem 3rem -2rem;
+            border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+        }
+        .hero-section h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: white;
+        }
+        .hero-section p {
+            font-size: 1.25rem;
+            opacity: 0.95;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .quick-start-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+        .feature-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+        }
+        .feature-card i {
+            font-size: 3rem;
+            color: var(--accent-primary);
+            margin-bottom: 1rem;
+        }
+        .feature-card h3 {
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+        .feature-card p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        .feature-card a {
+            display: inline-block;
+            margin-top: 1rem;
+            color: var(--accent-primary);
+            font-weight: 600;
+            text-decoration: none;
+        }
+        .feature-card a:hover {
+            text-decoration: underline;
+        }
+        .api-overview {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            margin: 3rem 0;
+        }
+        .api-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        .stat-item {
+            text-align: center;
+            padding: 1.5rem;
+            background: var(--bg-primary);
+            border-radius: var(--radius-md);
+        }
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+            display: block;
+        }
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+        .endpoints-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        .endpoint-category {
+            background: var(--bg-primary);
+            padding: 1.5rem;
+            border-radius: var(--radius-md);
+            border-left: 4px solid var(--accent-primary);
+        }
+        .endpoint-category h4 {
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+        .endpoint-category p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-left">
+                <button class="sidebar-toggle" id="sidebarToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <a href="index.html" class="logo">
+                    <i class="fas fa-book"></i>
+                    Alianza API Docs
+                </a>
+            </div>
+            <div class="nav-right">
+                <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-content">
+            <div class="sidebar-section">
+                <h3>Getting Started</h3>
+                <ul>
+                    <li><a href="getting-started/authentication.html">Authentication</a></li>
+                    <li><a href="getting-started/quick-start.html">Quick Start</a></li>
+                    <li><a href="getting-started/environments.html">Environments</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-section">
+                <h3>Guides</h3>
+                <ul>
+                    <li><a href="guides/account-management.html">Account Management</a></li>
+                    <li><a href="guides/user-provisioning.html">User Provisioning</a></li>
+                    <li><a href="guides/phone-numbers.html">Phone Numbers</a></li>
+                    <li><a href="guides/device-management.html">Device Management</a></li>
+                    <li><a href="guides/call-routing.html">Call Routing</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-section">
+                <h3>Advanced</h3>
+                <ul>
+                    <li><a href="advanced/error-handling.html">Error Handling</a></li>
+                    <li><a href="advanced/best-practices.html">Best Practices</a></li>
+                    <li><a href="advanced/webhooks.html">Webhooks</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-section">
+                <h3>Code Examples</h3>
+                <ul>
+                    <li><a href="code-examples/python-examples.html">Python</a></li>
+                    <li><a href="code-examples/nodejs-examples.html">Node.js</a></li>
+                    <li><a href="code-examples/php-examples.html">PHP</a></li>
+                    <li><a href="code-examples/java-examples.html">Java</a></li>
+                    <li><a href="code-examples/csharp-examples.html">C#</a></li>
+                    <li><a href="code-examples/ruby-examples.html">Ruby</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-section">
+                <h3>Architecture</h3>
+                <ul>
+                    <li><a href="architecture/diagrams.html">Architecture Diagrams</a></li>
+                </ul>
+            </div>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <div class="content-wrapper">
+            <div class="hero-section">
+                <h1><i class="fas fa-phone-alt"></i> Alianza API Documentation</h1>
+                <p>Comprehensive REST API for managing VoIP telephony services, accounts, users, devices, and phone numbers</p>
+            </div>
+
+            <section class="content-section">
+                <h2><i class="fas fa-rocket"></i> Quick Start</h2>
+                <p>Get started with the Alianza API in minutes. Choose your preferred path:</p>
+
+                <div class="quick-start-grid">
+                    <div class="feature-card">
+                        <i class="fas fa-key"></i>
+                        <h3>Authentication</h3>
+                        <p>Learn how to authenticate with the Alianza API using tokens, JWT, or SSO. Secure your integration with best practices.</p>
+                        <a href="getting-started/authentication.html">Get Started <i class="fas fa-arrow-right"></i></a>
+                    </div>
+
+                    <div class="feature-card">
+                        <i class="fas fa-bolt"></i>
+                        <h3>Quick Start Guide</h3>
+                        <p>Make your first API call in under 5 minutes. Follow our step-by-step tutorial to create accounts and provision users.</p>
+                        <a href="getting-started/quick-start.html">Start Tutorial <i class="fas fa-arrow-right"></i></a>
+                    </div>
+
+                    <div class="feature-card">
+                        <i class="fas fa-server"></i>
+                        <h3>Environments</h3>
+                        <p>Understand development, QA, beta, and production environments. Test safely before deploying to production.</p>
+                        <a href="getting-started/environments.html">View Environments <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </section>
+
+            <section class="content-section api-overview">
+                <h2><i class="fas fa-chart-bar"></i> API Overview</h2>
+                <p>The Alianza Public API v2 provides comprehensive access to all VoIP platform features through a RESTful interface.</p>
+
+                <div class="api-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">200+</span>
+                        <span class="stat-label">API Endpoints</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">4</span>
+                        <span class="stat-label">Environments</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">REST</span>
+                        <span class="stat-label">Architecture</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">JSON</span>
+                        <span class="stat-label">Data Format</span>
+                    </div>
+                </div>
+
+                <div class="info-box" style="margin-top: 2rem;">
+                    <i class="fas fa-info-circle"></i>
+                    <div>
+                        <strong>Base URLs:</strong>
+                        <ul style="margin-top: 0.5rem;">
+                            <li><strong>Development:</strong> https://api.d2.alianza.com</li>
+                            <li><strong>QA:</strong> https://api.q2.alianza.com</li>
+                            <li><strong>Beta:</strong> https://api.b2.alianza.com</li>
+                            <li><strong>Production:</strong> https://api.alianza.com</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section class="content-section">
+                <h2><i class="fas fa-book-open"></i> Documentation Guides</h2>
+
+                <h3>Core Guides</h3>
+                <div class="quick-start-grid">
+                    <div class="feature-card">
+                        <i class="fas fa-building"></i>
+                        <h3>Account Management</h3>
+                        <p>Create and manage accounts, configure settings, and understand the account hierarchy.</p>
+                        <a href="guides/account-management.html">Read Guide <i class="fas fa-arrow-right"></i></a>
+                    </div>
+
+                    <div class="feature-card">
+                        <i class="fas fa-users"></i>
+                        <h3>User Provisioning</h3>
+                        <p>Provision end users, configure voicemail, call forwarding, and call screening features.</p>
+                        <a href="guides/user-provisioning.html">Read Guide <i class="fas fa-arrow-right"></i></a>
+                    </div>
+
+                    <div class="feature-card">
+                        <i class="fas fa-phone"></i>
+                        <h3>Phone Numbers</h3>
+                        <p>Search, order, port, and assign phone numbers. Manage DID, toll-free, and vanity numbers.</p>
+                        <a href="guides/phone-numbers.html">Read Guide <i class="fas fa-arrow-right"></i></a>
+                    </div>
+
+                    <div class="feature-card">
+                        <i class="fas fa-mobile-alt"></i>
+                        <h3>Device Management</h3>
+                        <p>Configure VoIP devices, manage device lines, and set up device features.</p>
+                        <a href="guides/device-management.html">Read Guide <i class="fas fa-arrow-right"></i></a>
+                    </div>
+
+                    <div class="feature-card">
+                        <i class="fas fa-random"></i>
+                        <h3>Call Routing</h3>
+                        <p>Set up call forwarding, hunt groups, IVR menus, and advanced call routing rules.</p>
+                        <a href="guides/call-routing.html">Read Guide <i class="fas fa-arrow-right"></i></a>
+                    </div>
+
+                    <div class="feature-card">
+                        <i class="fas fa-webhook"></i>
+                        <h3>Webhooks</h3>
+                        <p>Receive real-time notifications for events like call completions, provisioning changes, and more.</p>
+                        <a href="advanced/webhooks.html">Read Guide <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+
+                <h3 style="margin-top: 3rem;">Advanced Topics</h3>
+                <div class="quick-start-grid">
+                    <div class="feature-card">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <h3>Error Handling</h3>
+                        <p>Understand error responses, implement retry logic, and handle edge cases gracefully.</p>
+                        <a href="advanced/error-handling.html">Read Guide <i class="fas fa-arrow-right"></i></a>
+                    </div>
+
+                    <div class="feature-card">
+                        <i class="fas fa-star"></i>
+                        <h3>Best Practices</h3>
+                        <p>Production-ready patterns for authentication, rate limiting, performance, and security.</p>
+                        <a href="advanced/best-practices.html">Read Guide <i class="fas fa-arrow-right"></i></a>
+                    </div>
+
+                    <div class="feature-card">
+                        <i class="fas fa-project-diagram"></i>
+                        <h3>Architecture Diagrams</h3>
+                        <p>Visual representations of system architecture, data flows, and integration patterns.</p>
+                        <a href="architecture/diagrams.html">View Diagrams <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </section>
+
+            <section class="content-section">
+                <h2><i class="fas fa-code"></i> Code Examples</h2>
+                <p>Production-ready code examples in your favorite programming language:</p>
+
+                <div class="quick-start-grid">
+                    <div class="feature-card">
+                        <i class="fab fa-python"></i>
+                        <h3>Python</h3>
+                        <p>Complete Python SDK with authentication, error handling, and example integrations.</p>
+                        <a href="code-examples/python-examples.html">View Examples <i class="fas fa-arrow-right"></i></a>
+                    </div>
+
+                    <div class="feature-card">
+                        <i class="fab fa-node-js"></i>
+                        <h3>Node.js</h3>
+                        <p>JavaScript and TypeScript SDKs with async/await patterns and Express.js integration.</p>
+                        <a href="code-examples/nodejs-examples.html">View Examples <i class="fas fa-arrow-right"></i></a>
+                    </div>
+
+                    <div class="feature-card">
+                        <i class="fab fa-php"></i>
+                        <h3>PHP</h3>
+                        <p>PHP client library with Guzzle HTTP client and Laravel framework examples.</p>
+                        <a href="code-examples/php-examples.html">View Examples <i class="fas fa-arrow-right"></i></a>
+                    </div>
+
+                    <div class="feature-card">
+                        <i class="fab fa-java"></i>
+                        <h3>Java</h3>
+                        <p>Java SDK with OkHttp client, Jackson JSON parsing, and Spring Boot integration.</p>
+                        <a href="code-examples/java-examples.html">View Examples <i class="fas fa-arrow-right"></i></a>
+                    </div>
+
+                    <div class="feature-card">
+                        <i class="fas fa-hashtag"></i>
+                        <h3>C#</h3>
+                        <p>C# / .NET client library with async/await, LINQ, and ASP.NET Core examples.</p>
+                        <a href="code-examples/csharp-examples.html">View Examples <i class="fas fa-arrow-right"></i></a>
+                    </div>
+
+                    <div class="feature-card">
+                        <i class="fas fa-gem"></i>
+                        <h3>Ruby</h3>
+                        <p>Ruby gem with Faraday HTTP client and Rails integration examples.</p>
+                        <a href="code-examples/ruby-examples.html">View Examples <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </section>
+
+            <section class="content-section">
+                <h2><i class="fas fa-plug"></i> Major API Endpoints</h2>
+
+                <div class="endpoints-grid">
+                    <div class="endpoint-category">
+                        <h4><i class="fas fa-building"></i> Accounts</h4>
+                        <p>/v2/accounts - Create, read, update, and delete accounts</p>
+                    </div>
+
+                    <div class="endpoint-category">
+                        <h4><i class="fas fa-users"></i> Users</h4>
+                        <p>/v2/users - Manage end users and account users</p>
+                    </div>
+
+                    <div class="endpoint-category">
+                        <h4><i class="fas fa-mobile-alt"></i> Devices</h4>
+                        <p>/v2/devices - VoIP device configuration and management</p>
+                    </div>
+
+                    <div class="endpoint-category">
+                        <h4><i class="fas fa-phone"></i> Phone Numbers</h4>
+                        <p>/v2/phonenumbers - Search, order, port, and assign numbers</p>
+                    </div>
+
+                    <div class="endpoint-category">
+                        <h4><i class="fas fa-random"></i> Call Routing</h4>
+                        <p>/v2/callforwarding - Configure forwarding and hunt groups</p>
+                    </div>
+
+                    <div class="endpoint-category">
+                        <h4><i class="fas fa-voicemail"></i> Voicemail</h4>
+                        <p>/v2/voicemail - Voicemail settings and greetings</p>
+                    </div>
+
+                    <div class="endpoint-category">
+                        <h4><i class="fas fa-phone-volume"></i> Calling Plans</h4>
+                        <p>/v2/callingplans - Manage calling plan assignments</p>
+                    </div>
+
+                    <div class="endpoint-category">
+                        <h4><i class="fas fa-exclamation-triangle"></i> E911</h4>
+                        <p>/v2/e911 - Emergency address validation and registration</p>
+                    </div>
+
+                    <div class="endpoint-category">
+                        <h4><i class="fas fa-chart-line"></i> CDR</h4>
+                        <p>/v2/cdr - Call detail records and usage reports</p>
+                    </div>
+
+                    <div class="endpoint-category">
+                        <h4><i class="fas fa-file-audio"></i> Media</h4>
+                        <p>/v2/media - Upload audio files and hold music</p>
+                    </div>
+
+                    <div class="endpoint-category">
+                        <h4><i class="fas fa-list"></i> IVR</h4>
+                        <p>/v2/ivr - Interactive voice response menus</p>
+                    </div>
+
+                    <div class="endpoint-category">
+                        <h4><i class="fas fa-layer-group"></i> Bulk Operations</h4>
+                        <p>/v2/bulk - Batch create/update operations</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="content-section">
+                <h2><i class="fas fa-question-circle"></i> Need Help?</h2>
+
+                <div class="info-box">
+                    <i class="fas fa-life-ring"></i>
+                    <div>
+                        <strong>Getting Support:</strong>
+                        <ul style="margin-top: 0.5rem;">
+                            <li>Review the <a href="getting-started/quick-start.html">Quick Start Guide</a> for common tasks</li>
+                            <li>Check the <a href="advanced/error-handling.html">Error Handling Guide</a> for troubleshooting</li>
+                            <li>Follow <a href="advanced/best-practices.html">Best Practices</a> for production deployments</li>
+                            <li>Contact your Alianza account manager for API credentials and support</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="warning-box" style="margin-top: 2rem;">
+                    <i class="fas fa-shield-alt"></i>
+                    <div>
+                        <strong>Security Notice:</strong> Always use HTTPS endpoints, store credentials securely in environment variables, and never commit tokens or passwords to version control.
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

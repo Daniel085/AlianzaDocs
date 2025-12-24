@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Environments - Alianza API Documentation</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-left">
+                <button class="sidebar-toggle" id="sidebarToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <a href="../index.html" class="logo">
+                    <i class="fas fa-book"></i>
+                    Alianza API Docs
+                </a>
+            </div>
+            <div class="nav-right">
+                <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-content">
+            <div class="sidebar-section">
+                <h3>Getting Started</h3>
+                <ul>
+                    <li><a href="authentication.html">Authentication</a></li>
+                    <li><a href="quick-start.html">Quick Start</a></li>
+                    <li><a href="environments.html" class="active">Environments</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-section">
+                <h3>Guides</h3>
+                <ul>
+                    <li><a href="../guides/account-management.html">Account Management</a></li>
+                    <li><a href="../guides/user-provisioning.html">User Provisioning</a></li>
+                    <li><a href="../guides/phone-numbers.html">Phone Numbers</a></li>
+                    <li><a href="../guides/device-management.html">Device Management</a></li>
+                    <li><a href="../guides/call-routing.html">Call Routing</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-section">
+                <h3>Advanced</h3>
+                <ul>
+                    <li><a href="../advanced/error-handling.html">Error Handling</a></li>
+                    <li><a href="../advanced/best-practices.html">Best Practices</a></li>
+                    <li><a href="../advanced/webhooks.html">Webhooks</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-section">
+                <h3>Code Examples</h3>
+                <ul>
+                    <li><a href="../code-examples/python-examples.html">Python</a></li>
+                    <li><a href="../code-examples/nodejs-examples.html">Node.js</a></li>
+                    <li><a href="../code-examples/php-examples.html">PHP</a></li>
+                    <li><a href="../code-examples/java-examples.html">Java</a></li>
+                    <li><a href="../code-examples/csharp-examples.html">C#</a></li>
+                    <li><a href="../code-examples/ruby-examples.html">Ruby</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-section">
+                <h3>Architecture</h3>
+                <ul>
+                    <li><a href="../architecture/diagrams.html">Architecture Diagrams</a></li>
+                </ul>
+            </div>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <div class="content-wrapper">
+            <div class="page-header">
+                <h1><i class="fas fa-server"></i> API Environments</h1>
+                <p class="subtitle">Understanding development, QA, beta, and production environments for safe testing and deployment</p>
+            </div>
+
+            <div class="toc-card">
+                <h3><i class="fas fa-list"></i> On This Page</h3>
+                <ul>
+                    <li><a href="#overview">Environment Overview</a></li>
+                    <li><a href="#development">Development Environment</a></li>
+                    <li><a href="#qa">QA Environment</a></li>
+                    <li><a href="#beta">Beta Environment</a></li>
+                    <li><a href="#production">Production Environment</a></li>
+                    <li><a href="#configuration">Environment Configuration</a></li>
+                    <li><a href="#testing">Testing Strategy</a></li>
+                    <li><a href="#best-practices">Best Practices</a></li>
+                </ul>
+            </div>
+
+            <!-- Overview Section -->
+            <section id="overview" class="content-section">
+                <h2><i class="fas fa-info-circle"></i> Environment Overview</h2>
+
+                <p>Alianza provides four separate API environments to support the full software development lifecycle. Each environment is isolated with its own data, allowing you to test safely without affecting production systems.</p>
+
+                <div class="diagram-block">
+                    <h3>Environment Progression</h3>
+                    <pre class="diagram">
+┌──────────────┐    ┌──────────────┐    ┌──────────────┐    ┌──────────────┐
+│ Development  │───▶│      QA      │───▶│     Beta     │───▶│  Production  │
+│   (D2)       │    │     (Q2)     │    │     (B2)     │    │              │
+└──────────────┘    └──────────────┘    └──────────────┘    └──────────────┘
+     Testing            Validation         Pre-release          Live System
+  Initial Dev          QA Testing        Beta Testing        Customer Traffic</pre>
+                </div>
+
+                <table class="properties-table">
+                    <thead>
+                        <tr>
+                            <th>Environment</th>
+                            <th>Base URL</th>
+                            <th>Purpose</th>
+                            <th>Data Persistence</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Development</strong></td>
+                            <td><code>https://api.d2.alianza.com</code></td>
+                            <td>Initial development and testing</td>
+                            <td>May be reset periodically</td>
+                        </tr>
+                        <tr>
+                            <td><strong>QA</strong></td>
+                            <td><code>https://api.q2.alianza.com</code></td>
+                            <td>Quality assurance and validation</td>
+                            <td>Stable for testing cycles</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Beta</strong></td>
+                            <td><code>https://api.b2.alianza.com</code></td>
+                            <td>Pre-production validation</td>
+                            <td>Production-like stability</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Production</strong></td>
+                            <td><code>https://api.alianza.com</code></td>
+                            <td>Live customer operations</td>
+                            <td>Permanent, critical data</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Development Section -->
+            <section id="development" class="content-section">
+                <h2><i class="fas fa-code"></i> Development Environment</h2>
+
+                <div class="info-box">
+                    <i class="fas fa-flask"></i>
+                    <div>
+                        <strong>Base URL:</strong> <code>https://api.d2.alianza.com</code>
+                    </div>
+                </div>
+
+                <h3>Purpose</h3>
+                <p>The Development environment is designed for initial integration work, experimentation, and rapid iteration. This is where you'll spend most of your time during the development phase.</p>
+
+                <h3>Characteristics</h3>
+                <ul>
+                    <li><strong>Frequent Updates:</strong> New API features are deployed here first</li>
+                    <li><strong>Data Resets:</strong> Data may be periodically reset or cleaned up</li>
+                    <li><strong>Relaxed Limits:</strong> Some rate limits may be higher for testing</li>
+                    <li><strong>Latest Features:</strong> Access to newest endpoints and functionality</li>
+                </ul>
+
+                <h3>When to Use</h3>
+                <ul>
+                    <li>Initial API integration and SDK development</li>
+                    <li>Testing new features and endpoints</li>
+                    <li>Debugging and troubleshooting issues</li>
+                    <li>Learning the API without consequences</li>
+                    <li>Automated integration tests in CI/CD pipelines</li>
+                </ul>
+
+                <h3>Example Configuration</h3>
+
+                <div class="language-tabs">
+                    <div class="tab-buttons">
+                        <button class="tab-button active" data-lang="python">Python</button>
+                        <button class="tab-button" data-lang="javascript">Node.js</button>
+                        <button class="tab-button" data-lang="php">PHP</button>
+                    </div>
+                    <div class="tab-content active" data-lang="python">
+                        <div class="code-block">
+                            <pre><code class="language-python"># .env.development
+ALIANZA_BASE_URL=https://api.d2.alianza.com
+ALIANZA_USERNAME=dev_user@company.com
+ALIANZA_PASSWORD=dev_password
+ALIANZA_PARTITION_ID=dev_partition_123
+
+# config.py
+import os
+
+class DevelopmentConfig:
+    ALIANZA_BASE_URL = os.getenv('ALIANZA_BASE_URL')
+    ALIANZA_USERNAME = os.getenv('ALIANZA_USERNAME')
+    ALIANZA_PASSWORD = os.getenv('ALIANZA_PASSWORD')
+    ALIANZA_PARTITION_ID = os.getenv('ALIANZA_PARTITION_ID')
+    DEBUG = True
+    VERIFY_SSL = True
+
+client = AlianzaClient(
+    base_url=DevelopmentConfig.ALIANZA_BASE_URL,
+    username=DevelopmentConfig.ALIANZA_USERNAME,
+    password=DevelopmentConfig.ALIANZA_PASSWORD
+)</code></pre>
+                            <button class="copy-btn" aria-label="Copy code"><i class="fas fa-copy"></i></button>
+                        </div>
+                    </div>
+                    <div class="tab-content" data-lang="javascript">
+                        <div class="code-block">
+                            <pre><code class="language-javascript">// .env.development
+// ALIANZA_BASE_URL=https://api.d2.alianza.com
+// ALIANZA_USERNAME=dev_user@company.com
+// ALIANZA_PASSWORD=dev_password
+// ALIANZA_PARTITION_ID=dev_partition_123
+
+// config.js
+const config = {
+    development: {
+        baseURL: process.env.ALIANZA_BASE_URL,
+        username: process.env.ALIANZA_USERNAME,
+        password: process.env.ALIANZA_PASSWORD,
+        partitionId: process.env.ALIANZA_PARTITION_ID,
+        timeout: 30000,
+        debug: true
+    }
+};
+
+const client = new AlianzaClient(config.development);</code></pre>
+                            <button class="copy-btn" aria-label="Copy code"><i class="fas fa-copy"></i></button>
+                        </div>
+                    </div>
+                    <div class="tab-content" data-lang="php">
+                        <div class="code-block">
+                            <pre><code class="language-php">// .env.development
+// ALIANZA_BASE_URL=https://api.d2.alianza.com
+// ALIANZA_USERNAME=dev_user@company.com
+// ALIANZA_PASSWORD=dev_password
+// ALIANZA_PARTITION_ID=dev_partition_123
+
+// config.php
+<?php
+$config = [
+    'base_url' => getenv('ALIANZA_BASE_URL'),
+    'username' => getenv('ALIANZA_USERNAME'),
+    'password' => getenv('ALIANZA_PASSWORD'),
+    'partition_id' => getenv('ALIANZA_PARTITION_ID'),
+    'debug' => true
+];
+
+$client = new AlianzaClient($config);</code></pre>
+                            <button class="copy-btn" aria-label="Copy code"><i class="fas fa-copy"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="warning-box">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <div>
+                        <strong>Important:</strong> Never use production credentials in the development environment. Always use environment-specific credentials provided by your Alianza account manager.
+                    </div>
+                </div>
+            </section>
+
+            <!-- QA Section -->
+            <section id="qa" class="content-section">
+                <h2><i class="fas fa-check-circle"></i> QA Environment</h2>
+
+                <div class="info-box">
+                    <i class="fas fa-vial"></i>
+                    <div>
+                        <strong>Base URL:</strong> <code>https://api.q2.alianza.com</code>
+                    </div>
+                </div>
+
+                <h3>Purpose</h3>
+                <p>The QA environment provides a stable testing platform for quality assurance teams to validate integrations before beta or production deployment.</p>
+
+                <h3>Characteristics</h3>
+                <ul>
+                    <li><strong>Stable Data:</strong> Data persists between testing cycles</li>
+                    <li><strong>Controlled Updates:</strong> API changes are more controlled</li>
+                    <li><strong>Realistic Limits:</strong> Rate limits match production settings</li>
+                    <li><strong>Testing Focus:</strong> Optimized for thorough QA testing</li>
+                </ul>
+
+                <h3>When to Use</h3>
+                <ul>
+                    <li>End-to-end integration testing</li>
+                    <li>Performance and load testing</li>
+                    <li>User acceptance testing (UAT)</li>
+                    <li>Regression testing before releases</li>
+                    <li>Training and demonstration purposes</li>
+                </ul>
+
+                <h3>Testing Workflow</h3>
+
+                <div class="code-block">
+                    <pre><code class="language-python"># test_integration.py
+import pytest
+from alianza_client import AlianzaClient
+
+@pytest.fixture
+def qa_client():
+    """QA environment client for testing"""
+    return AlianzaClient(
+        base_url='https://api.q2.alianza.com',
+        username=os.getenv('QA_USERNAME'),
+        password=os.getenv('QA_PASSWORD')
+    )
+
+def test_account_creation_flow(qa_client):
+    """Test complete account creation workflow"""
+    # Create account
+    account = qa_client.create_account({
+        'accountNumber': 'QA-TEST-001',
+        'name': 'QA Test Account',
+        'timeZone': 'America/New_York'
+    })
+
+    assert account['accountId'] is not None
+
+    # Create user
+    user = qa_client.create_user(account['accountId'], {
+        'firstName': 'Test',
+        'lastName': 'User',
+        'email': 'testuser@qa.example.com'
+    })
+
+    assert user['userId'] is not None
+
+    # Cleanup
+    qa_client.delete_user(user['userId'])
+    qa_client.delete_account(account['accountId'])</code></pre>
+                    <button class="copy-btn" aria-label="Copy code"><i class="fas fa-copy"></i></button>
+                </div>
+            </section>
+
+            <!-- Beta Section -->
+            <section id="beta" class="content-section">
+                <h2><i class="fas fa-star-half-alt"></i> Beta Environment</h2>
+
+                <div class="info-box">
+                    <i class="fas fa-rocket"></i>
+                    <div>
+                        <strong>Base URL:</strong> <code>https://api.b2.alianza.com</code>
+                    </div>
+                </div>
+
+                <h3>Purpose</h3>
+                <p>The Beta environment is a production-like environment for final validation before deploying to production. It mirrors production configurations and stability.</p>
+
+                <h3>Characteristics</h3>
+                <ul>
+                    <li><strong>Production Parity:</strong> Configuration matches production closely</li>
+                    <li><strong>Stable Environment:</strong> High availability and reliability</li>
+                    <li><strong>Production Limits:</strong> Same rate limits as production</li>
+                    <li><strong>Final Validation:</strong> Last checkpoint before production</li>
+                </ul>
+
+                <h3>When to Use</h3>
+                <ul>
+                    <li>Final pre-production validation</li>
+                    <li>Production deployment rehearsal</li>
+                    <li>Beta customer testing</li>
+                    <li>Performance benchmarking</li>
+                    <li>Production-like integration testing</li>
+                </ul>
+
+                <h3>Deployment Checklist</h3>
+
+                <div class="code-block">
+                    <pre><code class="language-python"># deployment_checklist.py
+def validate_beta_deployment():
+    """Pre-production validation checklist"""
+
+    checklist = {
+        'Authentication': validate_authentication(),
+        'Account Creation': test_account_creation(),
+        'User Provisioning': test_user_provisioning(),
+        'Phone Number Assignment': test_phone_assignment(),
+        'Call Routing': test_call_routing(),
+        'Error Handling': test_error_scenarios(),
+        'Rate Limiting': test_rate_limits(),
+        'Concurrent Operations': test_concurrency()
+    }
+
+    # Generate report
+    passed = sum(1 for result in checklist.values() if result)
+    total = len(checklist)
+
+    print(f"Beta Validation: {passed}/{total} tests passed")
+
+    for test, result in checklist.items():
+        status = "✓ PASS" if result else "✗ FAIL"
+        print(f"{status} - {test}")
+
+    return passed == total</code></pre>
+                    <button class="copy-btn" aria-label="Copy code"><i class="fas fa-copy"></i></button>
+                </div>
+            </section>
+
+            <!-- Production Section -->
+            <section id="production" class="content-section">
+                <h2><i class="fas fa-cloud"></i> Production Environment</h2>
+
+                <div class="warning-box">
+                    <i class="fas fa-shield-alt"></i>
+                    <div>
+                        <strong>Base URL:</strong> <code>https://api.alianza.com</code>
+                        <br>
+                        <strong>Critical:</strong> This is the live production environment. All operations affect real customer data and services.
+                    </div>
+                </div>
+
+                <h3>Purpose</h3>
+                <p>The Production environment handles live customer traffic and real business operations. This environment must be treated with extreme care and follows strict change control processes.</p>
+
+                <h3>Characteristics</h3>
+                <ul>
+                    <li><strong>High Availability:</strong> 99.9%+ uptime SLA</li>
+                    <li><strong>Real Data:</strong> All data is permanent and business-critical</li>
+                    <li><strong>Strict Limits:</strong> Rate limits enforced to protect system</li>
+                    <li><strong>Monitoring:</strong> Comprehensive logging and alerting</li>
+                </ul>
+
+                <h3>Production Best Practices</h3>
+
+                <div class="comparison-grid">
+                    <div class="comparison-do">
+                        <h4><i class="fas fa-check-circle"></i> DO</h4>
+                        <ul>
+                            <li>Test thoroughly in Dev → QA → Beta first</li>
+                            <li>Use separate production credentials</li>
+                            <li>Implement comprehensive error handling</li>
+                            <li>Monitor all production operations</li>
+                            <li>Use idempotent operations</li>
+                            <li>Implement retry logic with backoff</li>
+                            <li>Log all errors with request IDs</li>
+                            <li>Use circuit breakers for failures</li>
+                        </ul>
+                    </div>
+                    <div class="comparison-dont">
+                        <h4><i class="fas fa-times-circle"></i> DON'T</h4>
+                        <ul>
+                            <li>Test experimental code in production</li>
+                            <li>Share production credentials</li>
+                            <li>Skip error handling</li>
+                            <li>Ignore monitoring alerts</li>
+                            <li>Make bulk changes without testing</li>
+                            <li>Hard-code production credentials</li>
+                            <li>Deploy without validation</li>
+                            <li>Ignore rate limits</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3>Production Configuration Example</h3>
+
+                <div class="code-block">
+                    <pre><code class="language-python"># production_config.py
+import os
+import logging
+from alianza_client import AlianzaClient
+
+# Configure production logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s [%(levelname)s] %(message)s',
+    handlers=[
+        logging.FileHandler('/var/log/alianza_production.log'),
+        logging.StreamHandler()
+    ]
+)
+
+class ProductionConfig:
+    """Production environment configuration"""
+
+    BASE_URL = 'https://api.alianza.com'
+    USERNAME = os.getenv('ALIANZA_PROD_USERNAME')
+    PASSWORD = os.getenv('ALIANZA_PROD_PASSWORD')
+    PARTITION_ID = os.getenv('ALIANZA_PROD_PARTITION_ID')
+
+    # Production settings
+    TIMEOUT = 30
+    MAX_RETRIES = 3
+    BACKOFF_FACTOR = 2
+    VERIFY_SSL = True
+
+    # Monitoring
+    ENABLE_METRICS = True
+    ALERT_ON_ERRORS = True
+
+# Initialize production client
+prod_client = AlianzaClient(
+    base_url=ProductionConfig.BASE_URL,
+    username=ProductionConfig.USERNAME,
+    password=ProductionConfig.PASSWORD,
+    timeout=ProductionConfig.TIMEOUT,
+    max_retries=ProductionConfig.MAX_RETRIES
+)
+
+# Verify connection
+try:
+    prod_client.authenticate()
+    logging.info("Production client authenticated successfully")
+except Exception as e:
+    logging.error(f"Production authentication failed: {e}")
+    raise</code></pre>
+                    <button class="copy-btn" aria-label="Copy code"><i class="fas fa-copy"></i></button>
+                </div>
+            </section>
+
+            <!-- Configuration Section -->
+            <section id="configuration" class="content-section">
+                <h2><i class="fas fa-cog"></i> Environment Configuration</h2>
+
+                <h3>Environment-Aware Configuration</h3>
+
+                <p>Use environment variables and configuration files to manage different environments without code changes.</p>
+
+                <div class="code-block">
+                    <pre><code class="language-python"># config.py
+import os
+
+class Config:
+    """Base configuration"""
+    ALIANZA_TIMEOUT = 30
+    ALIANZA_MAX_RETRIES = 3
+
+class DevelopmentConfig(Config):
+    """Development environment"""
+    ALIANZA_BASE_URL = 'https://api.d2.alianza.com'
+    DEBUG = True
+
+class QAConfig(Config):
+    """QA environment"""
+    ALIANZA_BASE_URL = 'https://api.q2.alianza.com'
+    DEBUG = True
+
+class BetaConfig(Config):
+    """Beta environment"""
+    ALIANZA_BASE_URL = 'https://api.b2.alianza.com'
+    DEBUG = False
+
+class ProductionConfig(Config):
+    """Production environment"""
+    ALIANZA_BASE_URL = 'https://api.alianza.com'
+    DEBUG = False
+    ALIANZA_TIMEOUT = 60
+
+# Select config based on environment variable
+config_map = {
+    'development': DevelopmentConfig,
+    'qa': QAConfig,
+    'beta': BetaConfig,
+    'production': ProductionConfig
+}
+
+env = os.getenv('ALIANZA_ENV', 'development')
+current_config = config_map[env]()</code></pre>
+                    <button class="copy-btn" aria-label="Copy code"><i class="fas fa-copy"></i></button>
+                </div>
+            </section>
+
+            <!-- Testing Strategy Section -->
+            <section id="testing" class="content-section">
+                <h2><i class="fas fa-tasks"></i> Testing Strategy</h2>
+
+                <h3>Progressive Testing Approach</h3>
+
+                <div class="diagram-block">
+                    <pre class="diagram">
+Development Environment (D2)
+├─ Unit Tests
+├─ Integration Tests
+├─ API Endpoint Testing
+└─ Rapid Iteration
+        │
+        ▼
+QA Environment (Q2)
+├─ End-to-End Tests
+├─ Regression Testing
+├─ Performance Testing
+└─ User Acceptance Testing
+        │
+        ▼
+Beta Environment (B2)
+├─ Production Validation
+├─ Load Testing
+├─ Beta User Testing
+└─ Final Sign-Off
+        │
+        ▼
+Production Environment
+├─ Gradual Rollout
+├─ Monitoring & Alerts
+├─ Rollback Plan
+└─ Customer Operations</pre>
+                </div>
+
+                <h3>Automated Testing Pipeline</h3>
+
+                <div class="code-block">
+                    <pre><code class="language-yaml"># .github/workflows/api-tests.yml
+name: API Integration Tests
+
+on: [push, pull_request]
+
+jobs:
+  test-dev:
+    name: Test Development Environment
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run Integration Tests
+        env:
+          ALIANZA_BASE_URL: https://api.d2.alianza.com
+          ALIANZA_USERNAME: ${{ secrets.DEV_USERNAME }}
+          ALIANZA_PASSWORD: ${{ secrets.DEV_PASSWORD }}
+        run: pytest tests/integration/
+
+  test-qa:
+    name: Test QA Environment
+    needs: test-dev
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run E2E Tests
+        env:
+          ALIANZA_BASE_URL: https://api.q2.alianza.com
+          ALIANZA_USERNAME: ${{ secrets.QA_USERNAME }}
+          ALIANZA_PASSWORD: ${{ secrets.QA_PASSWORD }}
+        run: pytest tests/e2e/</code></pre>
+                    <button class="copy-btn" aria-label="Copy code"><i class="fas fa-copy"></i></button>
+                </div>
+            </section>
+
+            <!-- Best Practices Section -->
+            <section id="best-practices" class="content-section">
+                <h2><i class="fas fa-star"></i> Best Practices</h2>
+
+                <h3>Environment Management Guidelines</h3>
+
+                <ul class="checklist">
+                    <li><i class="fas fa-check"></i> <strong>Always start in Development</strong> - Never develop against production</li>
+                    <li><i class="fas fa-check"></i> <strong>Use environment variables</strong> - Never hardcode URLs or credentials</li>
+                    <li><i class="fas fa-check"></i> <strong>Test progressively</strong> - Dev → QA → Beta → Production</li>
+                    <li><i class="fas fa-check"></i> <strong>Separate credentials</strong> - Different credentials for each environment</li>
+                    <li><i class="fas fa-check"></i> <strong>Monitor all environments</strong> - Track errors and performance</li>
+                    <li><i class="fas fa-check"></i> <strong>Document environment differences</strong> - Track any configuration variations</li>
+                    <li><i class="fas fa-check"></i> <strong>Implement health checks</strong> - Verify connectivity before operations</li>
+                    <li><i class="fas fa-check"></i> <strong>Use feature flags</strong> - Control feature rollout across environments</li>
+                </ul>
+
+                <h3>Environment Switching</h3>
+
+                <div class="code-block">
+                    <pre><code class="language-bash"># Switch between environments using environment variables
+
+# Development
+export ALIANZA_ENV=development
+export ALIANZA_BASE_URL=https://api.d2.alianza.com
+
+# QA
+export ALIANZA_ENV=qa
+export ALIANZA_BASE_URL=https://api.q2.alianza.com
+
+# Beta
+export ALIANZA_ENV=beta
+export ALIANZA_BASE_URL=https://api.b2.alianza.com
+
+# Production
+export ALIANZA_ENV=production
+export ALIANZA_BASE_URL=https://api.alianza.com</code></pre>
+                    <button class="copy-btn" aria-label="Copy code"><i class="fas fa-copy"></i></button>
+                </div>
+            </section>
+
+            <!-- Next Steps -->
+            <section class="content-section">
+                <h2><i class="fas fa-forward"></i> Next Steps</h2>
+                <div class="link-grid">
+                    <a href="authentication.html" class="link-card">
+                        <i class="fas fa-key"></i>
+                        <h3>Authentication</h3>
+                        <p>Learn how to authenticate with each environment</p>
+                    </a>
+                    <a href="quick-start.html" class="link-card">
+                        <i class="fas fa-bolt"></i>
+                        <h3>Quick Start</h3>
+                        <p>Make your first API call in development</p>
+                    </a>
+                    <a href="../advanced/best-practices.html" class="link-card">
+                        <i class="fas fa-star"></i>
+                        <h3>Best Practices</h3>
+                        <p>Production deployment guidelines</p>
+                    </a>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script src="../js/main.js"></script>
+</body>
+</html>
