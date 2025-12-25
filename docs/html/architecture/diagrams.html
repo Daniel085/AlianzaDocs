@@ -1,162 +1,111 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Architecture diagrams and visual guides for the Alianza API platform">
-  <title>Architecture Diagrams - Alianza API</title>
-  <link rel="stylesheet" href="../css/main.css">
-  <style>
-    .diagram-block {
-      background: var(--bg-secondary);
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius-md);
-      padding: 1.5rem;
-      margin: 2rem 0;
-      overflow-x: auto;
-    }
-    .diagram-block pre {
-      margin: 0;
-      font-family: 'Courier New', monospace;
-      font-size: 0.85rem;
-      line-height: 1.4;
-      white-space: pre;
-      color: var(--text-primary);
-    }
-    .diagram-title {
-      font-size: 1.5rem;
-      font-weight: 600;
-      margin-top: 3rem;
-      margin-bottom: 1rem;
-      color: var(--accent-primary);
-      border-bottom: 2px solid var(--border-color);
-      padding-bottom: 0.5rem;
-    }
-    .key-points {
-      background: var(--bg-tertiary);
-      border-left: 4px solid var(--accent-primary);
-      padding: 1rem 1.5rem;
-      margin: 1.5rem 0;
-    }
-    .key-points h4 {
-      margin-top: 0;
-      color: var(--accent-primary);
-    }
-    .key-points ul {
-      margin-bottom: 0;
-    }
-    .toc {
-      background: var(--bg-secondary);
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius-md);
-      padding: 1.5rem;
-      margin: 2rem 0;
-    }
-    .toc h3 {
-      margin-top: 0;
-    }
-    .toc ol {
-      padding-left: 1.5rem;
-    }
-    .toc a {
-      color: var(--text-primary);
-      text-decoration: none;
-    }
-    .toc a:hover {
-      color: var(--accent-primary);
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Architecture Diagrams - Alianza API Documentation</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-  <!-- Header -->
-  <header class="docs-header">
-    <a href="../../../index.html" class="docs-logo">
-      <span>📞</span> Alianza API
-    </a>
-    <nav class="docs-nav">
-      <a href="../../../index.html">Home</a>
-      <a href="diagrams.html" class="active">Architecture</a>
-      <a href="../guides/account-management.html">Guides</a>
-      <a href="../../../openapi.yaml">API Reference</a>
-      <button id="theme-toggle" class="theme-toggle">🌙 Dark</button>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-left">
+                <button class="sidebar-toggle" id="sidebarToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <a href="../index.html" class="logo">
+                    <i class="fas fa-book"></i>
+                    Alianza API Docs
+                </a>
+            </div>
+            <div class="nav-right">
+                <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </div>
     </nav>
-  </header>
 
-  <div class="docs-container">
-    <!-- Sidebar -->
-    <aside class="docs-sidebar">
-      <div class="sidebar-section">
-        <div class="sidebar-title">Getting Started</div>
-        <ul class="sidebar-links">
-          <li><a href="../getting-started/quick-start.html">Quick Start</a></li>
-          <li><a href="../getting-started/authentication.html">Authentication</a></li>
-        </ul>
-      </div>
-
-      <div class="sidebar-section">
-        <div class="sidebar-title">Architecture</div>
-        <ul class="sidebar-links">
-          <li><a href="diagrams.html" class="active">Architecture Diagrams</a></li>
-        </ul>
-      </div>
-
-      <div class="sidebar-section">
-        <div class="sidebar-title">Guides</div>
-        <ul class="sidebar-links">
-          <li><a href="../guides/account-management.html">Account Management</a></li>
-          <li><a href="../guides/phone-numbers.html">Phone Numbers</a></li>
-          <li><a href="../guides/device-management.html">Device Management</a></li>
-          <li><a href="../guides/call-routing.html">Call Routing</a></li>
-        </ul>
-      </div>
-
-      <div class="sidebar-section">
-        <div class="sidebar-title">Code Examples</div>
-        <ul class="sidebar-links">
-          <li><a href="../code-examples/python-examples.html">Python</a></li>
-          <li><a href="../code-examples/nodejs-examples.html">Node.js</a></li>
-          <li><a href="../code-examples/php-examples.html">PHP</a></li>
-          <li><a href="../code-examples/java-examples.html">Java</a></li>
-        </ul>
-      </div>
-
-      <div class="sidebar-section">
-        <div class="sidebar-title">Advanced</div>
-        <ul class="sidebar-links">
-          <li><a href="../advanced/error-handling.html">Error Handling</a></li>
-          <li><a href="../advanced/best-practices.html">Best Practices</a></li>
-        </ul>
-      </div>
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-content">
+            <div class="sidebar-section">
+                <h3>Getting Started</h3>
+                <ul>
+                    <li><a href="../getting-started/authentication.html">Authentication</a></li>
+                    <li><a href="../getting-started/quick-start.html">Quick Start</a></li>
+                    <li><a href="../getting-started/environments.html">Environments</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-section">
+                <h3>Guides</h3>
+                <ul>
+                    <li><a href="../guides/account-management.html">Account Management</a></li>
+                    <li><a href="../guides/user-provisioning.html">User Provisioning</a></li>
+                    <li><a href="../guides/phone-numbers.html">Phone Numbers</a></li>
+                    <li><a href="../guides/device-management.html">Device Management</a></li>
+                    <li><a href="../guides/call-routing.html">Call Routing</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-section">
+                <h3>Advanced</h3>
+                <ul>
+                    <li><a href="../advanced/error-handling.html">Error Handling</a></li>
+                    <li><a href="../advanced/best-practices.html">Best Practices</a></li>
+                    <li><a href="../advanced/webhooks.html">Webhooks</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-section">
+                <h3>Code Examples</h3>
+                <ul>
+                    <li><a href="../code-examples/python-examples.html">Python</a></li>
+                    <li><a href="../code-examples/nodejs-examples.html">Node.js</a></li>
+                    <li><a href="../code-examples/php-examples.html">PHP</a></li>
+                    <li><a href="../code-examples/java-examples.html">Java</a></li>
+                    <li><a href="../code-examples/csharp-examples.html">C#</a></li>
+                    <li><a href="../code-examples/ruby-examples.html">Ruby</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-section">
+                <h3>Architecture</h3>
+                <ul>
+                    <li><a href="diagrams.html" class="active">Architecture Diagrams</a></li>
+                </ul>
+            </div>
+        </div>
     </aside>
 
-    <!-- Main Content -->
-    <main class="docs-main">
-      <h1>Architecture Diagrams</h1>
-      <p style="font-size: 1.2rem;">Visual guides to understanding the Alianza platform architecture, data models, and workflows.</p>
+    <main class="main-content">
+        <div class="content-wrapper">
+            <div class="page-header">
+                <h1><i class="fas fa-project-diagram"></i> Architecture Diagrams</h1>
+                <p class="subtitle">Visual guides to understanding the Alianza platform architecture, data models, and workflows</p>
+            </div>
 
-      <div class="toc">
-        <h3>Table of Contents</h3>
-        <ol>
-          <li><a href="#diagram1">Platform Hierarchy & Data Model</a></li>
-          <li><a href="#diagram2">Authentication Flow</a></li>
-          <li><a href="#diagram3">Account Creation Workflow</a></li>
-          <li><a href="#diagram4">Phone Number Lifecycle</a></li>
-          <li><a href="#diagram5">Call Routing Architecture</a></li>
-          <li><a href="#diagram6">BeYOC Architecture</a></li>
-          <li><a href="#diagram7">Multi-Environment Architecture</a></li>
-          <li><a href="#diagram8">Emergency Call (E911) Flow</a></li>
-          <li><a href="#diagram9">Bulk Operations Flow</a></li>
-          <li><a href="#diagram10">System Integration Architecture</a></li>
-          <li><a href="#diagram11">Device Provisioning State Machine</a></li>
-        </ol>
-      </div>
+            <div class="toc-card">
+                <h3><i class="fas fa-list"></i> Table of Contents</h3>
+                <ol>
+                    <li><a href="#diagram1">Platform Hierarchy & Data Model</a></li>
+                    <li><a href="#diagram2">Authentication Flow</a></li>
+                    <li><a href="#diagram3">Account Creation Workflow</a></li>
+                    <li><a href="#diagram4">Phone Number Lifecycle</a></li>
+                    <li><a href="#diagram5">Call Routing Architecture</a></li>
+                    <li><a href="#diagram6">BeYOC Architecture</a></li>
+                    <li><a href="#diagram7">Multi-Environment Architecture</a></li>
+                    <li><a href="#diagram8">Emergency Call (E911) Flow</a></li>
+                    <li><a href="#diagram9">Bulk Operations Flow</a></li>
+                    <li><a href="#diagram10">System Integration Architecture</a></li>
+                    <li><a href="#diagram11">Device Provisioning State Machine</a></li>
+                </ol>
+            </div>
 
-      <!-- Diagram 1 -->
-      <h2 id="diagram1" class="diagram-title">1. Platform Hierarchy & Data Model</h2>
-      <p>Understanding the hierarchical structure of the Alianza platform is fundamental to working with the API.</p>
+            <!-- Diagram 1 -->
+            <section id="diagram1" class="content-section">
+                <h2><i class="fas fa-sitemap"></i> 1. Platform Hierarchy & Data Model</h2>
+                <p>Understanding the hierarchical structure of the Alianza platform is fundamental to working with the API.</p>
 
-      <div class="diagram-block">
-        <pre>┌─────────────────────────────────────────┐
+                <div class="diagram-block">
+                    <pre class="diagram">┌─────────────────────────────────────────┐
 │           Partition (Tenant)            │
 │  (Service Provider's logical space)     │
 │  - Multi-tenant isolation               │
@@ -199,34 +148,38 @@
           │ - Toll-free           │
           │ - E911 info           │
           └───────────────────────┘</pre>
-      </div>
+                </div>
 
-      <div class="key-points">
-        <h4>Key Relationships</h4>
-        <ul>
-          <li><strong>1 Partition : N Accounts</strong> (one-to-many)</li>
-          <li><strong>1 Account : N End Users</strong> (one-to-many)</li>
-          <li><strong>1 Account : N Devices</strong> (one-to-many)</li>
-          <li><strong>1 End User : N Phone Numbers</strong> (one-to-many)</li>
-          <li><strong>1 Device : N Device Lines</strong> (one-to-many)</li>
-        </ul>
-      </div>
+                <div class="info-box">
+                    <i class="fas fa-link"></i>
+                    <div>
+                        <strong>Key Relationships:</strong>
+                        <ul style="margin-top: 0.5rem;">
+                            <li><strong>1 Partition : N Accounts</strong> (one-to-many)</li>
+                            <li><strong>1 Account : N End Users</strong> (one-to-many)</li>
+                            <li><strong>1 Account : N Devices</strong> (one-to-many)</li>
+                            <li><strong>1 End User : N Phone Numbers</strong> (one-to-many)</li>
+                            <li><strong>1 Device : N Device Lines</strong> (one-to-many)</li>
+                        </ul>
+                    </div>
+                </div>
 
-      <div class="card">
-        <div class="card-title">API Pattern</div>
-        <div class="code-block">
-          <pre><code>/v2/partition/{partitionId}/account
+                <h3>API Pattern</h3>
+                <div class="code-block">
+                    <pre><code class="language-text">/v2/partition/{partitionId}/account
 /v2/partition/{partitionId}/account/{accountId}/user
 /v2/partition/{partitionId}/account/{accountId}/device</code></pre>
-        </div>
-      </div>
+                    <button class="copy-btn" aria-label="Copy code"><i class="fas fa-copy"></i></button>
+                </div>
+            </section>
 
-      <!-- Diagram 2 -->
-      <h2 id="diagram2" class="diagram-title">2. Authentication Flow</h2>
-      <p>Token-based authentication is required for all API operations.</p>
+            <!-- Diagram 2 -->
+            <section id="diagram2" class="content-section">
+                <h2><i class="fas fa-key"></i> 2. Authentication Flow</h2>
+                <p>Token-based authentication is required for all API operations.</p>
 
-      <div class="diagram-block">
-        <pre>┌─────────────┐                          ┌──────────────┐
+                <div class="diagram-block">
+                    <pre class="diagram">┌─────────────┐                          ┌──────────────┐
 │   Client    │                          │ Alianza API  │
 │ Application │                          │   Gateway    │
 └──────┬──────┘                          └──────┬───────┘
@@ -275,24 +228,29 @@
        │                                        │
        │  8. 200 OK {new authToken}             │
        │<───────────────────────────────────────┤</pre>
-      </div>
+                </div>
 
-      <div class="key-points">
-        <h4>Best Practices</h4>
-        <ul>
-          <li>Store token securely (never in client-side localStorage)</li>
-          <li>Refresh token proactively before expiration (50-55 minutes)</li>
-          <li>Implement 401 error handling with automatic re-authentication</li>
-          <li>Log out explicitly to invalidate tokens</li>
-        </ul>
-      </div>
+                <div class="warning-box">
+                    <i class="fas fa-shield-alt"></i>
+                    <div>
+                        <strong>Best Practices:</strong>
+                        <ul style="margin-top: 0.5rem;">
+                            <li>Store token securely (never in client-side localStorage)</li>
+                            <li>Refresh token proactively before expiration (50-55 minutes)</li>
+                            <li>Implement 401 error handling with automatic re-authentication</li>
+                            <li>Log out explicitly to invalidate tokens</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
 
-      <!-- Diagram 3 -->
-      <h2 id="diagram3" class="diagram-title">3. Account Creation Workflow</h2>
-      <p>Complete workflow for creating a fully functional VoIP account.</p>
+            <!-- Diagram 3 -->
+            <section id="diagram3" class="content-section">
+                <h2><i class="fas fa-tasks"></i> 3. Account Creation Workflow</h2>
+                <p>Complete workflow for creating a fully functional VoIP account.</p>
 
-      <div class="diagram-block">
-        <pre>┌─────────────────────────────────────────────────┐
+                <div class="diagram-block">
+                    <pre class="diagram">┌─────────────────────────────────────────────────┐
 │ STEP 1: Validate Address                       │
 │ GET /v2/address/validate                        │
 │ Purpose: E911 compliance, service availability  │
@@ -356,71 +314,809 @@
          └───────┘
     Account fully provisioned
     User can make/receive calls</pre>
-      </div>
+                </div>
 
-      <div class="alert alert-warning">
-        <strong>⚠️ Critical Steps</strong>
-        <ol>
-          <li>Address validation is required for E911 compliance</li>
-          <li>Phone number must be in inventory or ordered</li>
-          <li>Device line configuration determines available features</li>
-          <li>All steps should be validated before proceeding</li>
-        </ol>
-      </div>
+                <div class="warning-box">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <div>
+                        <strong>Critical Steps:</strong>
+                        <ol style="margin-top: 0.5rem;">
+                            <li>Address validation is required for E911 compliance</li>
+                            <li>Phone number must be in inventory or ordered</li>
+                            <li>Device line configuration determines available features</li>
+                            <li>All steps should be validated before proceeding</li>
+                        </ol>
+                    </div>
+                </div>
+            </section>
 
-      <!-- Continue with remaining diagrams in next message due to length -->
-      <!-- For brevity, I'll include links to navigate to full content -->
+            <!-- Diagram 4 -->
+            <section id="diagram4" class="content-section">
+                <h2><i class="fas fa-phone"></i> 4. Phone Number Lifecycle</h2>
+                <p>Understanding the states and transitions of telephone numbers.</p>
 
-      <div class="alert alert-success" style="margin-top: 3rem;">
-        <strong>✅ All 11 Architecture Diagrams Complete</strong>
-        <p>This page includes comprehensive visual guides for:</p>
-        <ul>
-          <li>Platform hierarchy and data relationships</li>
-          <li>Authentication and security flows</li>
-          <li>Provisioning workflows (accounts, users, devices, numbers)</li>
-          <li>Call routing and emergency services</li>
-          <li>Multi-environment deployment</li>
-          <li>System integration patterns</li>
-        </ul>
-      </div>
+                <div class="diagram-block">
+                    <pre class="diagram">┌─────────────────────────┐
+│  INVENTORY AVAILABLE    │
+│  (In Alianza pool)      │
+└───────────┬─────────────┘
+            │
+            │ Search Available Numbers
+            │ GET /telephone-number/search
+            │
+            ▼
+┌─────────────────────────┐
+│   SEARCH RESULTS        │
+│   (Available TNs)       │
+└───────────┬─────────────┘
+            │
+            │ Reserve/Order Number
+            │ POST /telephone-number/order
+            │
+            ▼
+┌─────────────────────────┐
+│      RESERVED           │
+│  (Pending assignment)   │
+└───────────┬─────────────┘
+            │
+     ┌──────┴──────┐
+     │             │
+     │             │ Port from Another Carrier
+     │             │ POST /telephone-number/port
+     │             │
+     │             ▼
+     │      ┌─────────────────┐
+     │      │  PORT PENDING   │
+     │      │  (Waiting)      │
+     │      └────────┬────────┘
+     │               │
+     │               │ Port Complete
+     │               │
+     │               ▼
+     │      ┌─────────────────┐
+     │      │  PORT COMPLETE  │
+     │      └────────┬────────┘
+     │               │
+     └───────┬───────┘
+             │
+             │ Assign to User/Device
+             │ PUT /user/{id}/telephone-number
+             │
+             ▼
+┌─────────────────────────┐
+│    ACTIVE/ASSIGNED      │
+│  (In service)           │
+│  - Inbound calls work   │
+│  - Outbound caller ID   │
+│  - E911 registered      │
+└───────────┬─────────────┘
+            │
+            │ Unassign/Disconnect
+            │ DELETE /user/{id}/telephone-number
+            │
+            ▼
+┌─────────────────────────┐
+│     DISCONNECTED        │
+│  (Available to release) │
+└───────────┬─────────────┘
+            │
+            │ Release to inventory
+            │ DELETE /telephone-number/{id}
+            │
+            ▼
+┌─────────────────────────┐
+│      RELEASED           │
+│  (Returned to pool)     │
+└─────────────────────────┘</pre>
+                </div>
 
-      <!-- Next Steps -->
-      <div style="margin-top: 3rem; padding: 2rem; background: var(--bg-secondary); border-radius: var(--radius-lg);">
-        <h2>Next Steps</h2>
-        <p>Now that you understand the architecture:</p>
-        <div class="nav-cards" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-top: 1.5rem;">
-          <a href="../getting-started/quick-start.html" class="card" style="text-decoration: none;">
-            <div class="card-title">Quick Start Guide</div>
-            <p>Get hands-on with the API</p>
-          </a>
-          <a href="../guides/account-management.html" class="card" style="text-decoration: none;">
-            <div class="card-title">Account Management</div>
-            <p>Implement workflows</p>
-          </a>
-          <a href="../code-examples/python-examples.html" class="card" style="text-decoration: none;">
-            <div class="card-title">Code Examples</div>
-            <p>See it in code</p>
-          </a>
-          <a href="../advanced/best-practices.html" class="card" style="text-decoration: none;">
-            <div class="card-title">Best Practices</div>
-            <p>Optimize your integration</p>
-          </a>
+                <div class="info-box">
+                    <i class="fas fa-info-circle"></i>
+                    <div>
+                        <strong>Special Cases:</strong>
+                        <ul style="margin-top: 0.5rem;">
+                            <li><strong>Toll-Free Numbers:</strong> Different ordering process</li>
+                            <li><strong>Vanity Numbers:</strong> May require manual approval</li>
+                            <li><strong>Ported Numbers:</strong> 7-10 business day process</li>
+                            <li><strong>Emergency Numbers:</strong> Cannot be released immediately</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Diagram 5 -->
+            <section id="diagram5" class="content-section">
+                <h2><i class="fas fa-random"></i> 5. Call Routing Architecture</h2>
+                <p>How calls flow through the Alianza platform and routing options.</p>
+
+                <div class="diagram-block">
+                    <pre class="diagram">                    ┌───────────────────┐
+                    │  Incoming Call    │
+                    │  (PSTN/SIP Trunk) │
+                    └─────────┬─────────┘
+                              │
+                              ▼
+                    ┌───────────────────┐
+                    │  Phone Number     │
+                    │  (Telephone #)    │
+                    └─────────┬─────────┘
+                              │
+            ┌─────────────────┼─────────────────┐
+            │                 │                 │
+            ▼                 ▼                 ▼
+    ┌──────────────┐  ┌─────────────┐  ┌──────────────┐
+    │ Device Line  │  │  IVR Menu   │  │ Hunt Group   │
+    │              │  │             │  │              │
+    │ Ring phone   │  │ Press 1...  │  │ Ring multi-  │
+    │ directly     │  │ Press 2...  │  │ ple devices  │
+    └──────────────┘  └──────┬──────┘  └──────┬───────┘
+                             │                │
+                   ┌─────────┼────────────┐   │
+                   │         │            │   │
+                   ▼         ▼            ▼   ▼
+            ┌──────────┐ ┌────────┐ ┌─────────────┐
+            │ Paging   │ │ Pickup │ │ Call Queue  │
+            │ Group    │ │ Group  │ │             │
+            │          │ │        │ │ Hold music  │
+            │ One-way  │ │ Ring   │ │ Position    │
+            │ broadcast│ │ all    │ │ announce    │
+            └──────────┘ └────────┘ └──────┬──────┘
+                                           │
+                                           ▼
+                                    ┌─────────────┐
+                                    │   Agent     │
+                                    │  Answers    │
+                                    └─────────────┘</pre>
+                </div>
+
+                <div class="info-box">
+                    <i class="fas fa-route"></i>
+                    <div>
+                        <strong>All Call Options Can Also Route To:</strong>
+                        <ul style="margin-top: 0.5rem;">
+                            <li>Voicemail</li>
+                            <li>Call Parking Spot</li>
+                            <li>External Number (forwarding)</li>
+                            <li>Time-based routing</li>
+                            <li>Business hours routing</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <i class="fas fa-file-alt"></i>
+                    <div>
+                        <strong>Every call generates a CDR (Call Detail Record) with:</strong>
+                        <ul style="margin-top: 0.5rem;">
+                            <li>Caller ID</li>
+                            <li>Duration</li>
+                            <li>Disposition</li>
+                            <li>Cost/billing</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3>Routing Strategies</h3>
+
+                <h4>Hunt Group Modes:</h4>
+                <ul>
+                    <li><strong>Simultaneous:</strong> Ring all devices at once</li>
+                    <li><strong>Sequential:</strong> Try devices in order</li>
+                    <li><strong>Round-robin:</strong> Distribute calls evenly</li>
+                </ul>
+
+                <h4>IVR Capabilities:</h4>
+                <ul>
+                    <li>Multi-level menus</li>
+                    <li>Custom audio prompts</li>
+                    <li>Dial-by-extension</li>
+                    <li>Voicemail integration</li>
+                </ul>
+            </section>
+
+            <!-- Diagram 6 -->
+            <section id="diagram6" class="content-section">
+                <h2><i class="fas fa-network-wired"></i> 6. BeYOC (Bring Your Own Carrier) Architecture</h2>
+                <p>Integration model for customers using their own SIP trunk provider.</p>
+
+                <div class="diagram-block">
+                    <pre class="diagram">┌──────────────────────┐
+│   Customer's Own     │
+│   Carrier/Trunk      │
+│   Provider           │
+│                      │
+│   (PSTN Gateway)     │
+└──────────┬───────────┘
+           │
+           │ SIP Trunk
+           │ (Customer manages)
+           │
+           ▼
+┌──────────────────────┐         ┌─────────────────────┐
+│   Alianza Platform   │────────>│   Alianza API       │
+│   (Soft Switch)      │         │   Management        │
+│                      │         │                     │
+│ - Call routing       │         │ - Account setup     │
+│ - Feature server     │<────────│ - Device config     │
+│ - Voicemail          │         │ - User management   │
+│ - IVR                │         │ - Reporting         │
+│ - Call parking       │         │ - CDR access        │
+│ - Hunt groups        │         │                     │
+└──────────┬───────────┘         └─────────────────────┘
+           │
+           │ SIP Registration
+           │
+           ▼
+┌──────────────────────┐
+│   End User Devices   │
+│                      │
+│   - IP Phones        │
+│   - Soft phones      │
+│   - SIP devices      │
+└──────────────────────┘</pre>
+                </div>
+
+                <div class="info-box">
+                    <i class="fas fa-info-circle"></i>
+                    <div>
+                        <strong>Key Differences from Standard Deployment:</strong>
+                        <ul style="margin-top: 0.5rem;">
+                            <li>Customer maintains PSTN connectivity</li>
+                            <li>Customer responsible for trunking costs</li>
+                            <li>Alianza provides feature server only</li>
+                            <li>API usage remains the same</li>
+                            <li>Billing integration may differ</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <i class="fas fa-plug"></i>
+                    <div>
+                        <strong>BeYOC API Endpoints:</strong>
+                        <ul style="margin-top: 0.5rem;">
+                            <li>Same account/user/device management</li>
+                            <li>Special trunk configuration endpoints</li>
+                            <li>SIP credential management</li>
+                        </ul>
+                        <p style="margin-top: 0.5rem;"><strong>See:</strong> Alianza Account Create for BeYOC via API.pdf</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Diagram 7 -->
+            <section id="diagram7" class="content-section">
+                <h2><i class="fas fa-server"></i> 7. Multi-Environment Architecture</h2>
+                <p>Promotion path from development to production.</p>
+
+                <div class="diagram-block">
+                    <pre class="diagram">┌─────────────────────────────────────────────────────┐
+│                 DEVELOPMENT                         │
+│          https://api.d2.alianza.com                 │
+│                                                     │
+│  Purpose:                                           │
+│  • Initial development                              │
+│  • Feature testing                                  │
+│  • API exploration                                  │
+│  • Integration development                          │
+│                                                     │
+│  Characteristics:                                   │
+│  • Frequent changes                                 │
+│  • May have unstable features                       │
+│  • Test data only                                   │
+│  • Reset periodically                               │
+└──────────────────────┬──────────────────────────────┘
+                       │
+                       │ Promote when stable
+                       ▼
+┌─────────────────────────────────────────────────────┐
+│                      QA                             │
+│          https://api.q2.alianza.com                 │
+│                                                     │
+│  Purpose:                                           │
+│  • Integration testing                              │
+│  • User acceptance testing                          │
+│  • Performance testing                              │
+│  • Regression testing                               │
+│                                                     │
+│  Characteristics:                                   │
+│  • Stable API                                       │
+│  • Matches production                               │
+│  • Controlled test data                             │
+└──────────────────────┬──────────────────────────────┘
+                       │
+                       │ Final validation
+                       ▼
+┌─────────────────────────────────────────────────────┐
+│                     BETA                            │
+│          https://api.b2.alianza.com                 │
+│                                                     │
+│  Purpose:                                           │
+│  • Pre-production validation                        │
+│  • Pilot deployments                                │
+│  • Partner previews                                 │
+│  • Production rehearsal                             │
+│                                                     │
+│  Characteristics:                                   │
+│  • Production-like data                             │
+│  • Production-like scale                            │
+│  • Release candidates                               │
+└──────────────────────┬──────────────────────────────┘
+                       │
+                       │ Go-live
+                       ▼
+┌─────────────────────────────────────────────────────┐
+│                  PRODUCTION                         │
+│          https://api.alianza.com                    │
+│                                                     │
+│  Purpose:                                           │
+│  • Live customer traffic                            │
+│  • Production workloads                             │
+│  • Real billing/CDRs                                │
+│                                                     │
+│  Characteristics:                                   │
+│  • Highly available (99.999%)                       │
+│  • Monitored 24/7                                   │
+│  • Real customer data                               │
+│  • Strict change control                            │
+└─────────────────────────────────────────────────────┘</pre>
+                </div>
+
+                <div class="warning-box">
+                    <i class="fas fa-shield-alt"></i>
+                    <div>
+                        <strong>Best Practices:</strong>
+                        <ul style="margin-top: 0.5rem;">
+                            <li>Maintain separate credentials per environment</li>
+                            <li>Test in dev/QA before production deployment</li>
+                            <li>Use beta for pilot customers</li>
+                            <li>Never point production to dev/QA URLs</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Diagram 8 -->
+            <section id="diagram8" class="content-section">
+                <h2><i class="fas fa-phone-volume"></i> 8. Emergency Call (E911) Flow</h2>
+                <p>Kari's Law compliance for emergency calling.</p>
+
+                <div class="diagram-block">
+                    <pre class="diagram">┌───────────────────┐
+│  User Dials 911   │
+└─────────┬─────────┘
+          │
+          ▼
+┌─────────────────────────────────┐
+│    Alianza Switch Detects       │
+│    Emergency Call               │
+└─────────┬───────────────────────┘
+          │
+          │ Parallel Actions:
+          │
+    ┌─────┼─────┬────────┬────────────┐
+    │     │     │        │            │
+    ▼     ▼     ▼        ▼            ▼
+┌──────┐ ┌────┐ ┌──────┐ ┌─────────┐ ┌──────┐
+│Route │ │Log │ │Lookup│ │ Trigger │ │Create│
+│ to   │ │ in │ │ E911 │ │ Notif.  │ │ CDR  │
+│PSAP  │ │CDR │ │ Addr │ │ Webhook │ │      │
+└──┬───┘ └────┘ └──────┘ └────┬────┘ └──────┘
+   │                           │
+   │                           │
+   │                     ┌─────┴─────┐
+   │                     │           │
+   │                     ▼           ▼
+   │              ┌──────────┐ ┌─────────┐
+   │              │   SMS    │ │  Email  │
+   │              │   to     │ │   to    │
+   │              │ Contacts │ │ Contacts│
+   │              └──────────┘ └─────────┘
+   │
+   │ Connect caller to
+   │ Public Safety
+   │
+   ▼
+┌─────────────────────────┐
+│  PSAP (911 Center)      │
+│  Receives call with:    │
+│  - Caller ID            │
+│  - E911 address         │
+│  - Callback number      │
+└─────────────────────────┘</pre>
+                </div>
+
+                <div class="warning-box">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <div>
+                        <strong>Kari's Law Requirements:</strong>
+                        <ol style="margin-top: 0.5rem;">
+                            <li>Direct routing to 911 (no prefix dialing)</li>
+                            <li>Notification sent to designated contact(s)</li>
+                            <li>Caller location information transmitted</li>
+                            <li>Must work even without fully provisioned service</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <i class="fas fa-cog"></i>
+                    <div>
+                        <strong>Emergency Notification Configuration:</strong>
+                        <ul style="margin-top: 0.5rem;">
+                            <li>Configure via: <code>POST /v2/partition/{id}/account/{id}/emergency-notification</code></li>
+                            <li>Can set: SMS recipients, email recipients, webhook URLs</li>
+                            <li>Test notifications without calling 911</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Diagram 9 -->
+            <section id="diagram9" class="content-section">
+                <h2><i class="fas fa-layer-group"></i> 9. Bulk Operations Flow</h2>
+                <p>Managing large numbers of users efficiently.</p>
+
+                <div class="diagram-block">
+                    <pre class="diagram">┌────────────────────────────────────────────────┐
+│ STEP 1: Create Collection                     │
+│                                                │
+│ POST /v2/bulk-user-operation/collection       │
+│                                                │
+│ Purpose: Container for users to operate on    │
+│ Returns: collectionId                          │
+└──────────────────┬─────────────────────────────┘
+                   │
+                   ▼
+┌────────────────────────────────────────────────┐
+│ STEP 2: Add Users to Collection               │
+│                                                │
+│ POST /v2/bulk-user-operation/collection/      │
+│      {collectionId}/{extension}                │
+│                                                │
+│ Repeat for each user:                          │
+│ • User 1001                                    │
+│ • User 1002                                    │
+│ • User 1003                                    │
+│ • ... (can add hundreds/thousands)             │
+└──────────────────┬─────────────────────────────┘
+                   │
+                   ▼
+┌────────────────────────────────────────────────┐
+│ STEP 3: Create Bulk Job                       │
+│                                                │
+│ POST /v2/bulk-user-operation/job              │
+│ {                                              │
+│   "collectionId": "abc123",                    │
+│   "operation": "UPDATE_CALLING_PLAN",          │
+│   "parameters": {                              │
+│     "callingPlanId": "plan456"                 │
+│   }                                            │
+│ }                                              │
+│                                                │
+│ Returns: jobId                                 │
+└──────────────────┬─────────────────────────────┘
+                   │
+                   ▼
+┌────────────────────────────────────────────────┐
+│ STEP 4: Monitor Job Progress                  │
+│                                                │
+│ GET /v2/bulk-user-operation/job/{jobId}       │
+│                                                │
+│ Poll every 5-10 seconds                        │
+│                                                │
+│ Status Progression:                            │
+│ PENDING → PROCESSING → COMPLETED               │
+│                      ↘ FAILED                  │
+│                      ↘ PARTIAL                 │
+└──────────────────┬─────────────────────────────┘
+                   │
+                   ▼
+┌────────────────────────────────────────────────┐
+│ Job Complete                                   │
+│                                                │
+│ Response includes:                             │
+│ • Total users processed                        │
+│ • Successful operations                        │
+│ • Failed operations                            │
+│ • Error details per user                       │
+└────────────────────────────────────────────────┘</pre>
+                </div>
+
+                <div class="info-box">
+                    <i class="fas fa-tools"></i>
+                    <div>
+                        <strong>Supported Bulk Operations:</strong>
+                        <ul style="margin-top: 0.5rem;">
+                            <li>Update calling plans</li>
+                            <li>Change voicemail settings</li>
+                            <li>Modify call forwarding</li>
+                            <li>Update device configurations</li>
+                            <li>Delete users</li>
+                            <li>Provision features</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <i class="fas fa-star"></i>
+                    <div>
+                        <strong>Best Practices:</strong>
+                        <ul style="margin-top: 0.5rem;">
+                            <li>Batch users into collections of 500-1000</li>
+                            <li>Poll job status (don't wait synchronously)</li>
+                            <li>Handle partial failures gracefully</li>
+                            <li>Log results for audit trail</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Diagram 10 -->
+            <section id="diagram10" class="content-section">
+                <h2><i class="fas fa-plug"></i> 10. System Integration Architecture</h2>
+                <p>How external systems integrate with Alianza.</p>
+
+                <div class="diagram-block">
+                    <pre class="diagram">┌───────────────────────────────────────────────┐
+│        Your System (CRM, Billing, etc.)      │
+│                                               │
+│  • Customer management                        │
+│  • Billing system                             │
+│  • Ticketing system                           │
+│  • Custom applications                        │
+└─────────────────┬─────────────────────────────┘
+                  │
+                  │ HTTPS REST API Calls
+                  │ (JSON over TLS 1.2+)
+                  │
+                  ▼
+┌─────────────────────────────────────────────────┐
+│         Alianza API Gateway                     │
+│                                                 │
+│  Authentication: X-AUTH-TOKEN header            │
+│  Rate Limiting: 100 requests/second             │
+│  Security: IP whitelisting (optional)           │
+└─────────────┬───────────────────────────────────┘
+              │
+        ┌─────┴─────┬──────────┬──────────┐
+        │           │          │          │
+        ▼           ▼          ▼          ▼
+┌──────────┐ ┌──────────┐ ┌────────┐ ┌─────────┐
+│ Accounts │ │ Devices  │ │Numbers │ │ Routing │
+│          │ │          │ │        │ │         │
+│ - CRUD   │ │ - CRUD   │ │- Search│ │- IVR    │
+│ - Search │ │ - Config │ │- Order │ │- Hunt   │
+│ - Update │ │ - Lines  │ │- Port  │ │- Queue  │
+└────┬─────┘ └────┬─────┘ └───┬────┘ └────┬────┘
+     │            │            │           │
+     └────────────┴────────────┴───────────┘
+                  │
+                  ▼
+┌─────────────────────────────────────────────────┐
+│         Alianza VoIP Platform                   │
+│           (Soft Switch)                         │
+│                                                 │
+│  • Call processing                              │
+│  • Feature servers                              │
+│  • Media servers                                │
+│  • Voicemail                                    │
+└─────────────┬───────────────────────────────────┘
+              │
+        ┌─────┴─────┐
+        │           │
+        ▼           ▼
+┌──────────┐   ┌─────────┐
+│   PSTN   │   │   SIP   │
+│ Gateway  │   │ Devices │
+└──────────┘   └─────────┘</pre>
+                </div>
+
+                <div class="info-box">
+                    <i class="fas fa-webhook"></i>
+                    <div>
+                        <strong>Async Events (Webhooks):</strong>
+                        <ul style="margin-top: 0.5rem;">
+                            <li>Call completed (CDR)</li>
+                            <li>Voicemail received</li>
+                            <li>Number ported (status change)</li>
+                            <li>Device registered/unregistered</li>
+                            <li>Emergency call (911)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3>Integration Patterns</h3>
+
+                <h4>1. Synchronous Request/Response:</h4>
+                <ul>
+                    <li>Create/update operations</li>
+                    <li>Real-time queries</li>
+                    <li>Immediate validation</li>
+                </ul>
+
+                <h4>2. Polling:</h4>
+                <ul>
+                    <li>CDR retrieval</li>
+                    <li>Bulk operation status</li>
+                    <li>Port request status</li>
+                </ul>
+
+                <h4>3. Webhooks (if configured):</h4>
+                <ul>
+                    <li>Emergency notifications</li>
+                    <li>Event-driven updates</li>
+                </ul>
+            </section>
+
+            <!-- Diagram 11 -->
+            <section id="diagram11" class="content-section">
+                <h2><i class="fas fa-mobile-alt"></i> 11. Device Provisioning State Machine</h2>
+                <p>Lifecycle states of VoIP devices.</p>
+
+                <div class="diagram-block">
+                    <pre class="diagram">┌─────────────────────────┐
+│  UNASSIGNED             │
+│  (Device in inventory)  │
+│                         │
+│  • Not linked to user   │
+│  • No configuration     │
+└───────────┬─────────────┘
+            │
+            │ POST /account/{id}/device
+            │ {macAddress, model, type}
+            │
+            ▼
+┌─────────────────────────┐
+│  CREATED                │
+│  (Device record exists) │
+│                         │
+│  • MAC address recorded │
+│  • Model identified     │
+└───────────┬─────────────┘
+            │
+            │ POST /device/{id}/line
+            │ Configure line 1, 2, etc.
+            │
+            ▼
+┌─────────────────────────┐
+│  CONFIGURED             │
+│  (Lines provisioned)    │
+│                         │
+│  • SIP credentials set  │
+│  • Line features set    │
+│  • Codecs configured    │
+└───────────┬─────────────┘
+            │
+            │ Device boots,
+            │ downloads config,
+            │ sends SIP REGISTER
+            │
+            ▼
+┌─────────────────────────┐
+│  REGISTERED             │
+│  (Device online)        │
+│                         │
+│  • SIP registration OK  │
+│  • Can receive calls    │
+│  • Shows as online      │
+└───────────┬─────────────┘
+            │
+      ┌─────┴─────┐
+      │           │
+      │      [Network issue,
+      │       power loss]
+      │           │
+      │           ▼
+      │     ┌─────────────┐
+      │     │UNREGISTERED │
+      │     │(Offline)    │
+      │     └──────┬──────┘
+      │            │
+      │            │ Device reconnects
+      │            │
+      │     ┌──────┘
+      │     │
+      └─────┤
+            │
+            │ PUT /device/{id}
+            │ {status: "INACTIVE"}
+            │
+            ▼
+┌─────────────────────────┐
+│  INACTIVE               │
+│  (Deactivated)          │
+│                         │
+│  • Cannot register      │
+│  • Config unavailable   │
+│  • Calls blocked        │
+└───────────┬─────────────┘
+            │
+            │ DELETE /device/{id}
+            │
+            ▼
+┌─────────────────────────┐
+│  DELETED                │
+│  (Removed from system)  │
+│                         │
+│  • Record removed       │
+│  • MAC available reuse  │
+└─────────────────────────┘</pre>
+                </div>
+
+                <div class="info-box">
+                    <i class="fas fa-list"></i>
+                    <div>
+                        <strong>Device States:</strong>
+                        <ul style="margin-top: 0.5rem;">
+                            <li><strong>UNASSIGNED:</strong> In inventory, not configured</li>
+                            <li><strong>CREATED:</strong> Record exists, basic info set</li>
+                            <li><strong>CONFIGURED:</strong> Lines and features provisioned</li>
+                            <li><strong>REGISTERED:</strong> Online and ready (SIP registered)</li>
+                            <li><strong>UNREGISTERED:</strong> Temporarily offline</li>
+                            <li><strong>INACTIVE:</strong> Administratively disabled</li>
+                            <li><strong>DELETED:</strong> Removed from system</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="warning-box">
+                    <i class="fas fa-wrench"></i>
+                    <div>
+                        <strong>Troubleshooting:</strong>
+                        <ul style="margin-top: 0.5rem;">
+                            <li>Device stuck in CREATED → Check line configuration</li>
+                            <li>Device stuck in CONFIGURED → Check network/DHCP/TFTP</li>
+                            <li>REGISTERED → UNREGISTERED → Check network connectivity</li>
+                            <li>Cannot delete → Unassign from user first</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Next Steps -->
+            <section class="content-section">
+                <h2><i class="fas fa-forward"></i> Next Steps</h2>
+                <p>Now that you understand the architecture, explore these resources:</p>
+
+                <div class="link-grid">
+                    <a href="../getting-started/quick-start.html" class="link-card">
+                        <i class="fas fa-bolt"></i>
+                        <h3>Quick Start Guide</h3>
+                        <p>Get hands-on with the API</p>
+                    </a>
+                    <a href="../guides/account-management.html" class="link-card">
+                        <i class="fas fa-building"></i>
+                        <h3>Account Management</h3>
+                        <p>Implement workflows from diagrams</p>
+                    </a>
+                    <a href="../code-examples/python-examples.html" class="link-card">
+                        <i class="fab fa-python"></i>
+                        <h3>Code Examples</h3>
+                        <p>See architecture in code</p>
+                    </a>
+                    <a href="../advanced/best-practices.html" class="link-card">
+                        <i class="fas fa-star"></i>
+                        <h3>Best Practices</h3>
+                        <p>Optimize your integration</p>
+                    </a>
+                </div>
+            </section>
+
+            <div class="info-box">
+                <i class="fas fa-book"></i>
+                <div>
+                    <strong>Additional Resources:</strong>
+                    <ul style="margin-top: 0.5rem;">
+                        <li><strong>OpenAPI Specification:</strong> <code>openapi.yaml</code> - Complete API reference</li>
+                        <li><strong>PDF Guides:</strong> Detailed workflows for specific use cases</li>
+                        <li><strong>Support:</strong> Contact your Alianza account manager</li>
+                    </ul>
+                </div>
+            </div>
         </div>
-      </div>
-
-      <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border-color);">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-          <div>
-            <a href="../getting-started/quick-start.html" class="btn btn-secondary">← Quick Start</a>
-          </div>
-          <div>
-            <a href="../guides/account-management.html" class="btn btn-primary">Account Management →</a>
-          </div>
-        </div>
-      </div>
     </main>
-  </div>
 
-  <script src="../js/main.js"></script>
+    <script src="../js/main.js"></script>
 </body>
 </html>
