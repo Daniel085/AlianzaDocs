@@ -9,70 +9,75 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-  <header class="docs-header">
-    <a href="../../../index.html" class="docs-logo">
-      <span>📞</span> Alianza API
-    </a>
-    <nav class="docs-nav">
-      <a href="../../../index.html">Home</a>
-      <a href="../architecture/diagrams.html">Architecture</a>
-      <a href="account-management.html">Guides</a>
-      <a href="../../../openapi.yaml">API Reference</a>
-      <button id="theme-toggle" class="theme-toggle">🌙 Dark</button>
-    </nav>
-  </header>
-
-  <div class="docs-container">
-    <aside class="docs-sidebar">
-      <div class="sidebar-section">
-        <div class="sidebar-title">Getting Started</div>
-        <ul class="sidebar-links">
-          <li><a href="../getting-started/quick-start.html">Quick Start</a></li>
-          <li><a href="../getting-started/authentication.html">Authentication</a></li>
-        </ul>
+  <nav class="navbar">
+      <div class="nav-container">
+          <div class="nav-left">
+              <button class="sidebar-toggle" id="sidebarToggle">
+                  <i class="fas fa-bars"></i>
+              </button>
+              <a href="../index.html" class="logo">
+                  <i class="fas fa-book"></i>
+                  Alianza API Docs
+              </a>
+          </div>
+          <div class="nav-right">
+              <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
+                  <i class="fas fa-moon"></i>
+              </button>
+          </div>
       </div>
+  </nav>
 
-      <div class="sidebar-section">
-        <div class="sidebar-title">Architecture</div>
-        <ul class="sidebar-links">
-          <li><a href="../architecture/diagrams.html">Architecture Diagrams</a></li>
-        </ul>
+  <aside class="sidebar" id="sidebar">
+      <div class="sidebar-content">
+          <div class="sidebar-section">
+              <h3>Getting Started</h3>
+              <ul>
+                  <li><a href="../getting-started/authentication.html">Authentication</a></li>
+                  <li><a href="../getting-started/quick-start.html">Quick Start</a></li>
+                  <li><a href="../getting-started/environments.html">Environments</a></li>
+              </ul>
+          </div>
+          <div class="sidebar-section">
+              <h3>Guides</h3>
+              <ul>
+                  <li><a href="../guides/account-management.html">Account Management</a></li>
+                  <li><a href="../guides/user-provisioning.html" class="active">User Provisioning</a></li>
+                  <li><a href="../guides/phone-numbers.html">Phone Numbers</a></li>
+                  <li><a href="../guides/device-management.html">Device Management</a></li>
+                  <li><a href="../guides/call-routing.html">Call Routing</a></li>
+              </ul>
+          </div>
+          <div class="sidebar-section">
+              <h3>Advanced</h3>
+              <ul>
+                  <li><a href="../advanced/error-handling.html">Error Handling</a></li>
+                  <li><a href="../advanced/best-practices.html">Best Practices</a></li>
+                  <li><a href="../advanced/webhooks.html">Webhooks</a></li>
+              </ul>
+          </div>
+          <div class="sidebar-section">
+              <h3>Code Examples</h3>
+              <ul>
+                  <li><a href="../code-examples/python-examples.html">Python</a></li>
+                  <li><a href="../code-examples/nodejs-examples.html">Node.js</a></li>
+                  <li><a href="../code-examples/php-examples.html">PHP</a></li>
+                  <li><a href="../code-examples/java-examples.html">Java</a></li>
+                  <li><a href="../code-examples/csharp-examples.html">C#</a></li>
+                  <li><a href="../code-examples/ruby-examples.html">Ruby</a></li>
+              </ul>
+          </div>
+          <div class="sidebar-section">
+              <h3>Architecture</h3>
+              <ul>
+                  <li><a href="../architecture/diagrams.html">Architecture Diagrams</a></li>
+              </ul>
+          </div>
       </div>
+  </aside>
 
-      <div class="sidebar-section">
-        <div class="sidebar-title">Guides</div>
-        <ul class="sidebar-links">
-          <li><a href="account-management.html">Account Management</a></li>
-          <li><a href="phone-numbers.html">Phone Numbers</a></li>
-          <li><a href="device-management.html">Device Management</a></li>
-          <li><a href="call-routing.html">Call Routing</a></li>
-          <li><a href="user-provisioning.html" class="active">User Provisioning</a></li>
-        </ul>
-      </div>
-
-      <div class="sidebar-section">
-        <div class="sidebar-title">Code Examples</div>
-        <ul class="sidebar-links">
-          <li><a href="../code-examples/python-examples.html">Python</a></li>
-          <li><a href="../code-examples/nodejs-examples.html">Node.js</a></li>
-          <li><a href="../code-examples/php-examples.html">PHP</a></li>
-          <li><a href="../code-examples/java-examples.html">Java</a></li>
-          <li><a href="../code-examples/csharp-examples.html">C#</a></li>
-          <li><a href="../code-examples/ruby-examples.html">Ruby</a></li>
-        </ul>
-      </div>
-
-      <div class="sidebar-section">
-        <div class="sidebar-title">Advanced</div>
-        <ul class="sidebar-links">
-          <li><a href="../advanced/error-handling.html">Error Handling</a></li>
-          <li><a href="../advanced/best-practices.html">Best Practices</a></li>
-          <li><a href="../advanced/webhooks.html">Webhooks</a></li>
-        </ul>
-      </div>
-    </aside>
-
-    <main class="docs-main">
+  <main class="main-content">
+      <div class="content-wrapper">
       <h1><i class="fas fa-users"></i> User Provisioning Guide</h1>
       <p style="font-size: 1.2rem;">Complete guide to creating, configuring, and managing end users in the Alianza platform, including voicemail, call forwarding, and advanced features.</p>
 
@@ -1240,8 +1245,8 @@ print("User deleted successfully")</code></pre>
           </div>
         </div>
       </div>
-    </main>
-  </div>
+      </div>
+  </main>
 
   <script src="../js/main.js"></script>
 </body>
