@@ -2,15 +2,18 @@
 
 // Theme Toggle
 function initThemeToggle() {
-  const toggle = document.getElementById('theme-toggle');
+  // Support both old (theme-toggle) and new (themeToggle) IDs
+  const toggle = document.getElementById('themeToggle') || document.getElementById('theme-toggle');
   const html = document.documentElement;
+
+  if (!toggle) return;
 
   // Check for saved theme preference or default to light mode
   const currentTheme = localStorage.getItem('theme') || 'light';
   html.setAttribute('data-theme', currentTheme);
   updateToggleButton(currentTheme);
 
-  toggle?.addEventListener('click', () => {
+  toggle.addEventListener('click', () => {
     const theme = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
     html.setAttribute('data-theme', theme);
     localStorage.setItem('theme', theme);
@@ -18,7 +21,12 @@ function initThemeToggle() {
   });
 
   function updateToggleButton(theme) {
-    if (toggle) {
+    const icon = toggle.querySelector('i');
+    if (icon) {
+      // Modern structure with FontAwesome icons
+      icon.className = theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+    } else {
+      // Old structure with text
       toggle.textContent = theme === 'dark' ? '☀️ Light' : '🌙 Dark';
     }
   }
@@ -76,20 +84,35 @@ function initLanguageTabs() {
 
 // Mobile Menu Toggle
 function initMobileMenu() {
-  const toggle = document.getElementById('mobile-menu-toggle');
-  const sidebar = document.querySelector('.docs-sidebar');
+  // Support both old and new structures
+  const toggle = document.getElementById('sidebarToggle') || document.getElementById('mobile-menu-toggle');
+  const sidebar = document.querySelector('.sidebar') || document.querySelector('.docs-sidebar');
 
-  toggle?.addEventListener('click', () => {
+  if (!toggle || !sidebar) return;
+
+  toggle.addEventListener('click', (e) => {
+    e.stopPropagation();
     sidebar.classList.toggle('open');
   });
 
   // Close sidebar when clicking outside on mobile
   document.addEventListener('click', (e) => {
     if (window.innerWidth <= 768) {
-      if (!sidebar.contains(e.target) && !toggle.contains(e.target)) {
+      if (sidebar.classList.contains('open') &&
+          !sidebar.contains(e.target) &&
+          !toggle.contains(e.target)) {
         sidebar.classList.remove('open');
       }
     }
+  });
+
+  // Close sidebar when clicking a link on mobile
+  sidebar.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      if (window.innerWidth <= 768) {
+        sidebar.classList.remove('open');
+      }
+    });
   });
 }
 
@@ -113,15 +136,21 @@ function initSmoothScroll() {
 
 // Active Navigation Highlighting
 function initActiveNav() {
+  // Support both old (.sidebar-links) and new (.sidebar-section) structures
+  const navLinks = document.querySelectorAll('.sidebar-section a, .sidebar-links a');
+  if (navLinks.length === 0) return;
+
   const observer = new IntersectionObserver(
     (entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           const id = entry.target.getAttribute('id');
-          document.querySelectorAll('.sidebar-links a').forEach(link => {
-            link.classList.remove('active');
-            if (link.getAttribute('href') === `#${id}`) {
-              link.classList.add('active');
+          navLinks.forEach(link => {
+            if (link.getAttribute('href').includes('#')) {
+              link.classList.remove('active');
+              if (link.getAttribute('href') === `#${id}`) {
+                link.classList.add('active');
+              }
             }
           });
         }
@@ -239,7 +268,11 @@ function generateTOC() {
   const tocContainer = document.getElementById('toc');
   if (!tocContainer) return;
 
-  const headings = document.querySelectorAll('.docs-main h2, .docs-main h3');
+  // Support both old and new structures
+  const mainContent = document.querySelector('.main-content') || document.querySelector('.docs-main');
+  if (!mainContent) return;
+
+  const headings = mainContent.querySelectorAll('h2, h3');
   const tocList = document.createElement('ul');
   tocList.className = 'toc-list';
 
