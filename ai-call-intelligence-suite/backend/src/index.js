@@ -10,7 +10,8 @@ const helmet = require('helmet');
 const { createServer } = require('http');
 const { Server } = require('socket.io');
 const logger = require('./utils/logger');
-const config = require('./config');
+const db = require('./config/database');
+const redis = require('./config/redis');
 
 // Import routes (to be created)
 // const callsRouter = require('./api/routes/calls');
@@ -49,13 +50,23 @@ app.use((req, res, next) => {
   next();
 });
 
-// Health check endpoint
-app.get('/health', (req, res) => {
-  res.json({
-    status: 'healthy',
+// Health check endpoint - reports each dependency, 503 if any is down
+app.get('/health', async (req, res) => {
+  const [database, cache] = await Promise.all([
+    db.checkHealth(),
+    redis.checkHealth()
+  ]);
+  const healthy = database && cache;
+
+  res.status(healthy ? 200 : 503).json({
+    status: healthy ? 'healthy' : 'degraded',
     timestamp: new Date().toISOString(),
     uptime: process.uptime(),
-    environment: process.env.NODE_ENV
+    environment: process.env.NODE_ENV,
+    dependencies: {
+      database: database ? 'up' : 'down',
+      redis: cache ? 'up' : 'down'
+    }
   });
 });
 
@@ -153,34 +164,52 @@ app.use((req, res) => {
 const PORT = process.env.PORT || 4000;
 const HOST = process.env.HOST || '0.0.0.0';
 
-httpServer.listen(PORT, HOST, () => {
-  logger.info(`🚀 AI Call Intelligence Suite API server started`, {
-    port: PORT,
-    host: HOST,
-    environment: process.env.NODE_ENV,
-    nodeVersion: process.version
-  });
-  logger.info(`📡 WebSocket server ready for real-time connections`);
-  logger.info(`🏥 Health check: http://${HOST}:${PORT}/health`);
-  logger.info(`📚 API info: http://${HOST}:${PORT}/api/v1`);
-});
+const start = async () => {
+  // Connect to dependencies. A failure here is logged, not fatal: the server
+  // still starts and /health reports 'degraded' until the dependency is back.
+  if (await db.checkHealth()) {
+    logger.info('PostgreSQL connected');
+  } else {
+    logger.warn('PostgreSQL unavailable at startup');
+  }
 
-// Graceful shutdown
-process.on('SIGTERM', () => {
-  logger.info('SIGTERM signal received: closing HTTP server');
-  httpServer.close(() => {
+  try {
+    await redis.connect();
+  } catch (err) {
+    logger.warn('Redis unavailable at startup', { error: err.message });
+  }
+
+  httpServer.listen(PORT, HOST, () => {
+    logger.info(`🚀 AI Call Intelligence Suite API server started`, {
+      port: PORT,
+      host: HOST,
+      environment: process.env.NODE_ENV,
+      nodeVersion: process.version
+    });
+    logger.info(`📡 WebSocket server ready for real-time connections`);
+    logger.info(`🏥 Health check: http://${HOST}:${PORT}/health`);
+    logger.info(`📚 API info: http://${HOST}:${PORT}/api/v1`);
+  });
+};
+
+// Graceful shutdown: stop accepting requests, then close connections
+const shutdown = (signal) => {
+  logger.info(`${signal} signal received: closing HTTP server`);
+  httpServer.close(async () => {
     logger.info('HTTP server closed');
+    await Promise.allSettled([db.close(), redis.close()]);
+    logger.info('Database and Redis connections closed');
     process.exit(0);
   });
-});
+};
 
-process.on('SIGINT', () => {
-  logger.info('SIGINT signal received: closing HTTP server');
-  httpServer.close(() => {
-    logger.info('HTTP server closed');
-    process.exit(0);
-  });
-});
+process.on('SIGTERM', () => shutdown('SIGTERM'));
+process.on('SIGINT', () => shutdown('SIGINT'));
+
+// Only start listening when run directly, so tests can import the app
+if (require.main === module) {
+  start();
+}
 
 // Export for testing
 module.exports = { app, io, httpServer };

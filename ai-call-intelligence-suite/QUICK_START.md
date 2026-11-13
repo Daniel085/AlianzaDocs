@@ -179,6 +179,19 @@ SELECT * FROM users;
 - `call_intelligence` - AI-generated insights
 - `real_time_events` - Event stream storage
 - `users` - Application users (4 sample users included)
+
+### Demo Login
+
+All four seeded users (`admin@`, `agent1@`, `agent2@`, `manager@example.com`) use the password **`demo123`**. Passwords are stored as bcrypt hashes in `users.password_hash`. These are for local development only.
+
+### Schema Changes Need a Fresh Volume
+
+`init.sql` runs **only** when the Postgres volume is first created. After pulling a schema change, reset the database:
+
+```bash
+docker-compose down -v   # removes the postgres_data volume (deletes all data)
+docker-compose up -d
+```
 - `analytics_snapshots` - Dashboard metrics
 - `crm_integrations` - CRM configuration
 

@@ -61,6 +61,10 @@
   color: #f87171;
 }
 
+.status.degraded {
+  color: #fbbf24;
+}
+
 .api-info {
   margin-top: 1.5rem;
   padding-top: 1.5rem;

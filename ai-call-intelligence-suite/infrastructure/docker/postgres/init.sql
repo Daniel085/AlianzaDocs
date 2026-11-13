@@ -4,6 +4,10 @@
 -- Create extension for UUID generation
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
+-- pgcrypto provides crypt()/gen_salt('bf') for bcrypt-hashing the seed users'
+-- passwords. Its $2a$ hashes are verified by the Node bcrypt library.
+CREATE EXTENSION IF NOT EXISTS "pgcrypto";
+
 -- Calls table - stores call metadata
 CREATE TABLE IF NOT EXISTS calls (
     call_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -54,6 +58,7 @@ CREATE TABLE IF NOT EXISTS users (
     user_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     account_id VARCHAR(255) NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
+    password_hash VARCHAR(255) NOT NULL, -- bcrypt hash, never plain text
     name VARCHAR(255),
     role VARCHAR(50) DEFAULT 'agent',
     metadata JSONB DEFAULT '{}',
@@ -125,12 +130,13 @@ CREATE TRIGGER update_users_updated_at BEFORE UPDATE ON users
 CREATE TRIGGER update_crm_integrations_updated_at BEFORE UPDATE ON crm_integrations
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
--- Insert sample data for development
-INSERT INTO users (account_id, email, name, role) VALUES
-    ('acct_demo', 'admin@example.com', 'Admin User', 'admin'),
-    ('acct_demo', 'agent1@example.com', 'Jane Smith', 'agent'),
-    ('acct_demo', 'agent2@example.com', 'Mike Johnson', 'agent'),
-    ('acct_demo', 'manager@example.com', 'Sarah Williams', 'manager')
+-- Insert sample data for development.
+-- All demo users share the password 'demo123' (development only).
+INSERT INTO users (account_id, email, password_hash, name, role) VALUES
+    ('acct_demo', 'admin@example.com',   crypt('demo123', gen_salt('bf', 10)), 'Admin User',     'admin'),
+    ('acct_demo', 'agent1@example.com',  crypt('demo123', gen_salt('bf', 10)), 'Jane Smith',     'agent'),
+    ('acct_demo', 'agent2@example.com',  crypt('demo123', gen_salt('bf', 10)), 'Mike Johnson',   'agent'),
+    ('acct_demo', 'manager@example.com', crypt('demo123', gen_salt('bf', 10)), 'Sarah Williams', 'manager')
 ON CONFLICT DO NOTHING;
 
 -- Grant permissions

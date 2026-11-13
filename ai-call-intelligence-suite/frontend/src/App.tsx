@@ -1,16 +1,24 @@
 import { useState, useEffect } from 'react'
+import { API_BASE_URL } from './config'
 import './App.css'
+
+interface ApiInfo {
+  name: string
+  version: string
+  description: string
+}
 
 function App() {
   const [apiStatus, setApiStatus] = useState<string>('checking...')
-  const [apiInfo, setApiInfo] = useState<any>(null)
+  const [apiInfo, setApiInfo] = useState<ApiInfo | null>(null)
 
   useEffect(() => {
-    // Check backend health
-    fetch('http://localhost:4000/health')
+    // Check backend health. /health returns 503 with status 'degraded'
+    // when the API is up but the database or Redis is not.
+    fetch(`${API_BASE_URL}/health`)
       .then(res => res.json())
       .then(data => {
-        setApiStatus('connected ✓')
+        setApiStatus(data.status === 'healthy' ? 'connected ✓' : 'degraded ⚠')
         console.log('Backend health:', data)
       })
       .catch(err => {
@@ -19,9 +27,9 @@ function App() {
       })
 
     // Get API info
-    fetch('http://localhost:4000/api/v1')
+    fetch(`${API_BASE_URL}/api/v1`)
       .then(res => res.json())
-      .then(data => {
+      .then((data: ApiInfo) => {
         setApiInfo(data)
         console.log('API info:', data)
       })
@@ -40,7 +48,11 @@ function App() {
           <h2>System Status</h2>
           <div className="status-item">
             <span className="label">Backend API:</span>
-            <span className={`status ${apiStatus.includes('✓') ? 'connected' : 'disconnected'}`}>
+            <span className={`status ${
+              apiStatus.includes('✓') ? 'connected'
+                : apiStatus.includes('⚠') ? 'degraded'
+                : 'disconnected'
+            }`}>
               {apiStatus}
             </span>
           </div>
